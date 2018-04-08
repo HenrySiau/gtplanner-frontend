@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import GTPAppBarContainer from '../containers/GTPAppBarContainer';
 import GTPDrawerContainer from '../containers/GTPDrawerContainer';
+import ChatRoomContainer from '../containers/ChatRoomContainer';
 import { Route, Redirect } from 'react-router-dom';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
+import PropTypes from 'prop-types';
+import { withStyles } from 'material-ui/styles';
 
 const theme = createMuiTheme({
   palette: {
@@ -21,16 +24,36 @@ const theme = createMuiTheme({
   },
 });
 
+const styles = theme => ({
+  root: {
+    flexGrow: 1,
+    // height: 430,
+    zIndex: 1,
+    // overflow: 'hidden',
+    position: 'relative',
+    display: 'flex',
+    // width: '100%',
+  }
+});
 
 class App extends Component {
   render() {
     return (
       <MuiThemeProvider theme={theme}>
+      <div className={this.props.classes.root}>
         <GTPAppBarContainer />
         <GTPDrawerContainer />
+        <ChatRoomContainer />
+        </div>
       </MuiThemeProvider>
     );
   }
 }
 
-export default App;
+
+
+App.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(App);

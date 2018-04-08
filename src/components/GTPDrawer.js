@@ -4,16 +4,14 @@ import { withStyles } from 'material-ui/styles';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import InboxIcon from 'material-ui-icons/Inbox';
 import DraftsIcon from 'material-ui-icons/Drafts';
+import PropTypes from 'prop-types';
 
 
-const styles = {
+const styles = theme => ({
     list: {
         width: 250,
     },
-    fullList: {
-        width: 'auto',
-    },
-};
+});
 
 class GTPDrawer extends React.Component {
     
@@ -41,8 +39,6 @@ class GTPDrawer extends React.Component {
 
         return (<Drawer
             anchor='left'
-            // width={200}
-            // docked={false}
             open={this.props.isDrawerOpen}
             onClose={this.props.toggleDrawer}
         >
@@ -54,7 +50,10 @@ class GTPDrawer extends React.Component {
             </div>
         </Drawer>);
     }
-
 }
+
+GTPDrawer.propTypes = {
+    classes: PropTypes.object.isRequired,
+  };
 
 export default withStyles(styles)(GTPDrawer);
