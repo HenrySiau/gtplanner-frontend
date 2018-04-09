@@ -1,5 +1,5 @@
 const serverUrl = 'http://localhost:8080';
-const imageServerUrl = 'http://localhost:3000';
+const imageServerUrl = 'http://localhost:8080';
 
 const settings = {
     serverUrl: serverUrl,

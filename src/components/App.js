@@ -6,6 +6,8 @@ import { Route, Redirect } from 'react-router-dom';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
+import PrivateRoute from './PrivateRoute';
+import LoginForm from './LoginForm';
 
 const theme = createMuiTheme({
   palette: {
@@ -27,13 +29,16 @@ const theme = createMuiTheme({
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    // height: 430,
     zIndex: 1,
-    // overflow: 'hidden',
     position: 'relative',
     display: 'flex',
-    // width: '100%',
-  }
+  },
+  content: {
+    flexGrow: 1,
+    // backgroundColor: theme.palette.background.default,
+    padding: theme.spacing.unit * 3,
+    marginTop: '60px'
+  },
 });
 
 class App extends Component {
@@ -43,7 +48,11 @@ class App extends Component {
       <div className={this.props.classes.root}>
         <GTPAppBarContainer />
         <GTPDrawerContainer />
+        <main className={this.props.classes.content}>
+        <Route exact path="/login" component={LoginForm} />
+        </main>
         <ChatRoomContainer />
+        
         </div>
       </MuiThemeProvider>
     );
