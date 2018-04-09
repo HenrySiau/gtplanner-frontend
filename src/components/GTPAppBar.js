@@ -21,6 +21,8 @@ import classNames from 'classnames';
 import Badge from 'material-ui/Badge';
 import Icon from 'material-ui/Icon';
 import Hidden from 'material-ui/Hidden';
+import withWidth from 'material-ui/utils/withWidth';
+import compose from 'recompose/compose';
 
 const styles = theme => ({
     root: {
@@ -57,18 +59,21 @@ const styles = theme => ({
         right: '50px',
         width: '120px',
     },
-    question_answer: {
 
-    },
-    question_answer_badge: {
-    },
     messageNotification: {
         marginRight: theme.spacing.unit * 2,
 
     },
+    rightMenuIcon: {
+        marginRight: theme.spacing.unit * 2,
+    },
+    notification: {
+        marginRight: theme.spacing.unit * 3,
+    },
     container: {
         display: 'flex',
         alignItems: 'center',
+        justifyContent: 'flexEnd',
     }
 
 });
@@ -108,9 +113,11 @@ class GTPAppBar extends React.Component {
         const Logged = () => {
             return (
                 <div className={classes.container} >
-                    <Badge className={classes.question_answer_badge} badgeContent={3} color="secondary">
-                        <Icon className={classes.icon}>notifications</Icon>
-                    </Badge>
+                    <div className={classes.notification}>
+                        <Badge badgeContent={3} color="secondary">
+                            <Icon className={classes.icon} style={{ fontSize: 28 }}>notifications</Icon>
+                        </Badge>
+                    </div>
                     <Manager>
                         <Target>
                             <div
@@ -154,14 +161,13 @@ class GTPAppBar extends React.Component {
                                 }}
                             >
                                 <IconButton onClick={this.handleToggle}>
-                                    <Icon className={classes.icon} style={{ fontSize: 30, color: 'white' }}>menu</Icon>
+                                    <Icon className={classes.rightMenuIcon} style={{ fontSize: 30, color: 'white' }}>menu</Icon>
                                 </IconButton >
                             </div>
                         </Target>
                         <Popper
                             placement="bottom-start"
                             eventsEnabled={open}
-                            // className={classNames({ [classes.popperClose]: !open })}
                             className={open ? classes.popperOpen : classes.popperClose}
                         >
                             <ClickAwayListener onClickAway={this.handleClose}>
@@ -189,6 +195,21 @@ class GTPAppBar extends React.Component {
                 </div>
             );
         }
+
+        const Title = ()=>{
+            return(
+                <Typography variant="title" color="inherit" className={classes.flex}>
+                                Group Travel Planner
+                            </Typography>
+            )
+        }
+        const XsTitle = () => {
+            return(
+                <Typography variant="title" color="inherit" className={classes.flex} style={{ opacity: 0}}>
+                                |
+                            </Typography>
+            )
+        }
         return (
             <div className={classes.root}>
                 <AppBar position="absolute" className={classes.GTPAppBar}>
@@ -197,10 +218,7 @@ class GTPAppBar extends React.Component {
                             {/* <MenuIcon style={{ fontSize: 30, color: 'white' }}/> */}
                             <Icon className={classes.icon} style={{ fontSize: 30, color: 'white' }}>menu</Icon>
                         </IconButton>
-                        <Typography variant="title" color="inherit" className={classes.flex}>
-                            Group Travel Planner
-            </Typography>
-                        {/* {props.isLoggedIn ? <Logged /> : <Login />} */}
+                        {this.props.width==='xs'? <XsTitle /> : <Title/>}
                         <Logged />
                     </Toolbar>
                 </AppBar>
@@ -213,4 +231,4 @@ GTPAppBar.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(GTPAppBar);
+export default compose(withStyles(styles), withWidth())(GTPAppBar);
