@@ -2,7 +2,7 @@ import axios from 'axios';
 import settings from '../config';
 import { push } from 'react-router-redux';
 import { LOG_IN, LOG_OUT, TOGGLE_DRAWER, SNACKBAR_OPEN, SET_SNACKBAR_MESSAGE, UPDATE_SELECTED_TRIP } from './actionTypes';
-import { SET_INVITE_CODE, REMOVE_INVITE_CODE, UPDATE_RECENT_TRIPS, TOGGLE_CHAT_ROOM_OPEN} from './actionTypes';
+import { SET_INVITE_CODE, REMOVE_INVITE_CODE, UPDATE_RECENT_TRIPS, TOGGLE_CHAT_ROOM_OPEN, CHAT_ROOM_OPEN, CHAT_ROOM_CLOSE } from './actionTypes';
 
 const login = () => ({ type: LOG_IN });
 
@@ -92,6 +92,7 @@ export function logout() {
 export const toggleDrawer = { type: TOGGLE_DRAWER };
 
 export const toggleChatRoomOpen = { type: TOGGLE_CHAT_ROOM_OPEN };
+export const closeChatRoom = { type: CHAT_ROOM_CLOSE };
 
 export function validateJWT(id_token) {
     // TODO ajax call required
@@ -129,6 +130,14 @@ export function removeInviteCode() {
         type: REMOVE_INVITE_CODE
     }
 }
+
+export function openChatRoom() {
+    return {
+        type: CHAT_ROOM_OPEN
+    }
+}
+
+
 
 export function updateRecentTrips(trips) {
     return {

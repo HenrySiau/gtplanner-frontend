@@ -62,6 +62,19 @@ class GTPAppBar extends React.Component {
             this.props.validateJWT(localStorage.getItem('id_token'));
             this.props.updateSelectedTrip(null); //fetch default trip info
         }
+        if (window.innerWidth < 600){
+            this.props.closeChatRoom();
+            console.log(window.innerWidth);
+        }
+            window.addEventListener('resize', this.handleResize)
+    }
+
+    handleResize = () => {
+        if (window.innerWidth < 600){
+            console.log(window.innerWidth);
+            this.props.closeChatRoom();
+        }
+        
     }
     render() {
         const { classes } = this.props;
@@ -90,11 +103,11 @@ class GTPAppBar extends React.Component {
                     <GTPRightMenu />
                     <div className={classes.messageNotification}>
 
-                            <IconButton color="inherit" onClick={this.props.toggleChatRoomOpen}>
-                                <Badge className={classes.question_answer_badge} badgeContent={6} color="secondary">
-                                    <Icon className={classes.icon}>textsms</Icon>
-                                </Badge>
-                            </IconButton>
+                        <IconButton color="inherit" onClick={this.props.toggleChatRoomOpen}>
+                            <Badge className={classes.question_answer_badge} badgeContent={6} color="secondary">
+                                <Icon className={classes.icon}>textsms</Icon>
+                            </Badge>
+                        </IconButton>
 
                     </div>
                 </div>

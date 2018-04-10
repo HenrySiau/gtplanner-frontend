@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
-import {logout, toggleDrawer, validateJWT, updateSelectedTrip, toggleChatRoomOpen} from '../actions';
+import {logout, toggleDrawer, validateJWT, updateSelectedTrip, toggleChatRoomOpen, openChatRoom, closeChatRoom} from '../actions';
 import GTPAppBar from '../components/GTPAppBar';
 import { push } from 'react-router-redux';
 
@@ -30,6 +30,12 @@ const mapDispatchToProps = dispatch => {
         },
         toggleChatRoomOpen: () => {
             dispatch(toggleChatRoomOpen);
+        },
+        openChatRoom: () => {
+            dispatch(openChatRoom);
+        },
+        closeChatRoom: () => {
+            dispatch(closeChatRoom);
         }
     }
 }
