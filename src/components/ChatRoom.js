@@ -15,10 +15,19 @@ const styles = theme => ({
     },
     drawerPaper: {
         width: 320,
-        [theme.breakpoints.up('md')]: {
+        boxShadow: '-3px 0px 5px 0px rgba(220,220,220,1)',
+
+        // if paper position is relative, drawer will push main contain
+        // otherwise it will over lay main contain
+        [theme.breakpoints.up('sm')]: {
             position: 'relative',
+            
         },
     },
+    drawerHidden: {
+        // position: 'absolute',
+        width: 0
+    }
 });
 
 class ChatRoom extends React.Component {
@@ -29,6 +38,7 @@ class ChatRoom extends React.Component {
       handleChange = (event, value) => {
         this.setState({ value });
       };
+
 
     render() {
         const { classes } = this.props;
@@ -48,21 +58,20 @@ class ChatRoom extends React.Component {
             <Tab label="Members" />
           </Tabs>
         </AppBar>
-        {value === 0 && <Typography>Discussion</Typography>}
+        {value === 0 && <Typography>Discussion </Typography>}
         {value === 1 && <Typography>Members</Typography>}
 
             </div >
         );
 
         return (
-            <Hidden xsDown implementation="css">
         <Drawer
-            variant="permanent"
+            // variant="permanent"
+            variant='persistent'
             anchor='right'
-            open
-            classes={{
-                paper: classes.drawerPaper,
-            }}
+            open={this.props.isChatRoomOpen}
+            // open={true}
+            classes={this.props.isChatRoomOpen?{paper: classes.drawerPaper,} : {paper: classes.drawerHidden,}}
         >
             <div
                 tabIndex={0}
@@ -71,7 +80,6 @@ class ChatRoom extends React.Component {
                 {chatRoom}
             </div>
         </Drawer>
-        </Hidden>
         );
     }
 }

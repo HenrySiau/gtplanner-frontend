@@ -1,12 +1,13 @@
 import {connect} from 'react-redux';
-import {logout, toggleDrawer, validateJWT, updateSelectedTrip} from '../actions';
+import {logout, toggleDrawer, validateJWT, updateSelectedTrip, toggleChatRoomOpen} from '../actions';
 import GTPAppBar from '../components/GTPAppBar';
 import { push } from 'react-router-redux';
 
 const mapStateToProps = (state) => {
     return{
         isLoggedIn: state.isLoggedIn,
-        selectedTrip: state.selectedTrip
+        selectedTrip: state.selectedTrip,
+        isChatRoomOpen: state.isChatRoomOpen
     }
 }
 
@@ -26,6 +27,9 @@ const mapDispatchToProps = dispatch => {
         },
         updateSelectedTrip: (tripId) => {
             dispatch(updateSelectedTrip(tripId));
+        },
+        toggleChatRoomOpen: () => {
+            dispatch(toggleChatRoomOpen);
         }
     }
 }

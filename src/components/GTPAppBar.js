@@ -27,6 +27,7 @@ const styles = theme => ({
     },
     GTPAppBar: {
         zIndex: theme.zIndex.drawer + 1,
+
     },
     link: {
         color: 'white'
@@ -88,14 +89,13 @@ class GTPAppBar extends React.Component {
                     <GTPAvatar />
                     <GTPRightMenu />
                     <div className={classes.messageNotification}>
-                        {/* md, medium: 960px or larger */}
-                        <Hidden smUp>
-                            <IconButton color="inherit" >
-                                <Badge className={classes.question_answer_badge} badgeContent={4} color="secondary">
+
+                            <IconButton color="inherit" onClick={this.props.toggleChatRoomOpen}>
+                                <Badge className={classes.question_answer_badge} badgeContent={6} color="secondary">
                                     <Icon className={classes.icon}>textsms</Icon>
                                 </Badge>
                             </IconButton>
-                        </Hidden>
+
                     </div>
                 </div>
             );

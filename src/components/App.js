@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import GTPAppBarContainer from '../containers/GTPAppBarContainer';
 import GTPDrawerContainer from '../containers/GTPDrawerContainer';
 import ChatRoomContainer from '../containers/ChatRoomContainer';
-import { Route} from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
@@ -34,25 +34,17 @@ const theme = createMuiTheme({
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    position: 'relative',
     display: 'flex',
   },
   content: {
     display: 'flex',
-    flexGrow: 1,
+    position: 'relative',
+    // flexGrow: 1,
     padding: theme.spacing.unit * 3,
     marginTop: '60px',
     justifyContent: 'center',
     width: '100%',
-    zIndex: 1200,
-    // this is no a good fix
-    [theme.breakpoints.down('sm')]: {
-      marginRight: '320px',
-    },
-    [theme.breakpoints.down('xs')]: {
-      marginRight: '0',
-    },
-
+    overflow: 'scroll',
   },
 });
 
@@ -60,17 +52,19 @@ class App extends Component {
   render() {
     return (
       <MuiThemeProvider theme={theme}>
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <div className={this.props.classes.root}>
-        <GTPAppBarContainer />
-        <GTPDrawerContainer />
-        <main className={this.props.classes.content}>
-        <Route exact path="/login" component={LoginForm} />
-        <PrivateRoute exact path="/trip/new" component={CreateTripSection} />
-        </main>
-        <ChatRoomContainer />
-        
-        </div>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <div className={this.props.classes.root}>
+          
+            <GTPAppBarContainer />
+            <GTPDrawerContainer />
+            
+            <main className={this.props.classes.content}>
+              <Route exact path="/login" component={LoginForm} />
+              <PrivateRoute exact path="/trip/new" component={CreateTripSection} />
+            </main>
+            <ChatRoomContainer />
+
+          </div>
         </MuiPickersUtilsProvider>
       </MuiThemeProvider>
     );

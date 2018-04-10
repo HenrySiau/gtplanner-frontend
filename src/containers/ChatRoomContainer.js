@@ -1,22 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { toggleDrawer, updateSelectedTrip } from '../actions';
+import { toggleChatRoomOpen} from '../actions';
 import ChatRoom from '../components/ChatRoom';
 
 const mapStateToProps = (state) => {
     return {
-        isDrawerOpen: state.isDrawerOpen,
-        recentTrips: state.recentTrips
+        isChatRoomOpen: state.isChatRoomOpen
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        toggleDrawer: () => {
-            dispatch(toggleDrawer);
-        },
-        updateSelectedTrip: (tripId) => {
-            dispatch(updateSelectedTrip(tripId));
+        toggleChatRoomOpen: () => {
+            dispatch(toggleChatRoomOpen);
         }
     }
 }
