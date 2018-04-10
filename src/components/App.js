@@ -9,9 +9,9 @@ import { withStyles } from 'material-ui/styles';
 import PrivateRoute from './PrivateRoute';
 import LoginForm from './LoginForm';
 import CreateTripSection from '../sections/CreateTripSection';
-import MomentUtils from 'material-ui-pickers/utils/moment-utils';
 import DateFnsUtils from 'material-ui-pickers/utils/date-fns-utils';
 import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
+
 
 const theme = createMuiTheme({
   palette: {
@@ -30,6 +30,7 @@ const theme = createMuiTheme({
   },
 });
 
+
 const styles = theme => ({
   root: {
     flexGrow: 1,
@@ -39,12 +40,19 @@ const styles = theme => ({
   content: {
     display: 'flex',
     flexGrow: 1,
-    // backgroundColor: theme.palette.background.default,
     padding: theme.spacing.unit * 3,
     marginTop: '60px',
-    marginRight: '20px',
     justifyContent: 'center',
     width: '100%',
+    zIndex: 1200,
+    // this is no a good fix
+    [theme.breakpoints.down('sm')]: {
+      marginRight: '320px',
+    },
+    [theme.breakpoints.down('xs')]: {
+      marginRight: '0',
+    },
+
   },
 });
 
