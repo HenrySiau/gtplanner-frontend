@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import IconButton from 'material-ui/IconButton';
-import Avatar from 'material-ui/Avatar';
-import settings from '../config';
 import { MenuItem, MenuList } from 'material-ui/Menu';
 import { Manager, Target, Popper } from 'react-popper';
 import ClickAwayListener from 'material-ui/utils/ClickAwayListener';
 import Grow from 'material-ui/transitions/Grow';
 import Paper from 'material-ui/Paper';
 import Icon from 'material-ui/Icon';
+import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 
 
 const styles = theme => ({
@@ -26,7 +26,6 @@ const styles = theme => ({
     },
     paper: {
         marginRight: theme.spacing.unit * 2,
-
     },
     popperClose: {
         pointerEvents: 'none',
@@ -34,7 +33,7 @@ const styles = theme => ({
     popperOpen: {
         position: 'relative',
         right: '50px',
-        width: '120px',
+        width: '150px',
     },
 });
 
@@ -46,6 +45,7 @@ class GTPRightMenu extends React.Component {
     };
 
     handleMenuPopoverToggle = () => {
+        console.log('handleMenuPopoverToggle');
         this.setState({ isMenuPopoverOpen: !this.state.isMenuPopoverOpen });
     };
 
@@ -86,9 +86,26 @@ class GTPRightMenu extends React.Component {
                             <Grow in={isMenuPopoverOpen} id="menu-list-grow" style={{ transformOrigin: '0 0 0' }}>
                                 <Paper>
                                     <MenuList role="menu">
-                                        <MenuItem onClick={this.handleMenuPopoverClose}>Profile</MenuItem>
-                                        <MenuItem onClick={this.handleMenuPopoverClose}>My account</MenuItem>
-                                        <MenuItem onClick={this.handleMenuPopoverClose}>Logout</MenuItem>
+                                    <MenuItem onClick={()=>{
+                                        this.props.dispatch(push('/event/new'));
+                                        this.setState({ isMenuPopoverOpen: false });
+                                    }}>New Event</MenuItem>
+                                    <MenuItem onClick={()=>{
+                                        this.props.dispatch(push('/members/invite'));
+                                        this.setState({ isMenuPopoverOpen: false });
+                                    }}>Invite Members</MenuItem>
+                                    <MenuItem onClick={()=>{
+                                        this.props.dispatch(push('/trip/new'));
+                                        this.setState({ isMenuPopoverOpen: false });
+                                    }}>Create Trip</MenuItem>
+                                    <MenuItem onClick={()=>{
+                                        this.props.dispatch(push('/trips'));
+                                        this.setState({ isMenuPopoverOpen: false });
+                                    }}>My Trips</MenuItem>
+                                    <MenuItem onClick={()=>{
+                                        this.props.dispatch(push('/trip/members'));
+                                        this.setState({ isMenuPopoverOpen: false });
+                                    }}>Trip Members</MenuItem>
                                     </MenuList>
                                 </Paper>
                             </Grow>
@@ -105,4 +122,6 @@ GTPRightMenu.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(GTPRightMenu);
+GTPRightMenu = withStyles(styles)(GTPRightMenu);
+
+export default connect()(GTPRightMenu)

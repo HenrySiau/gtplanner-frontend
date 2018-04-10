@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import IconButton from 'material-ui/IconButton';
-import MenuIcon from 'material-ui-icons/Menu';
 import Avatar from 'material-ui/Avatar';
 import settings from '../config';
 import { MenuItem, MenuList } from 'material-ui/Menu';
@@ -10,7 +9,9 @@ import { Manager, Target, Popper } from 'react-popper';
 import ClickAwayListener from 'material-ui/utils/ClickAwayListener';
 import Grow from 'material-ui/transitions/Grow';
 import Paper from 'material-ui/Paper';
-import Icon from 'material-ui/Icon';
+import { connect } from 'react-redux';
+import {logout} from '../actions';
+import { push } from 'react-router-redux';
 
 const styles = theme => ({
     root: {
@@ -47,7 +48,6 @@ class GTPAvatar extends React.Component {
     };
 
     handleAvatarPopoverToggle = () => {
-        console.log('handleAvatarPopoverToggle');
         this.setState({ isAvatarPopoverOpen: !this.state.isAvatarPopoverOpen });
 
     };
@@ -63,8 +63,6 @@ class GTPAvatar extends React.Component {
     render() {
         const { classes } = this.props;
         const { isAvatarPopoverOpen} = this.state;
-
-
 
         return (
             <Manager>
@@ -96,9 +94,19 @@ class GTPAvatar extends React.Component {
                         <Grow in={isAvatarPopoverOpen} id="menu-list-grow" style={{ transformOrigin: '0 0 0' }}>
                             <Paper>
                                 <MenuList role="menu">
-                                    <MenuItem onClick={this.handleAvatarPopoverClose}>Profile</MenuItem>
-                                    <MenuItem onClick={this.handleAvatarPopoverClose}>My account</MenuItem>
-                                    <MenuItem onClick={this.handleAvatarPopoverClose}>Logout</MenuItem>
+                                    <MenuItem onClick={()=>{
+                                        this.props.dispatch(push('/myaccount'));
+                                        this.setState({ isAvatarPopoverOpen: false });
+                                    }}>My account</MenuItem>
+                                     <MenuItem onClick={()=>{
+                                        this.props.dispatch(push('/help'));
+                                        this.setState({ isAvatarPopoverOpen: false });
+                                    }}>Help</MenuItem>
+                                    <MenuItem onClick={()=>{
+                                        this.props.dispatch(logout);
+                                        this.setState({ isAvatarPopoverOpen: false });
+                                        window.location = "/";
+                                    }}>Logout</MenuItem>
                                 </MenuList>
                             </Paper>
                         </Grow>
@@ -113,5 +121,5 @@ class GTPAvatar extends React.Component {
 GTPAvatar.propTypes = {
     classes: PropTypes.object.isRequired,
 };
-
-export default withStyles(styles)(GTPAvatar);
+GTPAvatar = withStyles(styles)(GTPAvatar);
+export default connect()(GTPAvatar)

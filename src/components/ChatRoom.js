@@ -1,21 +1,17 @@
 import React from 'react';
 import Drawer from 'material-ui/Drawer';
 import { withStyles } from 'material-ui/styles';
-import InboxIcon from 'material-ui-icons/Inbox';
-import DraftsIcon from 'material-ui-icons/Drafts';
 import PropTypes from 'prop-types';
 import Typography from 'material-ui/Typography';
 import Tabs, { Tab } from 'material-ui/Tabs';
-import Icon from 'material-ui/Icon';
 import AppBar from 'material-ui/AppBar';
-import green from 'material-ui/colors/green';
 import Hidden from 'material-ui/Hidden';
 
 
 const styles = theme => ({
     chatRoom: {
         width: 320,
-        marginTop: 65
+        marginTop: 65,
     },
     drawerPaper: {
         width: 320,
@@ -59,7 +55,7 @@ class ChatRoom extends React.Component {
         );
 
         return (
-            <Hidden smDown implementation="css">
+            <Hidden xsDown implementation="css">
         <Drawer
             variant="permanent"
             anchor='right'

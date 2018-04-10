@@ -1,8 +1,6 @@
 import React from 'react';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
-import axios from 'axios';
-import settings from '../config';
 import { connect } from 'react-redux';
 import { loginWithPassword } from '../actions';
 import { withStyles } from 'material-ui/styles';
@@ -12,12 +10,10 @@ const styles = theme => ({
       margin: theme.spacing.unit,
     },
   });
-  
 
 class LoginForm extends React.Component {
     constructor(props) {
         super(props);
-
         this.state = {
             email: '',
             password: ''
@@ -62,7 +58,11 @@ class LoginForm extends React.Component {
                     onChange={this.handlePasswordChange}
                     onKeyPress={this.handlePressEnter}
                 /><br />
-                <Button variant="raised" color="primary" className={classes.button}>
+                <Button 
+                variant="raised" 
+                color="primary" 
+                className={classes.button}
+                onClick={this.handleSubmit}>
                 Login
                 </Button>
             </div>
@@ -76,5 +76,5 @@ const mapStateToProps = (state) => {
     }
 }
 
-LoginForm = connect(mapStateToProps)(withStyles(styles)(LoginForm));
-export default LoginForm
+LoginForm = withStyles(styles)(LoginForm);
+export default connect(mapStateToProps)(LoginForm);

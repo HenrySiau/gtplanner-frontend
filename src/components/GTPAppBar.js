@@ -6,9 +6,7 @@ import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
-import MenuIcon from 'material-ui-icons/Menu';
 import { Link } from 'react-router-dom';
-import classNames from 'classnames';
 import Badge from 'material-ui/Badge';
 import Icon from 'material-ui/Icon';
 import Hidden from 'material-ui/Hidden';
@@ -37,14 +35,6 @@ const styles = theme => ({
         marginRight: theme.spacing.unit * 2,
 
     },
-    popperClose: {
-        pointerEvents: 'none',
-    },
-    popperOpen: {
-        position: 'relative',
-        right: '50px',
-        width: '120px',
-    },
     messageNotification: {
         marginRight: theme.spacing.unit * 2,
 
@@ -62,15 +52,18 @@ const styles = theme => ({
 
 
 class GTPAppBar extends React.Component {
-
-    state = {
-        isAvatarPopoverOpen: false,
-        isMenuPopoverOpen: false
-    };
-
+    componentDidMount() {
+        // do not need to check if user already login because this function will
+        // invoke immediately each time user use our app
+        // if user has an id_token
+        if (localStorage.getItem('id_token')) {
+            // wil login if id_token is valid
+            this.props.validateJWT(localStorage.getItem('id_token'));
+            this.props.updateSelectedTrip(null); //fetch default trip info
+        }
+    }
     render() {
         const { classes } = this.props;
-        const { isAvatarPopoverOpen, isMenuPopoverOpen } = this.state;
 
         const Login = () => {
             return (
@@ -85,10 +78,10 @@ class GTPAppBar extends React.Component {
             return (
                 <div className={classes.container} >
                     <div className={classes.notification}>
-                    <IconButton color="inherit" >
-                        <Badge badgeContent={3} color="secondary">
-                            <Icon className={classes.icon} style={{ fontSize: 28 }}>notifications</Icon>
-                        </Badge>
+                        <IconButton color="inherit" >
+                            <Badge badgeContent={3} color="secondary">
+                                <Icon className={classes.icon} style={{ fontSize: 28 }}>notifications</Icon>
+                            </Badge>
                         </IconButton>
                     </div>
 
@@ -96,11 +89,11 @@ class GTPAppBar extends React.Component {
                     <GTPRightMenu />
                     <div className={classes.messageNotification}>
                         {/* md, medium: 960px or larger */}
-                        <Hidden mdUp>
-                        <IconButton color="inherit" >
-                            <Badge className={classes.question_answer_badge} badgeContent={4} color="secondary">
-                                <Icon className={classes.icon}>textsms</Icon>
-                            </Badge>
+                        <Hidden smUp>
+                            <IconButton color="inherit" >
+                                <Badge className={classes.question_answer_badge} badgeContent={4} color="secondary">
+                                    <Icon className={classes.icon}>textsms</Icon>
+                                </Badge>
                             </IconButton>
                         </Hidden>
                     </div>
@@ -132,7 +125,8 @@ class GTPAppBar extends React.Component {
                             <Icon className={classes.icon} style={{ fontSize: 30, color: 'white' }}>menu</Icon>
                         </IconButton>
                         {this.props.width === 'xs' ? <XsTitle /> : <Title />}
-                        <Logged />
+                        {this.props.isLoggedIn ? <Logged /> : <Login />}
+
                     </Toolbar>
                 </AppBar>
             </div>
