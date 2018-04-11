@@ -7,7 +7,6 @@ import Tabs, { Tab } from 'material-ui/Tabs';
 import AppBar from 'material-ui/AppBar';
 import Hidden from 'material-ui/Hidden';
 
-
 const styles = theme => ({
     chatRoom: {
         width: 320,

@@ -35,7 +35,8 @@ class CreateTripForm extends React.Component {
             isTripNameErr: false,
             isDescriptionErr: false,
             tripNameErrText: '',
-            descriptionErrText: ''
+            descriptionErrText: '',
+            submitButtonDisable: false
 
         };
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -45,7 +46,7 @@ class CreateTripForm extends React.Component {
     // toggleLogin = this.props.toggleLogin;
     handleTripNameChange = (event) => {
         if (this.state.isTripNameErr) {
-            if (event.target.value.length < 31) {
+            if (event.target.value.length < 31 && event.target.value.length > 1) {
                 this.setState({
                     tripName: event.target.value,
                     isTripNameErr: false,
@@ -66,6 +67,14 @@ class CreateTripForm extends React.Component {
         }
     };
 
+    validateTripNameLength = () => {
+        if (this.state.tripName.length < 2) {
+            this.setState({
+                isTripNameErr: true,
+                tripNameErrText: 'Trip name must at least 2 characters'
+            });
+        }
+    }
     handleDescriptionChange = (event) => {
         if (this.state.isDescriptionErr) {
             if (event.target.value.length < 301) {
@@ -89,32 +98,44 @@ class CreateTripForm extends React.Component {
         }
     }
     handleSubmit = () => {
-        axios({
-            method: 'POST',
-            url: settings.serverUrl + '/api/post/trip/new',
-            json: true,
-            headers: {
-                'x-access-token': localStorage.getItem('id_token'),
-            },
-            data: {
-                tripName: this.state.tripName,
-                description: this.state.description,
-                startDate: this.state.startDate,
-                endDate: this.state.endDate
-            }
-        })
-            .then((response) => {
-                // TODO: Redirect to create my first trip
-                console.log(response.data);
-                if (response.data.tripInfo) {
-                    this.props.dispatch(updateSelectedTripWithInfo(response.data.tripInfo));
-                    this.props.dispatch(push('/members/invite/'));
+        if (!(this.state.isTripNameErr || this.state.isDescriptionErr || this.state.tripName.length === 0)) {
+            this.setState({ submitButtonDisable: true });
+            axios({
+                method: 'POST',
+                url: settings.serverUrl + '/api/post/trip/new',
+                json: true,
+                headers: {
+                    'x-access-token': localStorage.getItem('id_token'),
+                },
+                data: {
+                    tripName: this.state.tripName,
+                    description: this.state.description,
+                    startDate: this.state.startDate,
+                    endDate: this.state.endDate
                 }
             })
-            .catch((error) => {
-                // TODO: show error message and guide user to re submit
-                console.error(error);
-            });
+                .then((response) => {
+                    // TODO: Redirect to create my first trip
+                    console.log(response.data);
+                    if (response.data.tripInfo) {
+                        this.props.dispatch(updateSelectedTripWithInfo(response.data.tripInfo));
+                        this.props.dispatch(push('/members/invite/'));
+                        this.props.dispatch(snackbarMessage(`Congratulations! You had successfully created a trip, let's invite members!`));
+                    } else {
+                        this.setState({ submitButtonDisable: false });
+                        this.props.dispatch(snackbarMessage('Something went wrong, Please submit again'));
+                    }
+                })
+                .catch((error) => {
+                    // TODO: show error message and guide user to re submit
+                    console.error(error);
+                    this.setState({ submitButtonDisable: false });
+                    this.props.dispatch(snackbarMessage('Something went wrong, Please submit again'));
+                });
+        }else{
+            console.log('Please complete the form');
+            this.props.dispatch(snackbarMessage('Please complete the form'));
+        }
     }
 
     handleChangeStartDate = (date) => {
@@ -149,6 +170,7 @@ class CreateTripForm extends React.Component {
                     helperText={this.state.tripNameErrText}
                     className={classes.input}
                     margin="normal"
+                    onBlur={this.validateTripNameLength}
                 /><br />
                 <DatePicker
                     value={this.state.startDate}
@@ -183,7 +205,9 @@ class CreateTripForm extends React.Component {
                     variant="raised"
                     color="primary"
                     className={classes.button}
-                    onClick={this.handleSubmit}>
+                    onClick={this.handleSubmit}
+                    disabled={this.state.submitButtonDisable}
+                >
                     Create
                 </Button>
             </div>

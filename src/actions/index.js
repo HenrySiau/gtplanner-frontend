@@ -1,7 +1,7 @@
 import axios from 'axios';
 import settings from '../config';
 import { push } from 'react-router-redux';
-import { LOG_IN, LOG_OUT, TOGGLE_DRAWER, SNACKBAR_OPEN, SET_SNACKBAR_MESSAGE, UPDATE_SELECTED_TRIP } from './actionTypes';
+import { LOG_IN, LOG_OUT, TOGGLE_DRAWER, SNACKBAR_OPEN, SNACKBAR_CLOSE, SET_SNACKBAR_MESSAGE, UPDATE_SELECTED_TRIP } from './actionTypes';
 import { SET_INVITE_CODE, REMOVE_INVITE_CODE, UPDATE_RECENT_TRIPS, TOGGLE_CHAT_ROOM_OPEN, CHAT_ROOM_OPEN, CHAT_ROOM_CLOSE } from './actionTypes';
 
 const login = () => ({ type: LOG_IN });
@@ -103,6 +103,7 @@ export function validateJWT(id_token) {
 }
 
 export const snackbarMessageOpen = { type: SNACKBAR_OPEN };
+export const snackbarMessageClose = { type: SNACKBAR_CLOSE };
 
 export function setSnackbarMessage(message) {
     return {

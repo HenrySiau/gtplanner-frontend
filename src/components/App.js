@@ -11,6 +11,7 @@ import LoginForm from './LoginForm';
 import CreateTripSection from '../sections/CreateTripSection';
 import DateFnsUtils from 'material-ui-pickers/utils/date-fns-utils';
 import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
+import GTPSnackbar from './GTPSnackbar';
 
 
 const theme = createMuiTheme({
@@ -63,7 +64,7 @@ class App extends Component {
               <PrivateRoute exact path="/trip/new" component={CreateTripSection} />
             </main>
             <ChatRoomContainer />
-
+            <GTPSnackbar />
           </div>
         </MuiPickersUtilsProvider>
       </MuiThemeProvider>
