@@ -71,6 +71,7 @@ class RegisterForm extends React.Component {
             isPasswordContainNumber: false,
             isPasswordSatisfyLengthRequirement: false,
             isDialogOpen: false,
+            submitButtonDisable: false
         };
     }
 
@@ -291,26 +292,31 @@ class RegisterForm extends React.Component {
 
     handleSubmit = () => {
         if (this.isFormReady()) {
-            // Use updater function to make sure get the newest state
-            this.setState((preState) => {
-                axios.post(settings.serverUrl + '/api/post/register', {
-                    userName: preState.userName,
-                    email: preState.email,
-                    phoneNumber: preState.phoneNumber,
-                    password: preState.password,
-                    passwordConfirm: preState.passwordConfirm
-
-                })
-                    .then((response) => {
-                        if (response.data.token) {
-                            this.props.dispatch(loginWithToken(response.data.token));
-                            this.handleDialogOpen();
-                        }
-                    })
-                    .catch((error) => {
-                        this.props.dispatch(snackbarMessage('Something went wrong, can not register, please try later'));
-                    });
+            this.setState({
+                submitButtonDisable: true
             });
+            axios.post(settings.serverUrl + '/api/post/register', {
+                userName: this.state.userName,
+                email: this.state.email,
+                phoneNumber: this.state.phoneNumber,
+                password: this.state.password,
+                passwordConfirm: this.state.passwordConfirm
+            })
+                .then((response) => {
+                    if (response.data.token) {
+                        this.props.dispatch(loginWithToken(response.data.token));
+                        this.handleDialogOpen();
+                    } else {
+                        this.props.dispatch(snackbarMessage('Something went wrong, can not register, please try again'));
+                    }
+                })
+                .catch((error) => {
+                    this.setState({
+                        submitButtonDisable: false
+                    });
+                    this.props.dispatch(snackbarMessage('Something went wrong, can not register, please try later'));
+                });
+
         } else {
             this.props.dispatch(snackbarMessage('Please fill the form properly'));
         }
@@ -418,6 +424,7 @@ class RegisterForm extends React.Component {
                     color="primary"
                     onClick={this.handleSubmit}
                     className={classes.registerButton}
+                    disabled={this.state.submitButtonDisable}
                 >
                     Register
                     </Button>
