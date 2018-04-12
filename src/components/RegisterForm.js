@@ -2,17 +2,10 @@ import React from 'react';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 import { connect } from 'react-redux';
-import { loginWithPassword } from '../actions';
 import { withStyles } from 'material-ui/styles';
-import Menu, { MenuItem, MenuList } from 'material-ui/Menu';
 import Icon from 'material-ui/Icon';
 import IconButton from 'material-ui/IconButton';
-import Dialog, {
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-} from 'material-ui/Dialog';
+import Dialog, { DialogActions, DialogContent, DialogContentText, DialogTitle } from 'material-ui/Dialog';
 import red from 'material-ui/colors/red';
 import lightBlue from 'material-ui/colors/lightBlue';
 import blue from 'material-ui/colors/blue';
@@ -23,12 +16,9 @@ import { loginWithToken } from '../actions';
 import { push } from 'react-router-redux';
 import { snackbarMessage } from '../actions';
 import Paper from 'material-ui/Paper';
-import classNames from 'classnames';
 
 const styles = theme => ({
     container: {
-        zIndex: 8888,
-        // position: 'relative',
     },
     registerButton: {
         margin: '10px 10px 5px 120px'
@@ -46,17 +36,9 @@ const styles = theme => ({
         color: blue[500],
         margin: 10
     },
-    popoverHint: {
-        color: lightBlue[300],
-        margin: 10,
-        fontSize: '80%'
-    },
     passwordRequirementPaper: {
         zIndex: 9999,
         position: 'absolute',
-    },
-    passwordRequirementPaperHidden: {
-        display: 'none'
     },
     textField: {
         width: '230px',
@@ -368,24 +350,6 @@ class RegisterForm extends React.Component {
 
     render() {
         const { classes } = this.props;
-        const dialogActions = [
-            <Button
-                variant="raised"
-                color="primary"
-                onClick={this.createNewTrip}
-                className={classes.dialogButton}
-            >
-                Create a new Trip
-            </Button>,
-            <Button
-                variant="raised"
-                color="primary"
-                onClick={this.goToMyAccount}
-                className={classes.dialogButton}
-            >
-                Setup my profile
-            </Button>,
-        ];
 
         return (
             <div className={classes.container}>
@@ -438,7 +402,6 @@ class RegisterForm extends React.Component {
                         <li className={this.state.isPasswordSatisfyLengthRequirement ? classes.valid : classes.invalid}>
                             8 to 30 characters</li>
                     </ul>
-                    <p className={classes.popoverHint}>Click anywhere to close this window</p>
                 </Paper >
                 <TextField
                     id='passwordCnfInputField'
@@ -460,13 +423,37 @@ class RegisterForm extends React.Component {
                     </Button>
 
                 <Dialog
-                    title="Welcome to GT Planner"
-                    actions={dialogActions}
                     modal={true}
                     open={this.state.isDialogOpen}
                 >
-                    Your account had successfully set up, please choose your next step.
-        </Dialog>
+                    <DialogTitle >
+                        {"Your account had successfully set up"}
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            please choose your next step, have fun using Group Travel Planner.
+            </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button
+                            variant="raised"
+                            color="primary"
+                            onClick={this.createNewTrip}
+                            className={classes.dialogButton}
+                        >
+                            Create a new Trip
+            </Button>
+                        <Button
+                            variant="raised"
+                            color="primary"
+                            onClick={this.goToMyAccount}
+                            className={classes.dialogButton}
+                        >
+                            Setup my profile
+            </Button>
+
+                    </DialogActions>
+                </Dialog>
             </div >
         );
     }
