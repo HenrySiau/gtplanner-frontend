@@ -39,11 +39,11 @@ const styles = theme => ({
         width: '200px',
         fontSize: '16px',
         padding: '5px 0 5px 0',
-        margin: '0'
+        margin: theme.spacing.unit,
     },
     textField: {
         width: '230px',
-        marginRight: theme.spacing.unit * 2,
+        // margin: theme.spacing.unit,
     }
 });
 
@@ -57,10 +57,23 @@ class InviteMemberForm extends React.Component {
             emailErrMessage: '',
             message: '',
             subject: '',
-            isLinkSelected: false,
-            linkFloatingLabelText: "Click to copy the Link"
+            subjectErrMessage: '',
+            messageErrMessage: '',
+            submitButtonDisable: false,
         };
         const toggleDialogOpen = this.toggleDialogOpen;
+    }
+
+    isFormReady=()=>{
+        if(
+            this.state.subject && this.state.message && this.state.emailList &&(
+                !this.state.subjectErrMessage && !this.state.messageErrMessage
+            )
+        ){
+            return true
+        }else{
+            return false
+        }
     }
 
     handleEmailChange = (event) => {
@@ -76,16 +89,48 @@ class InviteMemberForm extends React.Component {
         }
     };
 
-    handleMessageChange = (event) => {
-        this.setState({
-            message: event.target.value
-        });
+    handleSubjectChange = (event) => {
+        if (this.state.subjectErrMessage) {
+            if (event.target.value.length < 101) {
+                this.setState({
+                    subjectErrMessage: '',
+                    subject: event.target.value
+                });
+            }
+        } else {
+            if (event.target.value.length > 100) {
+                this.setState({
+                    subjectErrMessage: 'Subject must within 100 characters',
+                    subject: event.target.value
+                });
+            } else {
+                this.setState({
+                    subject: event.target.value
+                });
+            }
+        }
     }
 
-    handleSubjectChange = (event) => {
-        this.setState({
-            subject: event.target.value
-        });
+    handleMessageChange = (event) => {
+        if (this.state.messageErrMessage) {
+            if (event.target.value.length < 1001) {
+                this.setState({
+                    messageErrMessage: '',
+                    message: event.target.value
+                });
+            }
+        } else {
+            if (event.target.value.length > 1000) {
+                this.setState({
+                    messageErrMessage: 'Subject must within 1000 characters',
+                    message: event.target.value
+                });
+            } else {
+                this.setState({
+                    message: event.target.value
+                });
+            }
+        }
     }
 
     handleRequestDelete = (email) => {
@@ -103,10 +148,13 @@ class InviteMemberForm extends React.Component {
                 className={this.props.classes.chip}
             />
         );
-    }
+    };
 
     handleSubmit = () => {
-        if (this.props.invitationCode) {
+        if (this.isFormReady()) {
+            this.setState({
+                submitButtonDisable: true
+            });
             axios({
                 method: 'POST',
                 url: settings.serverUrl + '/api/post/members/invite',
@@ -124,16 +172,20 @@ class InviteMemberForm extends React.Component {
             })
                 .then((response) => {
                     if (response.data.success) {
-                        console.log(response.data);
                         this.props.push('/dashboard');
                         this.props.snackbarMessage('You had successfully invited ' + response.data.numberOfEmails + ' members');
                     } else {
+                        this.setState({
+                            submitButtonDisable: false
+                        });
                         this.props.snackbarMessage('something went wrong please try again');
                     }
                 })
                 .catch((error) => {
                     this.props.snackbarMessage('Some went wrong...');
                 });
+        }else{
+            this.props.snackbarMessage('Please fill up the form');
         }
 
     }
@@ -183,12 +235,12 @@ class InviteMemberForm extends React.Component {
 
         return (
             <div>
-                <input type="text" 
-                value={`https://www.gtplanner.com/trip/join?code=${this.props.invitationCode}`} 
-                id="invitationLink" 
-                onClick={this.handleCopyLink} 
-                className={classes.invitationLink}
-                readOnly />
+                <input type="text"
+                    value={`https://www.gtplanner.com/trip/join?code=${this.props.invitationCode}`}
+                    id="invitationLink"
+                    onClick={this.handleCopyLink}
+                    className={classes.invitationLink}
+                    readOnly />
 
                 <Icon
                     className={classes.copyButton}
@@ -211,7 +263,7 @@ class InviteMemberForm extends React.Component {
                     color="primary"
                     onClick={this.handleAddEmail}
                     className={classes.addButton}
-                    
+
                 >
                     Add
                 </Button><br />
@@ -219,6 +271,8 @@ class InviteMemberForm extends React.Component {
                     label="Subject"
                     onChange={this.handleSubjectChange}
                     className={classes.textField}
+                    helperText={this.state.subjectErrMessage}
+                    error={Boolean(this.state.subjectErrMessage)}
                 /><br />
                 <TextField
                     label="Message"
@@ -226,6 +280,8 @@ class InviteMemberForm extends React.Component {
                     rows='3'
                     onChange={this.handleMessageChange}
                     className={classes.textField}
+                    helperText={this.state.messageErrMessage}
+                    error={Boolean(this.state.messageErrMessage)}
                 /><br />
                 {this.state.emailList.length > 0 &&
                     <div>
@@ -237,6 +293,7 @@ class InviteMemberForm extends React.Component {
                             color="primary"
                             onClick={this.handleSubmit}
                             className={classes.submitButton}
+                            disabled={this.state.submitButtonDisable}
                         >
                             Invite
                         </Button></div>
