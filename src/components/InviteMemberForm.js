@@ -12,8 +12,13 @@ import { withStyles } from 'material-ui/styles';
 import Icon from 'material-ui/Icon';
 import PropTypes from 'prop-types';
 import Dialog, { DialogActions, DialogContent, DialogContentText, DialogTitle } from 'material-ui/Dialog';
+import IconButton from 'material-ui/IconButton';
+import Tooltip from 'material-ui/Tooltip';
 
 const styles = theme => ({
+    form: {
+        marginTop: theme.spacing.unit * 2,
+    },
     addButton: {
         margin: '10px 10px 5px 120px'
     },
@@ -39,7 +44,7 @@ const styles = theme => ({
         width: '200px',
         fontSize: '16px',
         padding: '5px 0 5px 0',
-        margin: theme.spacing.unit,
+        marginBottom: theme.spacing.unit,
     },
     textField: {
         width: '230px',
@@ -64,14 +69,14 @@ class InviteMemberForm extends React.Component {
         const toggleDialogOpen = this.toggleDialogOpen;
     }
 
-    isFormReady=()=>{
-        if(
-            this.state.subject && this.state.message && this.state.emailList &&(
+    isFormReady = () => {
+        if (
+            this.state.subject && this.state.message && this.state.emailList && (
                 !this.state.subjectErrMessage && !this.state.messageErrMessage
             )
-        ){
+        ) {
             return true
-        }else{
+        } else {
             return false
         }
     }
@@ -184,7 +189,7 @@ class InviteMemberForm extends React.Component {
                 .catch((error) => {
                     this.props.snackbarMessage('Some went wrong...');
                 });
-        }else{
+        } else {
             this.props.snackbarMessage('Please fill up the form');
         }
 
@@ -222,7 +227,7 @@ class InviteMemberForm extends React.Component {
         let invitationLink = document.getElementById('invitationLink');
         invitationLink.select();
         document.execCommand('copy');
-        alert('copied the text: ' + invitationLink.value);
+        this.props.snackbarMessage('You had copied the link');
     }
 
     outFunc() {
@@ -234,21 +239,32 @@ class InviteMemberForm extends React.Component {
         const { classes } = this.props;
 
         return (
-            <div>
-                <input type="text"
-                    value={`https://www.gtplanner.com/trip/join?code=${this.props.invitationCode}`}
-                    id="invitationLink"
-                    onClick={this.handleCopyLink}
-                    className={classes.invitationLink}
-                    readOnly />
-
-                <Icon
-                    className={classes.copyButton}
-                    // onmouseout={this.outFunc}
-                    onClick={this.handleCopyLink}
+            <div className={classes.form}>
+                <Tooltip
+                    placement="top"
+                    title="Invitation Link"
                 >
-                    content_copy
-                </Icon> <br />
+                    <input type="text"
+                        value={`https://www.gtplanner.com/trip/join?code=${this.props.invitationCode}`}
+                        id="invitationLink"
+                        onClick={this.handleCopyLink}
+                        className={classes.invitationLink}
+                        readOnly />
+                </Tooltip>
+                <IconButton onClick={this.handleCopyLink}>
+                    <Tooltip
+                        placement="top-end"
+                        title="Click to copy"
+                    >
+                        <Icon
+                            className={classes.copyButton}
+                        >
+                            content_copy
+                </Icon>
+                    </Tooltip>
+                </IconButton>
+                <br />
+
                 <TextField
                     label="Email"
                     onChange={this.handleEmailChange}
@@ -258,6 +274,7 @@ class InviteMemberForm extends React.Component {
                     error={Boolean(this.state.emailErrMessage)}
                     className={classes.textField}
                 /><br />
+
                 <Button
                     variant="raised"
                     color="primary"
@@ -266,7 +283,8 @@ class InviteMemberForm extends React.Component {
 
                 >
                     Add
-                </Button><br />
+                </Button>
+                <br />
                 <TextField
                     label="Subject"
                     onChange={this.handleSubjectChange}
