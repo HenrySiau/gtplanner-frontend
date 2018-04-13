@@ -430,7 +430,7 @@ class RegisterForm extends React.Component {
                     </Button>
 
                 <Dialog
-                    modal={true}
+                    disableBackdropClick={true}
                     open={this.state.isDialogOpen}
                 >
                     <DialogTitle >

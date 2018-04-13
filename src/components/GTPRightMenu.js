@@ -12,6 +12,8 @@ import Popover from 'material-ui/Popover';
 const styles = theme => ({
     rightMenuIcon: {
         marginRight: theme.spacing.unit,
+        fontSize: 30, 
+        color: 'white'
     },
 });
 
@@ -40,7 +42,7 @@ class GTPRightMenu extends React.Component {
                 <IconButton
                     id='appBarRightMenu'
                     onClick={this.handleClick}>
-                    <Icon className={classes.rightMenuIcon} style={{ fontSize: 30, color: 'white' }}>menu</Icon>
+                    <Icon className={classes.rightMenuIcon}>menu</Icon>
                 </IconButton >
 
                 <Popover
