@@ -4,12 +4,40 @@ import Button from 'material-ui/Button';
 import { connect } from 'react-redux';
 import { loginWithPassword } from '../actions';
 import { withStyles } from 'material-ui/styles';
+import instanceConfig from '../instanceConfig';
+import { Link } from 'react-router-dom'
 
 const styles = theme => ({
     button: {
-      margin: theme.spacing.unit,
+        margin: theme.spacing.unit,
+        width: '250px',
     },
-  });
+    forgotPasswordButton: {
+        margin: theme.spacing.unit,
+        width: '250px',
+        color: '#616161',
+        backgroundColor: '#EEEEEE',
+        textTransform: 'capitalize',
+    },
+    textField: {
+        width: '250px',
+        margin: theme.spacing.unit,
+    },
+    loginWith: {
+        width: '250px',
+        textTransform: 'capitalize',
+    },
+    signUpButton: {
+        width: '250px',
+        textTransform: 'capitalize',
+        margin: theme.spacing.unit,
+    }
+});
+
+
+
+
+
 
 class LoginForm extends React.Component {
     constructor(props) {
@@ -20,7 +48,39 @@ class LoginForm extends React.Component {
         };
     }
 
-    // toggleLogin = this.props.toggleLogin;
+    componentDidMount() {
+        window.fbAsyncInit = function () {
+            // FaceBook Login Functions
+            window.FB.init({
+                appId: instanceConfig.facebookAppId,
+                cookie: true,
+                xfbml: true,
+                version: 'v2.12'
+            });
+            // window.FB.AppEvents.logPageView();
+            window.FB.Event.subscribe('auth.statusChange', (response) => {
+                if (response.authResponse) {
+                    console.log('you are logged in');
+                } else {
+                    console.log('you are logged out');
+                }
+            })
+        }.bind(this);
+
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) { return; }
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+        // FB.getLoginStatus(function(response) {
+        //     // statusChangeCallback(response);
+        //     console.log(response);
+        // });
+        // End FaceBook Login Functions
+    }
 
     handleEmailChange = (event) => {
 
@@ -51,20 +111,53 @@ class LoginForm extends React.Component {
                 <TextField
                     label="Email"
                     onChange={this.handleEmailChange}
+                    className={classes.textField}
                 /><br />
                 <TextField
                     label="Password"
                     type="password"
                     onChange={this.handlePasswordChange}
                     onKeyPress={this.handlePressEnter}
+                    className={classes.textField}
                 /><br />
-                <Button 
-                variant="raised" 
-                color="primary" 
-                className={classes.button}
-                onClick={this.handleSubmit}>
-                Login
-                </Button>
+                <Button
+                    variant="raised"
+                    color="primary"
+                    className={classes.button}
+                    onClick={this.handleSubmit}>
+                    Log in
+                </Button><br />
+                <Button
+                    className={classes.forgotPasswordButton}
+                    variant="raised"
+                    component={Link}
+                    to="/password/forgot"
+                >Forgot password?</Button><br />
+                <Button disabled className={classes.loginWith}>
+                    Or Log in with
+      </Button><br />
+                <div className="fb-login-button"
+                    data-max-rows="1" 
+                    data-size="large"
+                    data-width="250" 
+                    data-button-type="login_with"
+                    data-show-faces="false" data-auto-logout-link="false"
+                    data-use-continue-as="true"
+                    style={{
+                        margin: '6px',
+                        width: '250px'
+                    }}
+                >
+                </div><br />
+                <Button
+                    variant="raised"
+                    color="primary"
+                    className={classes.signUpButton}
+                    component={Link}
+                    to="/register"
+                >
+                    No account?  Sign up here
+                </Button><br />
             </div>
         );
     }
