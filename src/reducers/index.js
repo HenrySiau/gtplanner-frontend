@@ -5,6 +5,7 @@ import { isSnackbarOpen, snackbarMessage } from './snackbar';
 import { selectedTrip, inviteCode } from './selectedTrip';
 import { recentTrips } from './recentTrips';
 import isChatRoomOpen from './isChatRoomOpen';
+import isDrawerExtended from './isDrawerExtended';
 
 export default combineReducers({
     isLoggedIn,
@@ -14,5 +15,6 @@ export default combineReducers({
     selectedTrip,
     inviteCode,
     recentTrips,
-    isChatRoomOpen
+    isChatRoomOpen,
+    isDrawerExtended
 })

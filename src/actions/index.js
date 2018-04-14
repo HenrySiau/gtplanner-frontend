@@ -3,6 +3,7 @@ import settings from '../config';
 import { push } from 'react-router-redux';
 import { LOG_IN, LOG_OUT, TOGGLE_DRAWER, SNACKBAR_OPEN, SNACKBAR_CLOSE, SET_SNACKBAR_MESSAGE, UPDATE_SELECTED_TRIP } from './actionTypes';
 import { SET_INVITE_CODE, REMOVE_INVITE_CODE, UPDATE_RECENT_TRIPS, TOGGLE_CHAT_ROOM_OPEN, CHAT_ROOM_OPEN, CHAT_ROOM_CLOSE } from './actionTypes';
+import { DRAWER_EXTEND, DRAWER_FOLD } from './actionTypes';
 
 const login = () => ({ type: LOG_IN });
 
@@ -90,6 +91,8 @@ export function logout() {
 };
 
 export const toggleDrawer = { type: TOGGLE_DRAWER };
+export const toggleDrawerExtend = { type: DRAWER_EXTEND };
+export const toggleDrawerFold = { type: DRAWER_FOLD };
 
 export const toggleChatRoomOpen = { type: TOGGLE_CHAT_ROOM_OPEN };
 export const closeChatRoom = { type: CHAT_ROOM_CLOSE };

@@ -1,12 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { toggleDrawer, updateSelectedTrip } from '../actions';
+import { toggleDrawer, updateSelectedTrip, toggleDrawerExtend, toggleDrawerFold } from '../actions';
 import GTPDrawer from '../components/GTPDrawer';
 
 const mapStateToProps = (state) => {
     return {
         isDrawerOpen: state.isDrawerOpen,
-        recentTrips: state.recentTrips
+        isDrawerExtended: state.isDrawerExtended,
+        recentTrips: state.recentTrips,
+        tripId: state.selectedTrip.tripId,
     }
 }
 
@@ -17,7 +19,13 @@ const mapDispatchToProps = dispatch => {
         },
         updateSelectedTrip: (tripId) => {
             dispatch(updateSelectedTrip(tripId));
-        }
+        },
+        toggleDrawerExtend: () => {
+            dispatch(toggleDrawerExtend());
+        },
+        toggleDrawerFold: () => {
+            dispatch(toggleDrawerFold());
+        },
     }
 }
 
