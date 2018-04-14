@@ -20,23 +20,27 @@ const styles = theme => ({
         // otherwise it will over lay main contain
         [theme.breakpoints.up('sm')]: {
             position: 'relative',
-            
+
         },
     },
     drawerHidden: {
         // position: 'absolute',
         width: 0
+    },
+    tab: {
+        // height: '20px'
+        marginTop: '0'
     }
 });
 
 class ChatRoom extends React.Component {
     state = {
         value: 0,
-      };
+    };
 
-      handleChange = (event, value) => {
+    handleChange = (event, value) => {
         this.setState({ value });
-      };
+    };
 
 
     render() {
@@ -45,40 +49,43 @@ class ChatRoom extends React.Component {
         const chatRoom = (
             <div className={classes.chatRoom}>
                 <AppBar position="static" color="default">
-          <Tabs
-            value={value}
-            onChange={this.handleChange}
-            // scrollable
-            // scrollButtons="on"
-            indicatorColor="primary"
-            textColor="primary"
-          >
-            <Tab label="Discussion" />
-            <Tab label="Members" />
-          </Tabs>
-        </AppBar>
-        {value === 0 && <Typography>Discussion </Typography>}
-        {value === 1 && <Typography>Members</Typography>}
+                    <Tabs
+                        value={value}
+                        onChange={this.handleChange}
+                        // scrollable
+                        // scrollButtons="on"
+                        indicatorColor="primary"
+                        textColor="primary"
+                    >
+                        <Tab label="Discussion" className={classes.tab} />
+                        <Tab label="Members" className={classes.tab} />
+                    </Tabs>
+                </AppBar>
+                {value === 0 && <Typography>Discussion </Typography>}
+                {value === 1 && <Typography>Members</Typography>}
 
             </div >
         );
 
         return (
-        <Drawer
-            // variant="permanent"
-            variant='persistent'
-            anchor='right'
-            open={this.props.isChatRoomOpen}
-            // open={true}
-            classes={this.props.isChatRoomOpen?{paper: classes.drawerPaper,} : {paper: classes.drawerHidden,}}
-        >
-            <div
-                tabIndex={0}
-                role="button"
+            <Drawer
+                // variant="permanent"
+                variant='persistent'
+                anchor='right'
+                open={Boolean(this.props.isChatRoomOpen && this.props.tripId)}
+                // open={true}
+                classes={
+                    this.props.isChatRoomOpen && this.props.tripId ?
+                        { paper: classes.drawerPaper, } :
+                        { paper: classes.drawerHidden, }}
             >
-                {chatRoom}
-            </div>
-        </Drawer>
+                <div
+                    tabIndex={0}
+                    role="button"
+                >
+                    {chatRoom}
+                </div>
+            </Drawer>
         );
     }
 }
