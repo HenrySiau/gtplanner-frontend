@@ -2,10 +2,14 @@ import React from 'react';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 import { connect } from 'react-redux';
-import { loginWithPassword } from '../actions';
 import { withStyles } from 'material-ui/styles';
 import instanceConfig from '../instanceConfig';
 import { Link } from 'react-router-dom'
+import { logout, loginWithPassword } from '../actions';
+import { push } from 'react-router-redux';
+import { Redirect } from 'react-router'
+
+
 
 const styles = theme => ({
     button: {
@@ -33,11 +37,6 @@ const styles = theme => ({
         margin: theme.spacing.unit,
     }
 });
-
-
-
-
-
 
 class LoginForm extends React.Component {
     constructor(props) {
@@ -74,12 +73,6 @@ class LoginForm extends React.Component {
             js.src = "https://connect.facebook.net/en_US/sdk.js";
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
-
-        // FB.getLoginStatus(function(response) {
-        //     // statusChangeCallback(response);
-        //     console.log(response);
-        // });
-        // End FaceBook Login Functions
     }
 
     handleEmailChange = (event) => {
@@ -95,7 +88,7 @@ class LoginForm extends React.Component {
     };
 
     handleSubmit = () => {
-        this.props.dispatch(loginWithPassword(this.state.email, this.state.password, this.props.inviteCode));
+        this.props.loginWithPassword(this.state.email, this.state.password, this.props.inviteCode);
     }
 
     handlePressEnter = (e) => {
@@ -108,6 +101,7 @@ class LoginForm extends React.Component {
         const { classes } = this.props;
         return (
             <div>
+                {this.props.isLoggedIn && <Redirect to="/dashboard" />}
                 <TextField
                     label="Email"
                     onChange={this.handleEmailChange}
@@ -137,9 +131,9 @@ class LoginForm extends React.Component {
                     Or Log in with
       </Button><br />
                 <div className="fb-login-button"
-                    data-max-rows="1" 
+                    data-max-rows="1"
                     data-size="large"
-                    data-width="250" 
+                    data-width="250"
                     data-button-type="login_with"
                     data-show-faces="false" data-auto-logout-link="false"
                     data-use-continue-as="true"
@@ -165,9 +159,23 @@ class LoginForm extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        inviteCode: state.inviteCode
+        inviteCode: state.inviteCode,
+        isLoggedIn: state.isLoggedIn
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return {
+        push: (url) => {
+            dispatch(push(url));
+        },
+        logout: () => {
+            dispatch(logout());
+        },
+        loginWithPassword: (email, password, inviteCode) => {
+            dispatch(loginWithPassword(email, password, inviteCode))
+        }
     }
 }
 
 LoginForm = withStyles(styles)(LoginForm);
-export default connect(mapStateToProps)(LoginForm);
+export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);

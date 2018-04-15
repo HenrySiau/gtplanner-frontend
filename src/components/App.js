@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import GTPAppBarContainer from '../containers/GTPAppBarContainer';
 import GTPDrawerContainer from '../containers/GTPDrawerContainer';
 import ChatRoomContainer from '../containers/ChatRoomContainer';
-import { Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
@@ -57,11 +57,11 @@ class App extends Component {
       <MuiThemeProvider theme={theme}>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <div className={this.props.classes.root}>
-          
+
             <GTPAppBarContainer />
             <GTPDrawerContainer />
-            
             <main className={this.props.classes.content}>
+              <Route exact path="/" component={LoginForm} />
               <Route exact path="/login" component={LoginForm} />
               <Route exact path="/register" component={RegisterForm} />
               <PrivateRoute exact path="/trip/new" component={CreateTripSection} />
@@ -75,8 +75,6 @@ class App extends Component {
     );
   }
 }
-
-
 
 App.propTypes = {
   classes: PropTypes.object.isRequired,
