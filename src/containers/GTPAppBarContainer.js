@@ -17,10 +17,10 @@ const mapDispatchToProps = dispatch => {
             dispatch(push(url));
         },
         logout: () => {
-            dispatch(logout);
+            dispatch(logout());
         },
         toggleDrawer: () => {
-            dispatch(toggleDrawer);
+            dispatch(toggleDrawer());
         },
         validateJWT: (token) =>{
             dispatch(validateJWT(token));
@@ -29,13 +29,13 @@ const mapDispatchToProps = dispatch => {
             dispatch(updateSelectedTrip(tripId));
         },
         toggleChatRoomOpen: () => {
-            dispatch(toggleChatRoomOpen);
+            dispatch(toggleChatRoomOpen());
         },
         openChatRoom: () => {
-            dispatch(openChatRoom);
+            dispatch(openChatRoom());
         },
         closeChatRoom: () => {
-            dispatch(closeChatRoom);
+            dispatch(closeChatRoom());
         }
     }
 }

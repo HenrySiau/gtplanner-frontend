@@ -69,7 +69,7 @@ class GTPAvatar extends React.Component {
                             this.setState({ avatarAnchor: null });
                         }}>Help</MenuItem>
                         <MenuItem onClick={() => {
-                            this.props.dispatch(logout);
+                            this.props.dispatch(logout());
                             this.setState({ avatarAnchor: null });
                             window.location = "/";
                         }}>Logout</MenuItem>

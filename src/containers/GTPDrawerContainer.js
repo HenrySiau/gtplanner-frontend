@@ -15,7 +15,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => {
     return {
         toggleDrawer: () => {
-            dispatch(toggleDrawer);
+            dispatch(toggleDrawer());
         },
         updateSelectedTrip: (tripId) => {
             dispatch(updateSelectedTrip(tripId));

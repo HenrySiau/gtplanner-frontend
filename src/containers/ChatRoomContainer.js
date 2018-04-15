@@ -13,7 +13,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => {
     return {
         toggleChatRoomOpen: () => {
-            dispatch(toggleChatRoomOpen);
+            dispatch(toggleChatRoomOpen());
         }
     }
 }

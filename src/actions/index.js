@@ -90,12 +90,12 @@ export function logout() {
     }
 };
 
-export const toggleDrawer = { type: TOGGLE_DRAWER };
-export const toggleDrawerExtend = { type: DRAWER_EXTEND };
-export const toggleDrawerFold = { type: DRAWER_FOLD };
+export const toggleDrawer = () => ({ type: TOGGLE_DRAWER });
+export const toggleDrawerExtend = () => ({ type: DRAWER_EXTEND });
+export const toggleDrawerFold = () => ({ type: DRAWER_FOLD });
 
-export const toggleChatRoomOpen = { type: TOGGLE_CHAT_ROOM_OPEN };
-export const closeChatRoom = { type: CHAT_ROOM_CLOSE };
+export const toggleChatRoomOpen = () => ({ type: TOGGLE_CHAT_ROOM_OPEN });
+export const closeChatRoom = () => ({ type: CHAT_ROOM_CLOSE });
 
 export function validateJWT(id_token) {
     // TODO ajax call required
@@ -105,8 +105,8 @@ export function validateJWT(id_token) {
     }
 }
 
-export const snackbarMessageOpen = { type: SNACKBAR_OPEN };
-export const snackbarMessageClose = { type: SNACKBAR_CLOSE };
+export const snackbarMessageOpen = () => ({ type: SNACKBAR_OPEN });
+export const snackbarMessageClose = () => ( { type: SNACKBAR_CLOSE });
 
 export function setSnackbarMessage(message) {
     return {

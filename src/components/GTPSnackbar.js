@@ -31,7 +31,7 @@ const mapStateToProps = (state) => {
   const mapDispatchToProps = dispatch => {
     return {
         snackbarMessageClose: () => {
-            dispatch(snackbarMessageClose);
+            dispatch(snackbarMessageClose());
         }
     }
 }
