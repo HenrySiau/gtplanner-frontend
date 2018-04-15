@@ -14,6 +14,7 @@ import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsPr
 import GTPSnackbar from './GTPSnackbar';
 import RegisterForm from './RegisterForm';
 import InviteMemberForm from './InviteMemberForm';
+import JoinATrip from './JoinATrip';
 
 
 const theme = createMuiTheme({
@@ -64,7 +65,8 @@ class App extends Component {
               <Route exact path="/" component={LoginForm} />
               <Route exact path="/login" component={LoginForm} />
               <Route exact path="/register" component={RegisterForm} />
-              <PrivateRoute exact path="/trip/new" component={CreateTripSection} />
+              <Route exact path="/register" component={RegisterForm} />
+              <PrivateRoute exact path="/trip/join" component={JoinATrip} />
               <PrivateRoute exact path="/members/invite" component={InviteMemberForm} />
             </main>
             <ChatRoomContainer />

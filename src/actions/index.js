@@ -11,7 +11,6 @@ export function loginWithToken(id_token) {
     localStorage.setItem('id_token', id_token);
     return function (dispatch) {
         dispatch(login());
-        dispatch(updateSelectedTrip(null));
         dispatch(fetchRecentTrips());
     }
 };
@@ -24,11 +23,6 @@ export function loginWithPassword(email, password, inviteCode) {
             inviteCode: inviteCode
         })
             .then(function (response) {
-                // if receive trip info
-                if (response.data.tripInfo) {
-                    // update trip info to redux store
-                    dispatch(updateSelectedTripWithInfo(response.data.tripInfo));
-                }
                 let id_token = response.data.token;
                 if (id_token) {
                     dispatch(loginWithToken(id_token));
@@ -117,7 +111,7 @@ export function setSnackbarMessage(message) {
 
 export function snackbarMessage(message) {
     return function (dispatch) {
-        dispatch(snackbarMessageOpen);
+        dispatch(snackbarMessageOpen());
         dispatch(setSnackbarMessage(message));
     }
 }

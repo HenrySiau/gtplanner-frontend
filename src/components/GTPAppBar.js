@@ -60,7 +60,13 @@ class GTPAppBar extends React.Component {
         if (localStorage.getItem('id_token')) {
             // wil login if id_token is valid
             this.props.validateJWT(localStorage.getItem('id_token'));
-            this.props.updateSelectedTrip(null); //fetch default trip info
+
+            // do not fetch selectedTrip when joining a code
+            // will fetch a new trip at joint a trip page
+            if (!window.location.href.match(/\/trip\/join\?code\=/)) {
+                this.props.updateSelectedTrip(null); //fetch default trip info
+                console.log('updateSelectedTrip at App Bar');
+            }
         }
         if (window.innerWidth < 600) {
             this.props.closeChatRoom();

@@ -56,7 +56,7 @@ class GTPDrawer extends React.Component {
         if (this.props.width === 'md' || this.props.width === 'lg' || this.props.width === 'xl') {
             this.props.toggleDrawer();
         }
-        if (this.props.width === 'lg' || this.props.width === 'xl') {
+        if (this.props.width === 'xl') {
             this.props.toggleDrawerExtend();
         }
     }

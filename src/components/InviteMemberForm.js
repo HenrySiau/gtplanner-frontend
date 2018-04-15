@@ -240,17 +240,13 @@ class InviteMemberForm extends React.Component {
 
         return (
             <div className={classes.form}>
-                <Tooltip
-                    placement="top"
-                    title="Invitation Link"
-                >
-                    <input type="text"
-                        value={`https://www.gtplanner.com/trip/join?code=${this.props.invitationCode}`}
-                        id="invitationLink"
-                        onClick={this.handleCopyLink}
-                        className={classes.invitationLink}
-                        readOnly />
-                </Tooltip>
+                <input type="text"
+                    // value={`https://www.gtplanner.com/trip/join?code=${this.props.invitationCode}`}
+                    value={`https://localhost:3000/trip/join?code=${this.props.invitationCode}`}
+                    id="invitationLink"
+                    onClick={this.handleCopyLink}
+                    className={classes.invitationLink}
+                    readOnly />
                 <IconButton onClick={this.handleCopyLink}>
                     <Tooltip
                         placement="top-end"
