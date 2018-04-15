@@ -65,8 +65,7 @@ class App extends Component {
               <Route exact path="/" component={LoginForm} />
               <Route exact path="/login" component={LoginForm} />
               <Route exact path="/register" component={RegisterForm} />
-              <Route exact path="/register" component={RegisterForm} />
-              <PrivateRoute exact path="/trip/join" component={JoinATrip} />
+              <Route exact path="/trip/join" component={JoinATrip} />
               <PrivateRoute exact path="/members/invite" component={InviteMemberForm} />
             </main>
             <ChatRoomContainer />
