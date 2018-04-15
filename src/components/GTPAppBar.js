@@ -62,19 +62,19 @@ class GTPAppBar extends React.Component {
             this.props.validateJWT(localStorage.getItem('id_token'));
             this.props.updateSelectedTrip(null); //fetch default trip info
         }
-        if (window.innerWidth < 600){
+        if (window.innerWidth < 600) {
             this.props.closeChatRoom();
             console.log(window.innerWidth);
         }
-            window.addEventListener('resize', this.handleResize)
+        window.addEventListener('resize', this.handleResize)
     }
 
     handleResize = () => {
-        if (window.innerWidth < 600){
+        if (window.innerWidth < 600) {
             console.log(window.innerWidth);
             this.props.closeChatRoom();
         }
-        
+
     }
     render() {
         const { classes } = this.props;
@@ -119,7 +119,7 @@ class GTPAppBar extends React.Component {
 
                 <Typography variant="title" color="inherit" className={classes.flex} >
                     {this.props.selectedTrip && (this.props.selectedTrip.title || 'Group Travel Planner')}
-                            </Typography>
+                </Typography>
             )
         }
         const XsTitle = () => {
@@ -133,9 +133,14 @@ class GTPAppBar extends React.Component {
             <div className={classes.root}>
                 <AppBar position="absolute" className={classes.GTPAppBar}>
                     <Toolbar>
-                        <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={this.props.toggleDrawer} >
-                            <Icon className={classes.icon} style={{ fontSize: 30, color: 'white' }}>menu</Icon>
-                        </IconButton>
+                        {this.props.isLoggedIn
+                            && <IconButton
+                                className={classes.menuButton}
+                                color="inherit" aria-label="Menu"
+                                onClick={this.props.toggleDrawer} >
+                                <Icon className={classes.icon} style={{ fontSize: 30, color: 'white' }}>menu</Icon>
+                            </IconButton>
+                        }
                         {this.props.width === 'xs' ? <XsTitle /> : <Title />}
                         {this.props.isLoggedIn ? <Logged /> : <Login />}
 

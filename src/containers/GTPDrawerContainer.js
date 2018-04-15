@@ -9,6 +9,7 @@ const mapStateToProps = (state) => {
         isDrawerExtended: state.isDrawerExtended,
         recentTrips: state.recentTrips,
         tripId: state.selectedTrip.tripId,
+        isLoggedIn: state.isLoggedIn,
     }
 }
 

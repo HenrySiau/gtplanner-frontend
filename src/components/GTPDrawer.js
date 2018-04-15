@@ -53,7 +53,6 @@ const styles = theme => ({
 
 class GTPDrawer extends React.Component {
     componentDidMount() {
-        console.log(this.props.width);
         if (this.props.width === 'md' || this.props.width === 'lg' || this.props.width === 'xl') {
             this.props.toggleDrawer();
         }
@@ -63,13 +62,17 @@ class GTPDrawer extends React.Component {
     }
 
     getDrawerClass = () => {
-        if (this.props.isDrawerClose) {
+        if (!this.props.isLoggedIn) {
             return ({ paper: this.props.classes.drawerClosed })
         } else {
-            if (this.props.isDrawerExtended) {
-                return ({ paper: this.props.classes.drawerPaperExtended })
+            if (!this.props.isDrawerOpen) {
+                return ({ paper: this.props.classes.drawerClosed })
             } else {
-                return { paper: this.props.classes.drawerPaperFolded }
+                if (this.props.isDrawerExtended) {
+                    return ({ paper: this.props.classes.drawerPaperExtended })
+                } else {
+                    return { paper: this.props.classes.drawerPaperFolded }
+                }
             }
         }
 
@@ -162,7 +165,7 @@ class GTPDrawer extends React.Component {
         return (<Drawer
             anchor='left'
             variant='persistent'
-            open={this.props.isDrawerOpen}
+            open={this.props.isDrawerOpen && this.props.isLoggedIn}
             onClose={this.props.toggleDrawer}
             classes={this.getDrawerClass()}
         >
