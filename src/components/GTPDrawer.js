@@ -1,6 +1,8 @@
 import React from 'react';
 import Drawer from 'material-ui/Drawer';
+import compose from 'recompose/compose';
 import { withStyles } from 'material-ui/styles';
+import withWidth from 'material-ui/utils/withWidth';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import InboxIcon from 'material-ui-icons/Inbox';
 import DraftsIcon from 'material-ui-icons/Drafts';
@@ -50,9 +52,15 @@ const styles = theme => ({
 });
 
 class GTPDrawer extends React.Component {
-    state = {
-        isDrawerClose: true
-    };
+    componentDidMount() {
+        console.log(this.props.width);
+        if (this.props.width === 'md' || this.props.width === 'lg' || this.props.width === 'xl') {
+            this.props.toggleDrawer();
+        }
+        if (this.props.width === 'lg' || this.props.width === 'xl') {
+            this.props.toggleDrawerExtend();
+        }
+    }
 
     getDrawerClass = () => {
         if (this.props.isDrawerClose) {
@@ -94,56 +102,56 @@ class GTPDrawer extends React.Component {
                     {this.generateNavigationIcon()}
                     <ListItem button>
                         <ListItemIcon>
-                        <Icon >map</Icon>
+                            <Icon >map</Icon>
                         </ListItemIcon>
                         <ListItemText primary="Map" />
                     </ListItem>
                     <ListItem button>
                         <ListItemIcon>
-                        <Icon >view_list</Icon>
+                            <Icon >view_list</Icon>
                         </ListItemIcon>
                         <ListItemText primary="Events" />
                     </ListItem>
                     <ListItem button>
                         <ListItemIcon>
-                        <Icon >pie_chart</Icon>
+                            <Icon >pie_chart</Icon>
                         </ListItemIcon>
                         <ListItemText primary="Split" />
                     </ListItem>
                     <Divider />
                     <ListItem button>
                         <ListItemIcon>
-                        <Icon >event</Icon>
+                            <Icon >event</Icon>
                         </ListItemIcon>
                         <ListItemText primary="Calender" />
                     </ListItem>
                     <ListItem button>
                         <ListItemIcon>
-                        <Icon >favorite</Icon>
+                            <Icon >favorite</Icon>
                         </ListItemIcon>
                         <ListItemText primary="Ideas" />
                     </ListItem>
                     <ListItem button>
                         <ListItemIcon>
-                        <Icon >check_box</Icon>
+                            <Icon >check_box</Icon>
                         </ListItemIcon>
                         <ListItemText primary="Checklist" />
                     </ListItem>
                     <ListItem button>
                         <ListItemIcon>
-                        <Icon >camera_alt</Icon>
+                            <Icon >camera_alt</Icon>
                         </ListItemIcon>
                         <ListItemText primary="Photos" />
                     </ListItem>
                     <ListItem button>
                         <ListItemIcon>
-                        <Icon >account_balance_wallet</Icon>
+                            <Icon >account_balance_wallet</Icon>
                         </ListItemIcon>
                         <ListItemText primary="Budget" />
                     </ListItem>
                     <ListItem button>
                         <ListItemIcon>
-                        <Icon >mail_outline</Icon>
+                            <Icon >mail_outline</Icon>
                         </ListItemIcon>
                         <ListItemText primary="Invites" />
                     </ListItem>
@@ -172,4 +180,4 @@ GTPDrawer.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(GTPDrawer);
+export default compose(withStyles(styles), withWidth())(GTPDrawer);
