@@ -7,7 +7,7 @@ import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import PrivateRoute from './PrivateRoute';
-import LoginForm from './LoginForm';
+import LoginSection from '../sections/LoginSection';
 import CreateTripSection from '../sections/CreateTripSection';
 import DateFnsUtils from 'material-ui-pickers/utils/date-fns-utils';
 import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
@@ -62,11 +62,12 @@ class App extends Component {
             <GTPAppBarContainer />
             <GTPDrawerContainer />
             <main className={this.props.classes.content}>
-              <Route exact path="/" component={LoginForm} />
-              <Route exact path="/login" component={LoginForm} />
+              <Route exact path="/" component={LoginSection} />
+              <Route exact path="/login" component={LoginSection} />
               <Route exact path="/register" component={RegisterForm} />
               <Route exact path="/trip/join" component={JoinATrip} />
               <PrivateRoute exact path="/members/invite" component={InviteMemberForm} />
+              <PrivateRoute exact path="/trip/new" component={CreateTripSection} />
             </main>
             <ChatRoomContainer />
             <GTPSnackbar />

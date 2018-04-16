@@ -63,6 +63,7 @@ class GTPAppBar extends React.Component {
 
             // do not fetch selectedTrip when joining a code
             // will fetch a new trip at joint a trip page
+            console.log(window.location.href);
             if (!window.location.href.match(/\/trip\/join\?code\=/)) {
                 this.props.updateSelectedTrip(null); //fetch default trip info
                 console.log('updateSelectedTrip at App Bar');

@@ -13,7 +13,6 @@ import Divider from 'material-ui/Divider';
 const drawerWidth = 150;
 const styles = theme => ({
     drawer: {
-
     },
     drawerPaperExtended: {
         width: drawerWidth,
@@ -23,7 +22,6 @@ const styles = theme => ({
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
         }),
-
     },
     drawerPaperFolded: {
         overflowX: 'hidden',
@@ -47,7 +45,6 @@ const styles = theme => ({
         marginLeft: '0 90 0 0'
     },
     navigationIconFolded: {
-
     }
 });
 

@@ -12,6 +12,9 @@ import { Redirect } from 'react-router'
 
 
 const styles = theme => ({
+    form:{
+        backgroundColor: 'white'
+    },
     button: {
         margin: theme.spacing.unit,
         width: '250px',
@@ -76,7 +79,6 @@ class LoginForm extends React.Component {
     }
 
     handleEmailChange = (event) => {
-
         this.setState({
             email: event.target.value
         });
@@ -103,7 +105,7 @@ class LoginForm extends React.Component {
     render() {
         const { classes } = this.props;
         return (
-            <div>
+            <div className={classes.form}>
                 {this.props.isLoggedIn && <Redirect to="/dashboard" />}
                 <TextField
                     label="Email"

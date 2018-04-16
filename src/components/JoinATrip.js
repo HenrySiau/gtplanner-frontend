@@ -38,13 +38,13 @@ const styles = theme => ({
 
 
 class RedirectWithMessage extends React.Component {
-    componentDidMount(){
-        console.log('redirect with Message');
-        const re =  /\/trip\/join\?code\=/ 
+    componentDidMount() {
+        this.props.push('/dashboard');
+        this.props.snackbarMessage('Welcome to your new trip!');
     }
-    render(){
-        return(
-            <div>{window.location.href.match(/\/trip\/join\?code\=/) && 'Match!' }</div>
+    render() {
+        return (
+            <div></div>
         )
     }
 
@@ -52,7 +52,6 @@ class RedirectWithMessage extends React.Component {
 
 class JoinATrip extends React.Component {
     state = {
-        isNextStepDialogOpen: false,
         isInvitationCodeValid: false,
     }
 
@@ -69,11 +68,6 @@ class JoinATrip extends React.Component {
                             this.setState({
                                 isInvitationCodeValid: true
                             });
-                            if (!this.props.isLoggedIn) {
-                                this.setState({
-                                    isNextStepDialogOpen: true,
-                                });
-                            }
 
                         } else {
                             this.props.push('/');
@@ -100,12 +94,9 @@ class JoinATrip extends React.Component {
         return (
             <div>
                 <h1>Join A Trip</h1>
-                <h1>{this.state.invitationCode}</h1>
-                <h1>{this.props.location.search.slice(6)}</h1>
-
                 <Dialog
                     disableBackdropClick={true}
-                    open={this.state.isNextStepDialogOpen}
+                    open={this.state.isInvitationCodeValid && !this.props.isLoggedIn}
                 >
                     <DialogTitle >
                         {"Welcome"}
@@ -119,7 +110,7 @@ class JoinATrip extends React.Component {
                         <Button
                             variant="raised"
                             color="primary"
-                            onClick={() => { this.props.push('/register') }}
+                            onClick={() => { this.props.push('/login') }}
                             className={classes.dialogButton}
                         >
                             Login
@@ -136,7 +127,10 @@ class JoinATrip extends React.Component {
                     </DialogActions>
                 </Dialog>
                 {/* we need to use different props or status incase user logged in with selectedTrip */}
-                {(this.props.isLoggedIn && this.state.isInvitationCodeValid) && <RedirectWithMessage />}
+                {(this.props.isLoggedIn && this.state.isInvitationCodeValid) && <RedirectWithMessage 
+                snackbarMessage={this.props.snackbarMessage}
+                push={this.props.push}
+                />}
             </div>
         );
     }
