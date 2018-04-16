@@ -72,9 +72,9 @@ class ChatRoom extends React.Component {
                 // variant="permanent"
                 variant='persistent'
                 anchor='right'
-                open={Boolean(this.props.isChatRoomOpen && this.props.tripId && this.props.isLoggedIn)}
+                open={this.props.isChatRoomOpen && this.props.isLoggedIn && Boolean(this.props.tripId)}
                 classes={
-                    this.props.isChatRoomOpen && this.props.tripId ?
+                    this.props.isChatRoomOpen && this.props.tripId && this.props.isLoggedIn?
                         { paper: classes.drawerPaper, } :
                         { paper: classes.drawerHidden, }}
             >
