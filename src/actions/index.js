@@ -15,7 +15,7 @@ export function loginWithToken(id_token) {
     }
 };
 
-export function loginWithPassword(email, password, inviteCode) {
+export function loginWithPassword(email, password, inviteCode, fetchDefaultTrip) {
     return function (dispatch) {
         axios.post(settings.serverUrl + '/api/post/signin', {
             email: email,
@@ -26,6 +26,12 @@ export function loginWithPassword(email, password, inviteCode) {
                 let id_token = response.data.token;
                 if (id_token) {
                     dispatch(loginWithToken(id_token));
+                    // if there is no selected Trip
+                    // fetch the default Trip
+                    // if there is a selected Trip from joining a trip do not fetch trip
+                    if (fetchDefaultTrip) {
+                        dispatch(updateSelectedTrip(null));
+                    }
                     dispatch(push('/dashboard'));
                 }
             })
@@ -100,7 +106,7 @@ export function validateJWT(id_token) {
 }
 
 export const snackbarMessageOpen = () => ({ type: SNACKBAR_OPEN });
-export const snackbarMessageClose = () => ( { type: SNACKBAR_CLOSE });
+export const snackbarMessageClose = () => ({ type: SNACKBAR_CLOSE });
 
 export function setSnackbarMessage(message) {
     return {

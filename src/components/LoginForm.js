@@ -88,7 +88,10 @@ class LoginForm extends React.Component {
     };
 
     handleSubmit = () => {
-        this.props.loginWithPassword(this.state.email, this.state.password, this.props.inviteCode);
+        // console.log('fetchDefaultTrip: ' + Boolean(!this.props.tripId));
+        let fetchDefaultTrip = this.props.tripId? false : true;
+        console.log('fetchDefaultTrip: ' + fetchDefaultTrip);
+        this.props.loginWithPassword(this.state.email, this.state.password, this.props.inviteCode, fetchDefaultTrip);
     }
 
     handlePressEnter = (e) => {
@@ -160,7 +163,8 @@ class LoginForm extends React.Component {
 const mapStateToProps = (state) => {
     return {
         inviteCode: state.inviteCode,
-        isLoggedIn: state.isLoggedIn
+        isLoggedIn: state.isLoggedIn,
+        tripId: state.selectedTrip.tripId,
     }
 }
 const mapDispatchToProps = dispatch => {
@@ -171,8 +175,8 @@ const mapDispatchToProps = dispatch => {
         logout: () => {
             dispatch(logout());
         },
-        loginWithPassword: (email, password, inviteCode) => {
-            dispatch(loginWithPassword(email, password, inviteCode))
+        loginWithPassword: (email, password, inviteCode, fetchDefaultTrip) => {
+            dispatch(loginWithPassword(email, password, inviteCode, fetchDefaultTrip))
         }
     }
 }
