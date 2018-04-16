@@ -6,7 +6,8 @@ import ChatRoom from '../components/ChatRoom';
 const mapStateToProps = (state) => {
     return {
         isChatRoomOpen: state.isChatRoomOpen,
-        tripId: state.selectedTrip.tripId
+        tripId: state.selectedTrip.tripId,
+        isLoggedIn: state.isLoggedIn
     }
 }
 
