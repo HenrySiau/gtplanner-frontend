@@ -12,7 +12,7 @@ import { Redirect } from 'react-router'
 
 
 const styles = theme => ({
-    form:{
+    form: {
         backgroundColor: 'white'
     },
     button: {
@@ -62,7 +62,12 @@ class LoginForm extends React.Component {
             // window.FB.AppEvents.logPageView();
             window.FB.Event.subscribe('auth.statusChange', (response) => {
                 if (response.authResponse) {
+                    console.log(response.authResponse);
+                    console.log('accessToken: ' + response.authResponse.accessToken);
                     console.log('you are logged in');
+                    window.FB.api('/me', 'GET', {fields: 'first_name,last_name,name,id,email,picture.width(150).height(150)'}, function(response) {
+                        console.log(JSON.stringify(response));
+                    });
                 } else {
                     console.log('you are logged out');
                 }
@@ -78,6 +83,7 @@ class LoginForm extends React.Component {
         }(document, 'script', 'facebook-jssdk'));
     }
 
+
     handleEmailChange = (event) => {
         this.setState({
             email: event.target.value
@@ -91,7 +97,7 @@ class LoginForm extends React.Component {
 
     handleSubmit = () => {
         // console.log('fetchDefaultTrip: ' + Boolean(!this.props.tripId));
-        let fetchDefaultTrip = this.props.tripId? false : true;
+        let fetchDefaultTrip = this.props.tripId ? false : true;
         console.log('fetchDefaultTrip: ' + fetchDefaultTrip);
         this.props.loginWithPassword(this.state.email, this.state.password, this.props.inviteCode, fetchDefaultTrip);
     }
@@ -142,6 +148,7 @@ class LoginForm extends React.Component {
                     data-button-type="login_with"
                     data-show-faces="false" data-auto-logout-link="false"
                     data-use-continue-as="true"
+                    scope="email"
                     style={{
                         margin: '6px',
                         width: '250px'
