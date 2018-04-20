@@ -3,7 +3,7 @@ import settings from '../config';
 import { push } from 'react-router-redux';
 import { LOG_IN, LOG_OUT, TOGGLE_DRAWER, SNACKBAR_OPEN, SNACKBAR_CLOSE, SET_SNACKBAR_MESSAGE, UPDATE_SELECTED_TRIP } from './actionTypes';
 import { SET_INVITE_CODE, REMOVE_INVITE_CODE, UPDATE_RECENT_TRIPS, TOGGLE_CHAT_ROOM_OPEN, CHAT_ROOM_OPEN, CHAT_ROOM_CLOSE } from './actionTypes';
-import { DRAWER_EXTEND, DRAWER_FOLD } from './actionTypes';
+import { DRAWER_EXTEND, DRAWER_FOLD, UPDATE_USER_INFO } from './actionTypes';
 
 const login = () => ({ type: LOG_IN });
 
@@ -43,7 +43,7 @@ export function loginWithPassword(email, password, inviteCode, fetchDefaultTrip)
     }
 };
 
-export function loginWithFacebook(userName, email, accessToken, inviteCode, fetchDefaultTrip) {
+export function loginWithFacebook(userName, email, phoneNumber, profilePictureURL, accessToken, inviteCode, fetchDefaultTrip) {
     return function (dispatch) {
         axios.post(settings.serverUrl + '/api/post/login/facebook', {
             userName: userName,
@@ -56,6 +56,7 @@ export function loginWithFacebook(userName, email, accessToken, inviteCode, fetc
                 let id_token = response.data.token;
                 if (id_token) {
                     dispatch(loginWithToken(id_token));
+                    dispatch(updateUserInfo(response.data.userId, userName, email, phoneNumber, profilePictureURL))
                     // if there is no selected Trip
                     // fetch the default Trip
                     // if there is a selected Trip from joining a trip do not fetch trip
@@ -204,3 +205,12 @@ export function fetchRecentTrips() {
     }
 
 };
+
+export const updateUserInfo = (userId, userName, email, phoneNumber, profilePictureURL) => ({
+    type: UPDATE_USER_INFO,
+    userId: userId,
+    userName: userName,
+    email: email,
+    phoneNumber: phoneNumber,
+    profilePictureURL: profilePictureURL,
+});

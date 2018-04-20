@@ -13,4 +13,5 @@ export const CHAT_ROOM_OPEN= 'CHAT_ROOM_OPEN';
 export const CHAT_ROOM_CLOSE= 'CHAT_ROOM_CLOSE';
 export const DRAWER_EXTEND= 'DRAWER_EXTEND';
 export const DRAWER_FOLD= 'DRAWER_FOLD';
+export const UPDATE_USER_INFO= 'UPDATE_USER_INFO';
 

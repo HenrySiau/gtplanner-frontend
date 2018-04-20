@@ -6,6 +6,7 @@ import { selectedTrip, inviteCode } from './selectedTrip';
 import { recentTrips } from './recentTrips';
 import isChatRoomOpen from './isChatRoomOpen';
 import isDrawerExtended from './isDrawerExtended';
+import {userInfo} from './userInfo';
 
 export default combineReducers({
     isLoggedIn,
@@ -16,5 +17,6 @@ export default combineReducers({
     inviteCode,
     recentTrips,
     isChatRoomOpen,
-    isDrawerExtended
+    isDrawerExtended,
+    userInfo
 })

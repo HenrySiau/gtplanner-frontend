@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { withStyles } from 'material-ui/styles';
 import instanceConfig from '../instanceConfig';
 import { Link } from 'react-router-dom'
-import { logout, loginWithPassword, loginWithFacebook } from '../actions';
+import { logout, loginWithPassword, loginWithFacebook, updateUserInfo } from '../actions';
 import { push } from 'react-router-redux';
 import { Redirect } from 'react-router'
 
@@ -64,11 +64,12 @@ class LoginForm extends React.Component {
                 if (response.authResponse) {
                     const accessToken = response.authResponse.accessToken;
                     const fetchDefaultTrip = this.props.tripId ? false : true;
-                    console.log('you are logged in');
                     window.FB.api('/me', 'GET', { fields: 'name,email,picture.width(150).height(150)' }, (response) => {
+                        console.log(response);
                         const userName = response.name;
                         const email = response.email;
-                        this.props.loginWithFacebook(userName, email, accessToken, this.props.inviteCode, fetchDefaultTrip);
+                        const profilePictureURL= response.picture.data.url;
+                        this.props.loginWithFacebook(userName, email, null,  profilePictureURL, accessToken, this.props.inviteCode, fetchDefaultTrip);
                     });
                 } else {
                     console.log('you are logged out');
@@ -191,6 +192,9 @@ const mapDispatchToProps = dispatch => {
         },
         loginWithFacebook: (userName, email, accessToken, inviteCode, fetchDefaultTrip) => {
             dispatch(loginWithFacebook(userName, email, accessToken, inviteCode, fetchDefaultTrip))
+        },
+        updateUserInfo: (userId, userName, email, phone, profilePictureURL) =>{
+            dispatch(updateUserInfo(userId, userName, email, phone, profilePictureURL))
         }
     }
 }

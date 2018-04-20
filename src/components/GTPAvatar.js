@@ -26,7 +26,6 @@ class GTPAvatar extends React.Component {
         avatarAnchor: null,
     };
 
-
     handleClick = event => {
         this.setState({ avatarAnchor: event.currentTarget });
     };
@@ -48,7 +47,7 @@ class GTPAvatar extends React.Component {
                     onClick={this.handleClick}>
                     <Avatar
                         alt="Profile Photo"
-                        src={settings.imageServerUrl + '/images/user.png'}
+                        src={this.props.profilePictureURL}
                         className={classes.avatar}
                     /> </IconButton >
 
@@ -83,5 +82,11 @@ class GTPAvatar extends React.Component {
 GTPAvatar.propTypes = {
     classes: PropTypes.object.isRequired,
 };
+const mapStateToProps = (state) => {
+    return {
+        profilePictureURL: state.userInfo.profilePictureURL
+    }
+}
+
 GTPAvatar = withStyles(styles)(GTPAvatar);
-export default connect()(GTPAvatar)
+export default connect(mapStateToProps)(GTPAvatar)
