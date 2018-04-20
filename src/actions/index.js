@@ -43,6 +43,36 @@ export function loginWithPassword(email, password, inviteCode, fetchDefaultTrip)
     }
 };
 
+export function loginWithFacebook(userName, email, accessToken, inviteCode, fetchDefaultTrip) {
+    return function (dispatch) {
+        axios.post(settings.serverUrl + '/api/post/login/facebook', {
+            userName: userName,
+            email: email,
+            accessToken: accessToken,
+            inviteCode: inviteCode,
+        })
+            .then(function (response) {
+                console.log(response);
+                let id_token = response.data.token;
+                if (id_token) {
+                    dispatch(loginWithToken(id_token));
+                    // if there is no selected Trip
+                    // fetch the default Trip
+                    // if there is a selected Trip from joining a trip do not fetch trip
+                    if (fetchDefaultTrip) {
+                        dispatch(updateSelectedTrip(null));
+                    }
+                    dispatch(push('/dashboard'));
+                }
+            })
+            .catch(function (error) {
+                // TODO: show error message and guide user to re submit
+                console.error(error);
+                dispatch(snackbarMessage('something went wrong'));
+            });
+    }
+};
+
 export function updateSelectedTrip(tripId) {
     return function (dispatch) {
         axios({

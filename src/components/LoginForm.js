@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { withStyles } from 'material-ui/styles';
 import instanceConfig from '../instanceConfig';
 import { Link } from 'react-router-dom'
-import { logout, loginWithPassword } from '../actions';
+import { logout, loginWithPassword, loginWithFacebook } from '../actions';
 import { push } from 'react-router-redux';
 import { Redirect } from 'react-router'
 
@@ -62,11 +62,13 @@ class LoginForm extends React.Component {
             // window.FB.AppEvents.logPageView();
             window.FB.Event.subscribe('auth.statusChange', (response) => {
                 if (response.authResponse) {
-                    console.log(response.authResponse);
-                    console.log('accessToken: ' + response.authResponse.accessToken);
+                    const accessToken = response.authResponse.accessToken;
+                    const fetchDefaultTrip = this.props.tripId ? false : true;
                     console.log('you are logged in');
-                    window.FB.api('/me', 'GET', {fields: 'first_name,last_name,name,id,email,picture.width(150).height(150)'}, function(response) {
-                        console.log(JSON.stringify(response));
+                    window.FB.api('/me', 'GET', { fields: 'name,email,picture.width(150).height(150)' }, (response) => {
+                        const userName = response.name;
+                        const email = response.email;
+                        this.props.loginWithFacebook(userName, email, accessToken, this.props.inviteCode, fetchDefaultTrip);
                     });
                 } else {
                     console.log('you are logged out');
@@ -97,7 +99,7 @@ class LoginForm extends React.Component {
 
     handleSubmit = () => {
         // console.log('fetchDefaultTrip: ' + Boolean(!this.props.tripId));
-        let fetchDefaultTrip = this.props.tripId ? false : true;
+        const fetchDefaultTrip = this.props.tripId ? false : true;
         console.log('fetchDefaultTrip: ' + fetchDefaultTrip);
         this.props.loginWithPassword(this.state.email, this.state.password, this.props.inviteCode, fetchDefaultTrip);
     }
@@ -186,6 +188,9 @@ const mapDispatchToProps = dispatch => {
         },
         loginWithPassword: (email, password, inviteCode, fetchDefaultTrip) => {
             dispatch(loginWithPassword(email, password, inviteCode, fetchDefaultTrip))
+        },
+        loginWithFacebook: (userName, email, accessToken, inviteCode, fetchDefaultTrip) => {
+            dispatch(loginWithFacebook(userName, email, accessToken, inviteCode, fetchDefaultTrip))
         }
     }
 }
