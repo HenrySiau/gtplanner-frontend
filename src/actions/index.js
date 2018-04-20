@@ -52,7 +52,6 @@ export function loginWithFacebook(userName, email, phoneNumber, profilePictureUR
             inviteCode: inviteCode,
         })
             .then(function (response) {
-                console.log(response);
                 let id_token = response.data.token;
                 if (id_token) {
                     dispatch(loginWithToken(id_token));
@@ -75,6 +74,7 @@ export function loginWithFacebook(userName, email, phoneNumber, profilePictureUR
 };
 
 export function updateSelectedTrip(tripId) {
+    console.log('update selected trip');
     return function (dispatch) {
         axios({
             method: 'GET',

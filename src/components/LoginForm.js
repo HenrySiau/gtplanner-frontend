@@ -9,8 +9,6 @@ import { logout, loginWithPassword, loginWithFacebook, updateUserInfo } from '..
 import { push } from 'react-router-redux';
 import { Redirect } from 'react-router'
 
-
-
 const styles = theme => ({
     form: {
         backgroundColor: 'white'
@@ -68,8 +66,8 @@ class LoginForm extends React.Component {
                         console.log(response);
                         const userName = response.name;
                         const email = response.email;
-                        const profilePictureURL= response.picture.data.url;
-                        this.props.loginWithFacebook(userName, email, null,  profilePictureURL, accessToken, this.props.inviteCode, fetchDefaultTrip);
+                        const profilePictureURL = response.picture.data.url;
+                        this.props.loginWithFacebook(userName, email, '+1 ', profilePictureURL, accessToken, this.props.inviteCode, fetchDefaultTrip);
                     });
                 } else {
                     console.log('you are logged out');
@@ -174,9 +172,9 @@ class LoginForm extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        inviteCode: state.inviteCode,
         isLoggedIn: state.isLoggedIn,
         tripId: state.selectedTrip.tripId,
+        inviteCode: state.inviteCode ? state.inviteCode : null
     }
 }
 const mapDispatchToProps = dispatch => {
@@ -190,10 +188,10 @@ const mapDispatchToProps = dispatch => {
         loginWithPassword: (email, password, inviteCode, fetchDefaultTrip) => {
             dispatch(loginWithPassword(email, password, inviteCode, fetchDefaultTrip))
         },
-        loginWithFacebook: (userName, email, accessToken, inviteCode, fetchDefaultTrip) => {
-            dispatch(loginWithFacebook(userName, email, accessToken, inviteCode, fetchDefaultTrip))
+        loginWithFacebook: (userName, email, phoneNumber, profilePictureURL, accessToken, inviteCode, fetchDefaultTrip) => {
+            dispatch(loginWithFacebook(userName, email, phoneNumber, profilePictureURL, accessToken, inviteCode, fetchDefaultTrip))
         },
-        updateUserInfo: (userId, userName, email, phone, profilePictureURL) =>{
+        updateUserInfo: (userId, userName, email, phone, profilePictureURL) => {
             dispatch(updateUserInfo(userId, userName, email, phone, profilePictureURL))
         }
     }

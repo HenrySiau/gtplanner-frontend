@@ -89,7 +89,7 @@ class GTPAppBar extends React.Component {
         const Login = () => {
             return (
                 <div>
-                    <Button component={Link} to="/login" className={classes.link}> Login </Button>
+                    <Button onClick={()=>{window.location = "/login";}} className={classes.link}> Login </Button>
                     <Button component={Link} to="/register" className={classes.link}> Register </Button>
                 </div>
             );
@@ -109,13 +109,13 @@ class GTPAppBar extends React.Component {
                     <GTPAvatar />
                     <GTPRightMenu />
                     <div className={classes.messageNotification}>
-
-                        <IconButton color="inherit" onClick={this.props.toggleChatRoomOpen}>
-                            <Badge className={classes.question_answer_badge} badgeContent={6} color="secondary">
-                                <Icon className={classes.icon}>textsms</Icon>
-                            </Badge>
-                        </IconButton>
-
+                        {Boolean(this.props.tripId) &&
+                            <IconButton color="inherit" onClick={this.props.toggleChatRoomOpen}>
+                                <Badge className={classes.question_answer_badge} badgeContent={6} color="secondary">
+                                    <Icon className={classes.icon}>textsms</Icon>
+                                </Badge>
+                            </IconButton>
+                        }
                     </div>
                 </div>
             );

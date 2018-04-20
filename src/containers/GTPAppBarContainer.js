@@ -7,7 +7,8 @@ const mapStateToProps = (state) => {
     return{
         isLoggedIn: state.isLoggedIn,
         selectedTrip: state.selectedTrip,
-        isChatRoomOpen: state.isChatRoomOpen
+        isChatRoomOpen: state.isChatRoomOpen,
+        tripId: state.selectedTrip.tripId,
     }
 }
 
