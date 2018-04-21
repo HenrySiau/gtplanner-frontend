@@ -4,7 +4,7 @@ import Button from 'material-ui/Button';
 import Chip from 'material-ui/Chip';
 import axios from 'axios';
 import settings from '../config';
-import validator from './Validator';
+import {isEmailFormatOK} from './Validator';
 import { connect } from 'react-redux';
 import { snackbarMessage } from '../actions';
 import { push } from 'react-router-redux';
@@ -86,7 +86,7 @@ class InviteMemberForm extends React.Component {
             emailToAdd: event.target.value
         });
         if (this.state.emailErrMessage) {
-            if (validator.emailFormatOK(event.target.value)) {
+            if (isEmailFormatOK(event.target.value)) {
                 this.setState({
                     emailErrMessage: ''
                 });
@@ -204,7 +204,7 @@ class InviteMemberForm extends React.Component {
             this.setState({
                 emailToAdd: ''
             });
-        } else if (!validator.emailFormatOK(this.email)) {
+        } else if (!isEmailFormatOK(this.email)) {
             this.setState({
                 emailErrMessage: 'Invalid email format'
             });

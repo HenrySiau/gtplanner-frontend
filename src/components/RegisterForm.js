@@ -11,10 +11,9 @@ import lightBlue from 'material-ui/colors/lightBlue';
 import blue from 'material-ui/colors/blue';
 import axios from 'axios';
 import settings from '../config';
-import validator from './Validator';
-import { loginWithToken, removeInviteCode } from '../actions';
+import {isEmailFormatOK} from './Validator';
+import { loginWithToken, removeInviteCode, snackbarMessage } from '../actions';
 import { push } from 'react-router-redux';
-import { snackbarMessage } from '../actions';
 import Paper from 'material-ui/Paper';
 
 const styles = theme => ({
@@ -99,7 +98,7 @@ class RegisterForm extends React.Component {
 
     ValidateEmailAvailable = () => {
         let email = this.strip(this.state.email);
-        if (validator.emailFormatOK(email)) {
+        if (isEmailFormatOK(email)) {
             this.setState({
                 emailErrMessage: '',
                 isEmailFormatIncorrect: false
@@ -130,7 +129,7 @@ class RegisterForm extends React.Component {
     }
 
     ValidateEmailFormat = (email) => {
-        if (validator.emailFormatOK(this.strip(email))) {
+        if (isEmailFormatOK(this.strip(email))) {
             return true
         } else {
             return false
