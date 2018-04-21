@@ -109,7 +109,9 @@ class ChatRoom extends React.Component {
     };
 
     scrollToBot() {
-        ReactDOM.findDOMNode(this.refs.chats).scrollTop = ReactDOM.findDOMNode(this.refs.chats).scrollHeight;
+        if (ReactDOM.findDOMNode(this.refs.chats)) {
+            ReactDOM.findDOMNode(this.refs.chats).scrollTop = ReactDOM.findDOMNode(this.refs.chats).scrollHeight;
+        }
     }
 
     submitMessage(e) {
@@ -164,17 +166,17 @@ class ChatRoom extends React.Component {
                         <Tab label="Members" className={classes.tab} />
                     </Tabs>
                 </AppBar>
-                {value === 0 && <Typography>
+                {value === 0 && <div>
                     <div className="chatroom">
-                    <ul className="chats" ref="chats">
-                        {messages}
-                    </ul>
-                    <form className="input" onSubmit={(e) => this.submitMessage(e)}>
-                        <input type="text" ref="msg" />
-                        <input type="submit" value="Submit" />
-                    </form>
+                        <ul className="chats" ref="chats">
+                            {messages}
+                        </ul>
+                        <form className="input" onSubmit={(e) => this.submitMessage(e)}>
+                            <input type="text" ref="msg" />
+                            <input type="submit" value="Submit" />
+                        </form>
                     </div>
-                </Typography>}
+                </div>}
                 {value === 1 && <Typography>Members</Typography>}
 
             </div >

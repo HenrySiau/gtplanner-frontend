@@ -117,7 +117,7 @@ a:link {
     background: rgba(255, 255, 255, 0.5);
     outline: 0;
     /* border: 2px solid #1EE494; */
-    border: 2px solid rgb(87, 87, 87);
+    border: 2px solid rgb(78, 78, 78);
     padding: 0 5px;
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
@@ -130,7 +130,7 @@ a:link {
 
 .chatroom .input input[type="submit"] {
     background: transparent;
-    border: 1px solid rgb(87, 87, 87);
+    border: 1px solid rgb(78, 78, 78);
     height: 30px;
     width: 70px;
     font-size: 14px;
