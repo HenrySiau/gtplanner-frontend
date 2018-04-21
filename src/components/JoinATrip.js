@@ -3,7 +3,7 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import { withStyles } from 'material-ui/styles';
 import instanceConfig from '../instanceConfig';
-import { snackbarMessage, updateSelectedTripWithInfo } from '../actions';
+import { snackbarMessage, updateSelectedTripWithInfo, setInviteCode } from '../actions';
 import { push } from 'react-router-redux';
 import Dialog, { DialogActions, DialogContent, DialogContentText, DialogTitle } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
@@ -59,12 +59,14 @@ class JoinATrip extends React.Component {
     componentDidMount() {
         if (this.props.location.search) {
             if (this.props.location.search.length > 6) {
+                const invitationCode = this.props.location.search.slice(6);
                 axios.post(settings.serverUrl + '/api/post/invitation/code/verify', {
-                    invitationCode: this.props.location.search.slice(6),
+                    invitationCode: invitationCode,
                 })
                     .then((response) => {
                         if (response.data.tripInfo) {
                             this.props.updateSelectedTripWithInfo(response.data.tripInfo);
+                            this.props.setInviteCode(invitationCode);
                             this.setState({
                                 isInvitationCodeValid: true
                             });
@@ -127,9 +129,9 @@ class JoinATrip extends React.Component {
                     </DialogActions>
                 </Dialog>
                 {/* we need to use different props or status incase user logged in with selectedTrip */}
-                {(this.props.isLoggedIn && this.state.isInvitationCodeValid) && <RedirectWithMessage 
-                snackbarMessage={this.props.snackbarMessage}
-                push={this.props.push}
+                {(this.props.isLoggedIn && this.state.isInvitationCodeValid) && <RedirectWithMessage
+                    snackbarMessage={this.props.snackbarMessage}
+                    push={this.props.push}
                 />}
             </div>
         );
@@ -153,6 +155,9 @@ const mapDispatchToProps = dispatch => {
         },
         updateSelectedTripWithInfo: (tripInfo) => {
             dispatch(updateSelectedTripWithInfo(tripInfo))
+        },
+        setInviteCode: (code) => {
+            dispatch(setInviteCode(code))
         }
 
     }

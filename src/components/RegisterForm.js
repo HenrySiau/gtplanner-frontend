@@ -12,7 +12,7 @@ import blue from 'material-ui/colors/blue';
 import axios from 'axios';
 import settings from '../config';
 import validator from './Validator';
-import { loginWithToken } from '../actions';
+import { loginWithToken, removeInviteCode } from '../actions';
 import { push } from 'react-router-redux';
 import { snackbarMessage } from '../actions';
 import Paper from 'material-ui/Paper';
@@ -300,13 +300,23 @@ class RegisterForm extends React.Component {
                 email: this.state.email,
                 phoneNumber: this.state.phoneNumber,
                 password: this.state.password,
-                passwordConfirm: this.state.passwordConfirm
+                passwordConfirm: this.state.passwordConfirm,
+                inviteCode: this.props.inviteCode
             })
                 .then((response) => {
                     if (response.data.token) {
+                        console.log(response.data);
                         this.props.dispatch(loginWithToken(response.data.token));
-                        this.handleDialogOpen();
+                        if (!this.props.inviteCode) {
+                            this.handleDialogOpen();
+                        } else {
+                            this.props.dispatch(push('/dashboard'));
+                            this.props.dispatch(snackbarMessage('Welcome to your new trip!'));
+                            this.props.dispatch(removeInviteCode());
+                        }
+
                     } else {
+                        console.log('no token returned');
                         this.props.dispatch(snackbarMessage('Something went wrong, can not register, please try again'));
                     }
                 })
@@ -314,6 +324,7 @@ class RegisterForm extends React.Component {
                     this.setState({
                         submitButtonDisable: false
                     });
+                    console.error(error);
                     this.props.dispatch(snackbarMessage('Something went wrong, can not register, please try later'));
                 });
 
@@ -465,6 +476,13 @@ class RegisterForm extends React.Component {
         );
     }
 }
+const mapStateToProps = (state) => {
+    return {
+        isLoggedIn: state.isLoggedIn,
+        tripId: state.selectedTrip.tripId,
+        inviteCode: state.inviteCode ? state.inviteCode : null
+    }
+}
 
 RegisterForm = withStyles(styles)(RegisterForm);
-export default connect()(RegisterForm);
+export default connect(mapStateToProps)(RegisterForm);
