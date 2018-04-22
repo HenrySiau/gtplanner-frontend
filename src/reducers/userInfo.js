@@ -6,7 +6,7 @@ const initialState = {
     userName: '',
     email: '',
     phone: '',
-    profilePictureURL: settings.imageServerUrl + '/images/user.png',
+    profilePictureURL: '',
 }
 export const userInfo = (state = initialState, action) => {
     switch (action.type) {
@@ -15,7 +15,7 @@ export const userInfo = (state = initialState, action) => {
                 userId: action.userId,
                 userName: action.userName,
                 email: action.email,
-                phone: action.phone,
+                phoneNumber: action.phoneNumber,
                 profilePictureURL: action.profilePictureURL,
             }
         default:

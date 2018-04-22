@@ -67,13 +67,22 @@ class JoinATrip extends React.Component {
                     token: token
                 })
                     .then((response) => {
+                        const newToken = response.data.token;
                         // if returns updated token which means the token we sent is valid
-                        if(response.data.token){
+                        if(newToken){
                             // login 
-                            this.props.dispatch(loginWithToken(response.data.token));
+                            this.props.dispatch(loginWithToken(newToken));
                         }
-                        if(response.data.userInfo){
-                            this.props.dispatch(updateUserInfo(response.data.userInfo));
+                        const userInfo = response.data.userInfo;
+                        if(userInfo){
+                           const newUserInfo={
+                            userId: userInfo.userId,
+                            userName: userInfo.userName,
+                            email: userInfo.email,
+                            phoneNumber: userInfo.phoneNumber || '',
+                            profilePictureURL: userInfo.profilePicture || (userInfo.facebookProfilePictureURL || '')
+                            };
+                            this.props.dispatch(updateUserInfo(newUserInfo));
                         }
                         if (response.data.tripInfo) {
                             this.props.updateSelectedTripWithInfo(response.data.tripInfo);

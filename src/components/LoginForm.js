@@ -4,10 +4,12 @@ import Button from 'material-ui/Button';
 import { connect } from 'react-redux';
 import { withStyles } from 'material-ui/styles';
 import instanceConfig from '../instanceConfig';
-import { Link } from 'react-router-dom'
-import { logout, loginWithPassword, loginWithFacebook, updateUserInfo } from '../actions';
+import { Link } from 'react-router-dom';
+import { logout, loginWithPassword, updateUserInfo, updateSelectedTrip, snackbarMessage, loginWithToken } from '../actions';
 import { push } from 'react-router-redux';
-import { Redirect } from 'react-router'
+import { Redirect } from 'react-router';
+import axios from 'axios';
+import settings from '../config';
 
 const styles = theme => ({
     form: {
@@ -49,7 +51,7 @@ class LoginForm extends React.Component {
     }
 
     componentDidMount() {
-        window.fbAsyncInit = function () {
+        window.fbAsyncInit = () => {
             // FaceBook Login Functions
             window.FB.init({
                 appId: instanceConfig.facebookAppId,
@@ -67,13 +69,48 @@ class LoginForm extends React.Component {
                         const userName = response.name;
                         const email = response.email;
                         const profilePictureURL = response.picture.data.url;
-                        this.props.loginWithFacebook(userName, email, '+1 ', profilePictureURL, accessToken, this.props.inviteCode, fetchDefaultTrip);
+                        axios.post(settings.serverUrl + '/api/post/login/facebook', {
+                            userName: userName,
+                            email: email,
+                            accessToken: accessToken,
+                            inviteCode: this.props.inviteCode,
+                            facebookProfilePictureURL: profilePictureURL
+                        })
+                            .then((response) => {
+                                let id_token = response.data.token;
+                                let userInfo = response.data.userInfo;
+                                if (id_token) {
+                                    this.props.loginWithToken(id_token);
+                                    // if there is no selected Trip
+                                    // fetch the default Trip
+                                    // if there is a selected Trip from joining a trip do not fetch trip
+                                    if (this.props.inviteCode) {
+                                        this.props.updateSelectedTrip(null);
+                                    }
+                                    this.props.push('/dashboard');
+                                }
+                                if (userInfo) {
+                                    const newUserInfo = {
+                                        userId: userInfo.userId,
+                                        userName: userInfo.userName || userName,
+                                        email: userInfo.email || email,
+                                        phoneNumber: userInfo.phoneNumber || '',
+                                        profilePictureURL: userInfo.profilePicture ? settings.serverUrl + userInfo.profilePicture : profilePictureURL
+                                    }
+                                    this.props.updateUserInfo(newUserInfo);
+                                }
+                            })
+                            .catch((error) => {
+                                // TODO: show error message and guide user to re submit
+                                console.error(error);
+                                this.props.snackbarMessage('something went wrong');
+                            });
                     });
                 } else {
                     console.log('you are logged out');
                 }
             })
-        }.bind(this);
+        };
 
         (function (d, s, id) {
             var js, fjs = d.getElementsByTagName(s)[0];
@@ -188,11 +225,17 @@ const mapDispatchToProps = dispatch => {
         loginWithPassword: (email, password, inviteCode, fetchDefaultTrip) => {
             dispatch(loginWithPassword(email, password, inviteCode, fetchDefaultTrip))
         },
-        loginWithFacebook: (userName, email, phoneNumber, profilePictureURL, accessToken, inviteCode, fetchDefaultTrip) => {
-            dispatch(loginWithFacebook(userName, email, phoneNumber, profilePictureURL, accessToken, inviteCode, fetchDefaultTrip))
-        },
         updateUserInfo: (userInfo) => {
             dispatch(updateUserInfo(userInfo))
+        },
+        updateSelectedTrip: (trip) => {
+            dispatch(updateSelectedTrip(trip));
+        },
+        snackbarMessage: (msg) => {
+            dispatch(snackbarMessage(msg));
+        },
+        loginWithToken: (token) => {
+            dispatch(loginWithToken(token));
         }
     }
 }

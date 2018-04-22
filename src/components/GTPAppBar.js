@@ -68,10 +68,24 @@ class GTPAppBar extends React.Component {
                 axios.post(settings.serverUrl + '/api/post/login/token', {
                     token: localStorage.getItem('id_token'),
                 })
-                    .then( (response) => {
-                        if(response.data.success){
+                    .then((response) => {
+                        if (response.data.success) {
                             this.props.updateSelectedTrip(null); //fetch default trip info
                             console.log('updateSelectedTrip at App Bar');
+                            const userInfo = response.data.userInfo;
+                            if (userInfo) {
+                                const newUserInfo = {
+                                    userId: userInfo.userId,
+                                    userName: userInfo.userName,
+                                    email: userInfo.email,
+                                    phoneNumber: userInfo.phoneNumber || '',
+                                    profilePictureURL: userInfo.profilePicture || (userInfo.facebookProfilePictureURL || '')
+                                }
+                                this.props.updateUserInfo(newUserInfo);
+                            }
+                            if (response.data.token) {
+                                this.props.loginWithToken(response.data.token);
+                            }
                         }
                         console.log(response.data);
                     })

@@ -47,7 +47,7 @@ class GTPAvatar extends React.Component {
                     onClick={this.handleClick}>
                     <Avatar
                         alt="Profile Photo"
-                        src={this.props.profilePictureURL}
+                        src={this.props.profilePictureURL || settings.imageServerUrl + '/images/user.png'}
                         className={classes.avatar}
                     /> </IconButton >
 
