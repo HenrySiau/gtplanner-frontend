@@ -14,6 +14,8 @@ import withWidth from 'material-ui/utils/withWidth';
 import compose from 'recompose/compose';
 import GTPAvatar from './GTPAvatar';
 import GTPRightMenu from './GTPRightMenu';
+import axios from 'axios';
+import settings from '../config';
 const styles = theme => ({
     root: {
         flexGrow: 1,
@@ -58,15 +60,25 @@ class GTPAppBar extends React.Component {
         // invoke immediately each time user use our app
         // if user has an id_token
         if (localStorage.getItem('id_token')) {
-            // wil login if id_token is valid
-            this.props.validateJWT(localStorage.getItem('id_token'));
-
             // do not fetch selectedTrip when joining a code
             // will fetch a new trip at joint a trip page
-            console.log(window.location.href);
-            if (!window.location.href.match(/\/trip\/join\?code\=/)) {
-                this.props.updateSelectedTrip(null); //fetch default trip info
-                console.log('updateSelectedTrip at App Bar');
+            if (!window.location.href.match(/\/trip\/join/)) {
+                // wil login if id_token is valid
+                // this.props.validateJWT(localStorage.getItem('id_token'));
+                axios.post(settings.serverUrl + '/api/post/login/token', {
+                    token: localStorage.getItem('id_token'),
+                })
+                    .then( (response) => {
+                        if(response.data.success){
+                            this.props.updateSelectedTrip(null); //fetch default trip info
+                            console.log('updateSelectedTrip at App Bar');
+                        }
+                        console.log(response.data);
+                    })
+                    .catch(function (error) {
+                        // TODO: show error message and guide user to re submit
+                        console.error(error);
+                    });
             }
         }
         if (window.innerWidth < 600) {
@@ -89,7 +101,7 @@ class GTPAppBar extends React.Component {
         const Login = () => {
             return (
                 <div>
-                    <Button onClick={()=>{window.location = "/login";}} className={classes.link}> Login </Button>
+                    <Button onClick={() => { window.location = "/login"; }} className={classes.link}> Login </Button>
                     <Button component={Link} to="/register" className={classes.link}> Register </Button>
                 </div>
             );

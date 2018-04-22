@@ -3,11 +3,12 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import { withStyles } from 'material-ui/styles';
 import instanceConfig from '../instanceConfig';
-import { snackbarMessage, updateSelectedTripWithInfo, setInviteCode } from '../actions';
+import { snackbarMessage, updateSelectedTripWithInfo, setInviteCode , loginWithToken, updateUserInfo} from '../actions';
 import { push } from 'react-router-redux';
 import Dialog, { DialogActions, DialogContent, DialogContentText, DialogTitle } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 import settings from '../config';
+import {validateJWT} from './Validator';
 
 const styles = theme => ({
     button: {
@@ -60,10 +61,20 @@ class JoinATrip extends React.Component {
         if (this.props.location.search) {
             if (this.props.location.search.length > 6) {
                 const invitationCode = this.props.location.search.slice(6);
+                const token = localStorage.getItem('id_token')? localStorage.getItem('id_token') : '';
                 axios.post(settings.serverUrl + '/api/post/invitation/code/verify', {
                     invitationCode: invitationCode,
+                    token: token
                 })
                     .then((response) => {
+                        // if returns updated token which means the token we sent is valid
+                        if(response.data.token){
+                            // login 
+                            this.props.dispatch(loginWithToken(response.data.token));
+                        }
+                        if(response.data.userInfo){
+                            this.props.dispatch(updateUserInfo(response.data.userInfo));
+                        }
                         if (response.data.tripInfo) {
                             this.props.updateSelectedTripWithInfo(response.data.tripInfo);
                             this.props.setInviteCode(invitationCode);
@@ -86,6 +97,8 @@ class JoinATrip extends React.Component {
                 this.props.push('/');
                 this.props.snackbarMessage('Invalid Invitation Link');
             }
+        }else{
+            this.props.push('/');
         }
     }
 

@@ -52,10 +52,14 @@ export function loginWithFacebook(userName, email, phoneNumber, profilePictureUR
             inviteCode: inviteCode,
         })
             .then(function (response) {
+               
                 let id_token = response.data.token;
                 if (id_token) {
+                    const userInfo = {
+                        userId: response.data.userId
+                    }
                     dispatch(loginWithToken(id_token));
-                    dispatch(updateUserInfo(response.data.userId, userName, email, phoneNumber, profilePictureURL))
+                    dispatch(updateUserInfo(userInfo));
                     // if there is no selected Trip
                     // fetch the default Trip
                     // if there is a selected Trip from joining a trip do not fetch trip
@@ -132,7 +136,26 @@ export function validateJWT(id_token) {
     // TODO ajax call required
     console.log('validateJWT: ' + id_token);
     return function (dispatch) {
-        dispatch(loginWithToken(id_token));
+        axios.post(settings.serverUrl + '/api/post/JWT/validate', {
+            token: id_token,
+        })
+            .then(function (response) {
+                let userInfo = response.data.userInfo;
+                if (userInfo) {
+                    dispatch(updateUserInfo(userInfo))
+                    dispatch(loginWithToken(id_token));
+                }
+                else{
+                    // invalid JWT
+                }
+            })
+            .catch(function (error) {
+                // TODO: show error message and guide user to re submit
+                console.error(error);
+                dispatch(snackbarMessage('email or password incorrect'));
+            });
+
+        // dispatch(loginWithToken(id_token));
     }
 }
 
@@ -206,11 +229,11 @@ export function fetchRecentTrips() {
 
 };
 
-export const updateUserInfo = (userId, userName, email, phoneNumber, profilePictureURL) => ({
+export const updateUserInfo = (userInfo) => ({
     type: UPDATE_USER_INFO,
-    userId: userId,
-    userName: userName,
-    email: email,
-    phoneNumber: phoneNumber,
-    profilePictureURL: profilePictureURL,
+    userId: userInfo.userId,
+    userName: userInfo.userName,
+    email: userInfo.email,
+    phoneNumber: userInfo.phoneNumber,
+    profilePicture: userInfo.profilePicture,
 });

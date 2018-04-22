@@ -241,8 +241,7 @@ class InviteMemberForm extends React.Component {
         return (
             <div className={classes.form}>
                 <input type="text"
-                    value={`https://www.gtplanner.com/trip/join?code=${this.props.invitationCode}`}
-                    // value={`https://localhost:3000/trip/join?code=${this.props.invitationCode}`}
+                    value={settings.serverUrl + `/trip/join?code=${this.props.invitationCode}`}
                     id="invitationLink"
                     onClick={this.handleCopyLink}
                     className={classes.invitationLink}

@@ -191,8 +191,8 @@ const mapDispatchToProps = dispatch => {
         loginWithFacebook: (userName, email, phoneNumber, profilePictureURL, accessToken, inviteCode, fetchDefaultTrip) => {
             dispatch(loginWithFacebook(userName, email, phoneNumber, profilePictureURL, accessToken, inviteCode, fetchDefaultTrip))
         },
-        updateUserInfo: (userId, userName, email, phone, profilePictureURL) => {
-            dispatch(updateUserInfo(userId, userName, email, phone, profilePictureURL))
+        updateUserInfo: (userInfo) => {
+            dispatch(updateUserInfo(userInfo))
         }
     }
 }
