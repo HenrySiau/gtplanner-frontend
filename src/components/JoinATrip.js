@@ -3,12 +3,12 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import { withStyles } from 'material-ui/styles';
 import instanceConfig from '../instanceConfig';
-import { snackbarMessage, updateSelectedTripWithInfo, setInviteCode , loginWithToken, updateUserInfo} from '../actions';
+import { snackbarMessage, updateSelectedTripWithInfo, setInviteCode, loginWithToken, updateUserInfo, removeInviteCode } from '../actions';
 import { push } from 'react-router-redux';
 import Dialog, { DialogActions, DialogContent, DialogContentText, DialogTitle } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 import settings from '../config';
-import {validateJWT} from './Validator';
+import { validateJWT } from './Validator';
 
 const styles = theme => ({
     button: {
@@ -38,58 +38,59 @@ const styles = theme => ({
 });
 
 
-class RedirectWithMessage extends React.Component {
-    componentDidMount() {
-        this.props.push('/dashboard');
-        this.props.snackbarMessage('Welcome to your new trip!');
-    }
-    render() {
-        return (
-            <div></div>
-        )
-    }
-
-}
-
 class JoinATrip extends React.Component {
     state = {
         isInvitationCodeValid: false,
+        isTokenValid: false,
     }
 
-
+    //      https://localhost:3000/trip/join?code=tBkXLGVP
     componentDidMount() {
         if (this.props.location.search) {
+            console.log('this.props.location.search: ' + this.props.location.search);
             if (this.props.location.search.length > 6) {
                 const invitationCode = this.props.location.search.slice(6);
-                const token = localStorage.getItem('id_token')? localStorage.getItem('id_token') : '';
+                console.log('invitationCode: ' + invitationCode);
+                const token = localStorage.getItem('id_token') ? localStorage.getItem('id_token') : '';
                 axios.post(settings.serverUrl + '/api/post/invitation/code/verify', {
                     invitationCode: invitationCode,
                     token: token
                 })
                     .then((response) => {
-                        const newToken = response.data.token;
+                        console.log(response.data);
                         // if returns updated token which means the token we sent is valid
-                        if(newToken){
-                            // login 
-                            this.props.dispatch(loginWithToken(newToken));
-                        }
                         const userInfo = response.data.userInfo;
-                        if(userInfo){
-                           const newUserInfo={
-                            userId: userInfo.userId,
-                            userName: userInfo.userName,
-                            email: userInfo.email,
-                            phoneNumber: userInfo.phoneNumber || '',
-                            profilePictureURL: userInfo.profilePicture || (userInfo.facebookProfilePictureURL || '')
+                        if (userInfo) {
+                            const newUserInfo = {
+                                userId: userInfo.userId,
+                                userName: userInfo.userName,
+                                email: userInfo.email,
+                                phoneNumber: userInfo.phoneNumber || '',
+                                profilePictureURL: userInfo.profilePicture || (userInfo.facebookProfilePictureURL || '')
                             };
-                            this.props.dispatch(updateUserInfo(newUserInfo));
+                            this.props.updateUserInfo(newUserInfo);
+                            const newToken = response.data.token;
+                            if (newToken) {
+                                localStorage.setItem('id_token', newToken);
+                                // open dialog to let user choose whether continue with this user
+                                this.setState({
+                                    isTokenValid: true
+                                })
+                                // console.log("loginWithToken(newToken");
+                                // this.props.loginWithToken(newToken);
+                            }
                         }
                         if (response.data.tripInfo) {
+
                             this.props.updateSelectedTripWithInfo(response.data.tripInfo);
-                            this.props.setInviteCode(invitationCode);
-                            this.setState({
-                                isInvitationCodeValid: true
-                            });
+                            if (this.props.isLoggedIn) {
+                                this.continueWithToken();
+                            } else {
+                                this.props.setInviteCode(invitationCode);
+                                this.setState({
+                                    isInvitationCodeValid: true
+                                });
+                            }
 
                         } else {
                             this.props.push('/');
@@ -97,6 +98,7 @@ class JoinATrip extends React.Component {
                         }
                     })
                     .catch((error) => {
+                        console.error(error);
                         this.props.push('/');
                         this.props.snackbarMessage('Something went wrong');
                     });
@@ -106,12 +108,35 @@ class JoinATrip extends React.Component {
                 this.props.push('/');
                 this.props.snackbarMessage('Invalid Invitation Link');
             }
-        }else{
+        } else {
             this.props.push('/');
         }
     }
 
+    continueWithToken = () => {
+        axios.post(settings.serverUrl + '/api/post/trip/join', {
+            invitationCode: this.props.location.search.slice(6),
+            token: localStorage.getItem('id_token')
+        })
+            .then((response) => {
+                console.log(response.data);
+                if (response.data.success) {
+                    this.props.loginWithToken(localStorage.getItem('id_token'));
+                    this.props.removeInviteCode();
+                    this.props.push('/dashboard');
+                    this.props.snackbarMessage('Welcome to your new trip!');
+                } else {
+                    this.props.push('/');
+                    this.props.snackbarMessage('Can not join this trip');
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+                this.props.push('/');
+                this.props.snackbarMessage('Something went wrong');
+            });
 
+    }
 
     render() {
         const { classes } = this.props;
@@ -120,7 +145,40 @@ class JoinATrip extends React.Component {
                 <h1>Join A Trip</h1>
                 <Dialog
                     disableBackdropClick={true}
-                    open={this.state.isInvitationCodeValid && !this.props.isLoggedIn}
+                    open={this.state.isInvitationCodeValid && this.state.isTokenValid}
+                >
+                    <DialogTitle >
+                        {"Welcome"}
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            Do you want to continue as {this.props.userName}?.
+                    </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button
+                            variant="raised"
+                            color="primary"
+                            onClick={this.continueWithToken}
+                            className={classes.dialogButton}
+                        >
+                            Yes
+                    </Button>
+                        <Button
+                            variant="raised"
+                            color="primary"
+                            onClick={() => { this.props.push('/login') }}
+                            className={classes.dialogButton}
+                        >
+                            Continue with different account
+                    </Button>
+
+                    </DialogActions>
+                </Dialog>
+
+                <Dialog
+                    disableBackdropClick={true}
+                    open={this.state.isInvitationCodeValid && !this.state.isTokenValid}
                 >
                     <DialogTitle >
                         {"Welcome"}
@@ -150,11 +208,6 @@ class JoinATrip extends React.Component {
 
                     </DialogActions>
                 </Dialog>
-                {/* we need to use different props or status incase user logged in with selectedTrip */}
-                {(this.props.isLoggedIn && this.state.isInvitationCodeValid) && <RedirectWithMessage
-                    snackbarMessage={this.props.snackbarMessage}
-                    push={this.props.push}
-                />}
             </div>
         );
     }
@@ -165,6 +218,7 @@ const mapStateToProps = (state) => {
         inviteCode: state.inviteCode,
         isLoggedIn: state.isLoggedIn,
         selectedTrip: state.selectedTrip,
+        userName: state.userInfo.userName,
     }
 }
 const mapDispatchToProps = dispatch => {
@@ -180,6 +234,15 @@ const mapDispatchToProps = dispatch => {
         },
         setInviteCode: (code) => {
             dispatch(setInviteCode(code))
+        },
+        loginWithToken: (token) => {
+            dispatch(loginWithToken(token));
+        },
+        updateUserInfo: (userInfo) => {
+            dispatch(updateUserInfo(userInfo));
+        },
+        removeInviteCode: () => {
+            dispatch(removeInviteCode());
         }
 
     }
