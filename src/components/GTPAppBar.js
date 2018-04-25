@@ -166,7 +166,7 @@ class GTPAppBar extends React.Component {
             <div className={classes.root}>
                 <AppBar position="absolute" className={classes.GTPAppBar}>
                     <Toolbar>
-                        {this.props.isLoggedIn
+                        {(this.props.isLoggedIn && Boolean(this.props.tripId))
                             && <IconButton
                                 className={classes.menuButton}
                                 color="inherit" aria-label="Menu"

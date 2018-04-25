@@ -59,7 +59,10 @@ class GTPDrawer extends React.Component {
     }
 
     getDrawerClass = () => {
-        if (!this.props.isLoggedIn) {
+        if(!Boolean(this.props.tripId)){
+            return ({ paper: this.props.classes.drawerClosed })
+        }
+        if (!this.props.isLoggedIn ) {
             return ({ paper: this.props.classes.drawerClosed })
         } else {
             if (!this.props.isDrawerOpen) {
@@ -162,7 +165,7 @@ class GTPDrawer extends React.Component {
         return (<Drawer
             anchor='left'
             variant='persistent'
-            open={this.props.isDrawerOpen && this.props.isLoggedIn}
+            open={this.props.isDrawerOpen && this.props.isLoggedIn && Boolean(this.props.tripId)}
             onClose={this.props.toggleDrawer}
             classes={this.getDrawerClass()}
         >

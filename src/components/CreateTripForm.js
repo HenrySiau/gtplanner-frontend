@@ -116,7 +116,7 @@ class CreateTripForm extends React.Component {
             })
                 .then((response) => {
                     // TODO: Redirect to create my first trip
-                    console.log(response.data);
+                    console.log('Create a new Trip response: ' + response.data);
                     if (response.data.tripInfo) {
                         this.props.dispatch(updateSelectedTripWithInfo(response.data.tripInfo));
                         this.props.dispatch(push('/members/invite/'));
