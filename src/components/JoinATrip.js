@@ -37,11 +37,14 @@ const styles = theme => ({
     }
 });
 
+var storedUserInfo = {};
+
 
 class JoinATrip extends React.Component {
     state = {
         isInvitationCodeValid: false,
         isTokenValid: false,
+        userName: '',
     }
 
     //      https://localhost:3000/trip/join?code=tBkXLGVP
@@ -68,7 +71,8 @@ class JoinATrip extends React.Component {
                                 phoneNumber: userInfo.phoneNumber || '',
                                 profilePictureURL: userInfo.profilePicture || (userInfo.facebookProfilePictureURL || '')
                             };
-                            this.props.updateUserInfo(newUserInfo);
+                            this.setState({userName: userInfo.userName});
+                            storedUserInfo = newUserInfo;
                             const newToken = response.data.token;
                             if (newToken) {
                                 localStorage.setItem('id_token', newToken);
@@ -119,8 +123,10 @@ class JoinATrip extends React.Component {
             token: localStorage.getItem('id_token')
         })
             .then((response) => {
+                console.log('response: ' + response);
                 console.log(response.data);
                 if (response.data.success) {
+                    this.props.updateUserInfo(storedUserInfo);
                     this.props.loginWithToken(localStorage.getItem('id_token'));
                     this.props.removeInviteCode();
                     this.props.push('/dashboard');
@@ -152,7 +158,7 @@ class JoinATrip extends React.Component {
                     </DialogTitle>
                     <DialogContent>
                         <DialogContentText>
-                            Do you want to continue as {this.props.userName}?.
+                            Do you want to continue as {this.state.userName}?.
                     </DialogContentText>
                     </DialogContent>
                     <DialogActions>
@@ -167,7 +173,10 @@ class JoinATrip extends React.Component {
                         <Button
                             variant="raised"
                             color="primary"
-                            onClick={() => { this.props.push('/login') }}
+                            onClick={() => { 
+                                localStorage.removeItem('id_token');
+                                this.props.push('/login') 
+                            }}
                             className={classes.dialogButton}
                         >
                             Continue with different account
@@ -218,7 +227,6 @@ const mapStateToProps = (state) => {
         inviteCode: state.inviteCode,
         isLoggedIn: state.isLoggedIn,
         selectedTrip: state.selectedTrip,
-        userName: state.userInfo.userName,
     }
 }
 const mapDispatchToProps = dispatch => {
