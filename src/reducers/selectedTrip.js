@@ -27,10 +27,10 @@ export const selectedTrip = (state = initialState, action) => {
     }
 }
 
-export const inviteCode = (state = '', action) => {
+export const invitationCode = (state = '', action) => {
     switch (action.type) {
         case SET_INVITE_CODE:
-            return action.inviteCode
+            return action.invitationCode
         case REMOVE_INVITE_CODE:
             return ''
         default:

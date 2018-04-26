@@ -47,7 +47,7 @@ class JoinATrip extends React.Component {
         userName: '',
     }
 
-    //      https://localhost:3000/trip/join?code=tBkXLGVP
+    //      https://localhost:3000/trip/join?code=ThbcIkPL
     componentDidMount() {
         if (this.props.location.search) {
             console.log('this.props.location.search: ' + this.props.location.search);
@@ -224,7 +224,7 @@ class JoinATrip extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        inviteCode: state.inviteCode,
+        invitationCode: state.invitationCode,
         isLoggedIn: state.isLoggedIn,
         selectedTrip: state.selectedTrip,
     }

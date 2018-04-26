@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 import isLoggedIn from './isLoggedIn';
 import isDrawerOpen from './isDrawerOpen';
 import { isSnackbarOpen, snackbarMessage } from './snackbar';
-import { selectedTrip, inviteCode } from './selectedTrip';
+import { selectedTrip, invitationCode } from './selectedTrip';
 import { recentTrips } from './recentTrips';
 import isChatRoomOpen from './isChatRoomOpen';
 import isDrawerExtended from './isDrawerExtended';
@@ -14,7 +14,7 @@ export default combineReducers({
     isSnackbarOpen,
     snackbarMessage,
     selectedTrip,
-    inviteCode,
+    invitationCode,
     recentTrips,
     isChatRoomOpen,
     isDrawerExtended,

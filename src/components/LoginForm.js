@@ -73,7 +73,7 @@ class LoginForm extends React.Component {
                             userName: userName,
                             email: email,
                             accessToken: accessToken,
-                            inviteCode: this.props.inviteCode,
+                            invitationCode: this.props.invitationCode,
                             facebookProfilePictureURL: profilePictureURL
                         })
                             .then((response) => {
@@ -84,7 +84,7 @@ class LoginForm extends React.Component {
                                     // if there is no selected Trip
                                     // fetch the default Trip
                                     // if there is a selected Trip from joining a trip do not fetch trip
-                                    if (this.props.inviteCode) {
+                                    if (this.props.invitationCode) {
                                         this.props.updateSelectedTrip(null);
                                     }
                                     this.props.push('/dashboard');
@@ -137,7 +137,7 @@ class LoginForm extends React.Component {
         // console.log('fetchDefaultTrip: ' + Boolean(!this.props.tripId));
         const fetchDefaultTrip = this.props.tripId ? false : true;
         console.log('fetchDefaultTrip: ' + fetchDefaultTrip);
-        this.props.loginWithPassword(this.state.email, this.state.password, this.props.inviteCode, fetchDefaultTrip);
+        this.props.loginWithPassword(this.state.email, this.state.password, this.props.invitationCode, fetchDefaultTrip);
     }
 
     handlePressEnter = (e) => {
@@ -211,7 +211,7 @@ const mapStateToProps = (state) => {
     return {
         isLoggedIn: state.isLoggedIn,
         tripId: state.selectedTrip.tripId,
-        inviteCode: state.inviteCode ? state.inviteCode : null
+        invitationCode: state.invitationCode ? state.invitationCode : null
     }
 }
 const mapDispatchToProps = dispatch => {
@@ -222,8 +222,8 @@ const mapDispatchToProps = dispatch => {
         logout: () => {
             dispatch(logout());
         },
-        loginWithPassword: (email, password, inviteCode, fetchDefaultTrip) => {
-            dispatch(loginWithPassword(email, password, inviteCode, fetchDefaultTrip))
+        loginWithPassword: (email, password, invitationCode, fetchDefaultTrip) => {
+            dispatch(loginWithPassword(email, password, invitationCode, fetchDefaultTrip))
         },
         updateUserInfo: (userInfo) => {
             dispatch(updateUserInfo(userInfo))

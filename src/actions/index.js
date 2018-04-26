@@ -15,12 +15,12 @@ export function loginWithToken(id_token) {
     }
 };
 
-export function loginWithPassword(email, password, inviteCode, fetchDefaultTrip) {
+export function loginWithPassword(email, password, invitationCode, fetchDefaultTrip) {
     return function (dispatch) {
         axios.post(settings.serverUrl + '/api/post/signin', {
             email: email,
             password: password,
-            inviteCode: inviteCode
+            invitationCode: invitationCode
         })
             .then(function (response) {
                 let id_token = response.data.token;
@@ -142,10 +142,10 @@ export function snackbarMessage(message) {
     }
 }
 
-export function setInviteCode(inviteCode) {
+export function setInviteCode(invitationCode) {
     return {
         type: SET_INVITE_CODE,
-        inviteCode: inviteCode
+        invitationCode: invitationCode
     }
 }
 

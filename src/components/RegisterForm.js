@@ -11,7 +11,7 @@ import lightBlue from 'material-ui/colors/lightBlue';
 import blue from 'material-ui/colors/blue';
 import axios from 'axios';
 import settings from '../config';
-import {isEmailFormatOK} from './Validator';
+import { isEmailFormatOK } from './Validator';
 import { loginWithToken, removeInviteCode, snackbarMessage } from '../actions';
 import { push } from 'react-router-redux';
 import Paper from 'material-ui/Paper';
@@ -300,13 +300,13 @@ class RegisterForm extends React.Component {
                 phoneNumber: this.state.phoneNumber,
                 password: this.state.password,
                 passwordConfirm: this.state.passwordConfirm,
-                inviteCode: this.props.inviteCode
+                invitationCode: this.props.invitationCode
             })
                 .then((response) => {
                     if (response.data.token) {
                         console.log(response.data);
                         this.props.dispatch(loginWithToken(response.data.token));
-                        if (!this.props.inviteCode) {
+                        if (!this.props.invitationCode) {
                             this.handleDialogOpen();
                         } else {
                             this.props.dispatch(push('/dashboard'));
@@ -479,7 +479,7 @@ const mapStateToProps = (state) => {
     return {
         isLoggedIn: state.isLoggedIn,
         tripId: state.selectedTrip.tripId,
-        inviteCode: state.inviteCode ? state.inviteCode : null
+        invitationCode: state.invitationCode ? state.invitationCode : null
     }
 }
 
