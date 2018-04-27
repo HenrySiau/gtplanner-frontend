@@ -12,7 +12,7 @@ import blue from 'material-ui/colors/blue';
 import axios from 'axios';
 import settings from '../config';
 import { isEmailFormatOK } from './Validator';
-import { loginWithToken, removeInviteCode, snackbarMessage } from '../actions';
+import { loginWithToken, removeInviteCode, snackbarMessage, updateSelectedTripWithInfo, updateUserInfo } from '../actions';
 import { push } from 'react-router-redux';
 import Paper from 'material-ui/Paper';
 
@@ -303,21 +303,37 @@ class RegisterForm extends React.Component {
                 invitationCode: this.props.invitationCode
             })
                 .then((response) => {
-                    if (response.data.token) {
-                        console.log(response.data);
-                        this.props.dispatch(loginWithToken(response.data.token));
-                        if (!this.props.invitationCode) {
-                            this.handleDialogOpen();
-                        } else {
+                    const userInfo = response.data.userInfo;
+                    if (userInfo) {
+                        const newUserInfo = {
+                            userId: userInfo.userId,
+                            userName: userInfo.userName,
+                            email: userInfo.email,
+                            phoneNumber: userInfo.phoneNumber || '',
+                            profilePictureURL: userInfo.profilePicture || (userInfo.facebookProfilePictureURL || ''),
+                            trips: userInfo.trips,
+                        };
+                        this.props.dispatch(updateUserInfo(newUserInfo));
+                        const newToken = response.data.token;
+                        if (newToken) {
+                            this.props.dispatch(loginWithToken(response.data.token));
+                        }
+                    } else {// fail creating a user
+                        this.props.dispatch(snackbarMessage('Something went wrong, can not register, please try again'));
+                    }
+                    if (this.props.invitationCode) {
+                        if (response.data.tripInfo) {
+                            this.props.dispatch(updateSelectedTripWithInfo(response.data.tripInfo));
                             this.props.dispatch(push('/dashboard'));
                             this.props.dispatch(snackbarMessage('Welcome to your new trip!'));
                             this.props.dispatch(removeInviteCode());
+                        } else {
+                            this.props.dispatch(snackbarMessage('can not joint the trip'));
                         }
-
                     } else {
-                        console.log('no token returned');
-                        this.props.dispatch(snackbarMessage('Something went wrong, can not register, please try again'));
+                        this.handleDialogOpen();
                     }
+
                 })
                 .catch((error) => {
                     this.setState({
