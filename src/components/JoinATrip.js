@@ -61,40 +61,29 @@ class JoinATrip extends React.Component {
                 })
                     .then((response) => {
                         console.log(response.data);
-                        // if returns updated token which means the token we sent is valid
                         const userInfo = response.data.userInfo;
                         if (userInfo) {
-                            const newUserInfo = {
-                                userId: userInfo.userId,
-                                userName: userInfo.userName,
-                                email: userInfo.email,
-                                phoneNumber: userInfo.phoneNumber || '',
-                                profilePictureURL: userInfo.profilePicture || (userInfo.facebookProfilePictureURL || '')
-                            };
-                            this.setState({userName: userInfo.userName});
-                            storedUserInfo = newUserInfo;
-                            const newToken = response.data.token;
-                            if (newToken) {
-                                localStorage.setItem('id_token', newToken);
-                                // open dialog to let user choose whether continue with this user
+                            if (userInfo.userName) {
                                 this.setState({
-                                    isTokenValid: true
-                                })
-                                // console.log("loginWithToken(newToken");
-                                // this.props.loginWithToken(newToken);
+                                    userName: userInfo.userName,
+                                    isTokenValid: true,
+                                });
                             }
                         }
                         if (response.data.tripInfo) {
-                            this.props.updateSelectedTripWithInfo(response.data.tripInfo);
                             if (this.props.isLoggedIn) {
                                 this.continueWithToken();
                             } else {
-                                this.props.setInvitationCode(invitationCode);
-                                this.setState({
-                                    isInvitationCodeValid: true
-                                });
+                                const receivedInvitationCode = response.data.tripInfo.invitationCode;
+                                if (receivedInvitationCode) {
+                                    // if there is a invitationCode in redux store
+                                    // means there is a valid trip waiting to join
+                                    this.props.setInvitationCode(receivedInvitationCode);
+                                    this.setState({
+                                        isInvitationCodeValid: true
+                                    });
+                                }
                             }
-
                         } else {
                             this.props.push('/');
                             this.props.snackbarMessage('Invalid Invitation Link');
@@ -122,14 +111,33 @@ class JoinATrip extends React.Component {
             token: localStorage.getItem('id_token')
         })
             .then((response) => {
-                console.log('response: ' + response);
                 console.log(response.data);
                 if (response.data.success) {
-                    this.props.updateUserInfo(storedUserInfo);
-                    this.props.loginWithToken(localStorage.getItem('id_token'));
-                    this.props.removeInvitationCode();
-                    this.props.push('/dashboard');
-                    this.props.snackbarMessage('Welcome to your new trip!');
+                    const userInfo = response.data.userInfo;
+                    if (userInfo) {
+                        const newUserInfo = {
+                            userId: userInfo.userId,
+                            userName: userInfo.userName,
+                            email: userInfo.email,
+                            phoneNumber: userInfo.phoneNumber || '',
+                            profilePictureURL: userInfo.profilePicture || (userInfo.facebookProfilePictureURL || ''),
+                            trips: userInfo.trips,
+                        };
+                        this.props.updateUserInfo(newUserInfo);
+                    }
+                    if (response.data.token) {
+                        this.props.loginWithToken(response.data.token);
+                    }
+                    if (response.data.tripInfo) {
+                        this.props.updateSelectedTripWithInfo(response.data.tripInfo);
+                        this.props.removeInvitationCode();
+                        this.props.push('/dashboard');
+                        this.props.snackbarMessage('Welcome to your new trip!');
+                    } else {
+                        this.props.push('/');
+                        this.props.snackbarMessage('Invalid Invitation Link');
+                    }
+
                 } else {
                     this.props.push('/');
                     this.props.snackbarMessage('Can not join this trip');
@@ -140,7 +148,6 @@ class JoinATrip extends React.Component {
                 this.props.push('/');
                 this.props.snackbarMessage('Something went wrong');
             });
-
     }
 
     render() {
@@ -172,9 +179,9 @@ class JoinATrip extends React.Component {
                         <Button
                             variant="raised"
                             color="primary"
-                            onClick={() => { 
+                            onClick={() => {
                                 localStorage.removeItem('id_token');
-                                this.props.push('/login') 
+                                this.props.push('/login')
                             }}
                             className={classes.dialogButton}
                         >
