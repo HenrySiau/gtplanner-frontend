@@ -3,7 +3,7 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import { withStyles } from 'material-ui/styles';
 import instanceConfig from '../instanceConfig';
-import { snackbarMessage, updateSelectedTripWithInfo, setInviteCode, loginWithToken, updateUserInfo, removeInviteCode } from '../actions';
+import { snackbarMessage, updateSelectedTripWithInfo, setInvitationCode, loginWithToken, updateUserInfo, removeInvitationCode } from '../actions';
 import { push } from 'react-router-redux';
 import Dialog, { DialogActions, DialogContent, DialogContentText, DialogTitle } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
@@ -85,12 +85,11 @@ class JoinATrip extends React.Component {
                             }
                         }
                         if (response.data.tripInfo) {
-
                             this.props.updateSelectedTripWithInfo(response.data.tripInfo);
                             if (this.props.isLoggedIn) {
                                 this.continueWithToken();
                             } else {
-                                this.props.setInviteCode(invitationCode);
+                                this.props.setInvitationCode(invitationCode);
                                 this.setState({
                                     isInvitationCodeValid: true
                                 });
@@ -128,7 +127,7 @@ class JoinATrip extends React.Component {
                 if (response.data.success) {
                     this.props.updateUserInfo(storedUserInfo);
                     this.props.loginWithToken(localStorage.getItem('id_token'));
-                    this.props.removeInviteCode();
+                    this.props.removeInvitationCode();
                     this.props.push('/dashboard');
                     this.props.snackbarMessage('Welcome to your new trip!');
                 } else {
@@ -240,8 +239,8 @@ const mapDispatchToProps = dispatch => {
         updateSelectedTripWithInfo: (tripInfo) => {
             dispatch(updateSelectedTripWithInfo(tripInfo))
         },
-        setInviteCode: (code) => {
-            dispatch(setInviteCode(code))
+        setInvitationCode: (code) => {
+            dispatch(setInvitationCode(code))
         },
         loginWithToken: (token) => {
             dispatch(loginWithToken(token));
@@ -249,8 +248,8 @@ const mapDispatchToProps = dispatch => {
         updateUserInfo: (userInfo) => {
             dispatch(updateUserInfo(userInfo));
         },
-        removeInviteCode: () => {
-            dispatch(removeInviteCode());
+        removeInvitationCode: () => {
+            dispatch(removeInvitationCode());
         }
 
     }

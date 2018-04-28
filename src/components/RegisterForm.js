@@ -12,7 +12,7 @@ import blue from 'material-ui/colors/blue';
 import axios from 'axios';
 import settings from '../config';
 import { isEmailFormatOK } from './Validator';
-import { loginWithToken, removeInviteCode, snackbarMessage, updateSelectedTripWithInfo, updateUserInfo } from '../actions';
+import { loginWithToken, removeInvitationCode, snackbarMessage, updateSelectedTripWithInfo, updateUserInfo } from '../actions';
 import { push } from 'react-router-redux';
 import Paper from 'material-ui/Paper';
 
@@ -326,7 +326,7 @@ class RegisterForm extends React.Component {
                             this.props.dispatch(updateSelectedTripWithInfo(response.data.tripInfo));
                             this.props.dispatch(push('/dashboard'));
                             this.props.dispatch(snackbarMessage('Welcome to your new trip!'));
-                            this.props.dispatch(removeInviteCode());
+                            this.props.dispatch(removeInvitationCode());
                         } else {
                             this.props.dispatch(snackbarMessage('can not joint the trip'));
                         }

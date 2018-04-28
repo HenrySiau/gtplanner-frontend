@@ -7,6 +7,7 @@ const initialState = {
     email: '',
     phone: '',
     profilePictureURL: '',
+    trips: []
 }
 export const userInfo = (state = initialState, action) => {
     switch (action.type) {
@@ -17,6 +18,7 @@ export const userInfo = (state = initialState, action) => {
                 email: action.email,
                 phoneNumber: action.phoneNumber,
                 profilePictureURL: action.profilePictureURL,
+                trips: action.trips
             }
         default:
             return state

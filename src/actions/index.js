@@ -142,14 +142,14 @@ export function snackbarMessage(message) {
     }
 }
 
-export function setInviteCode(invitationCode) {
+export function setInvitationCode(invitationCode) {
     return {
         type: SET_INVITE_CODE,
         invitationCode: invitationCode
     }
 }
 
-export function removeInviteCode() {
+export function removeInvitationCode() {
     return {
         type: REMOVE_INVITE_CODE
     }
@@ -202,4 +202,5 @@ export const updateUserInfo = (userInfo) => ({
     email: userInfo.email,
     phoneNumber: userInfo.phoneNumber,
     profilePictureURL: userInfo.profilePictureURL,
+    trips: userInfo.trips,
 });
