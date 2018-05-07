@@ -294,7 +294,7 @@ class RegisterForm extends React.Component {
             this.setState({
                 submitButtonDisable: true
             });
-            axios.post(settings.serverUrl + '/api/post/register', {
+            axios.post(settings.serverUrl + '/api/post/user/register', {
                 userName: this.state.userName,
                 email: this.state.email,
                 phoneNumber: this.state.phoneNumber,

@@ -1,11 +1,11 @@
-import {connect} from 'react-redux';
-import {logout, toggleDrawer, loginWithToken, updateSelectedTrip, toggleChatRoomOpen, openChatRoom, closeChatRoom} from '../actions';
-import {updateUserInfo} from '../actions';
+import { connect } from 'react-redux';
+import { logout, toggleDrawer, loginWithToken, toggleChatRoomOpen, openChatRoom, closeChatRoom } from '../actions';
+import { updateUserInfo, updateSelectedTripWithInfo } from '../actions';
 import GTPAppBar from '../components/GTPAppBar';
 import { push } from 'react-router-redux';
 
 const mapStateToProps = (state) => {
-    return{
+    return {
         isLoggedIn: state.isLoggedIn,
         selectedTrip: state.selectedTrip,
         isChatRoomOpen: state.isChatRoomOpen,
@@ -24,11 +24,8 @@ const mapDispatchToProps = dispatch => {
         toggleDrawer: () => {
             dispatch(toggleDrawer());
         },
-        loginWithToken: (token) =>{
+        loginWithToken: (token) => {
             dispatch(loginWithToken(token));
-        },
-        updateSelectedTrip: (tripId) => {
-            dispatch(updateSelectedTrip(tripId));
         },
         toggleChatRoomOpen: () => {
             dispatch(toggleChatRoomOpen());
@@ -39,8 +36,8 @@ const mapDispatchToProps = dispatch => {
         closeChatRoom: () => {
             dispatch(closeChatRoom());
         },
-        updateUserInfo: (userInfo)=> {
-            dispatch(updateUserInfo(userInfo));
+        updateSelectedTripWithInfo: tripInfo => {
+            dispatch(updateSelectedTripWithInfo(tripInfo));
         }
     }
 }

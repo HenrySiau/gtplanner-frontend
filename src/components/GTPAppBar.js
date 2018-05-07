@@ -70,8 +70,10 @@ class GTPAppBar extends React.Component {
                 })
                     .then((response) => {
                         if (response.data.success) {
-                            this.props.updateSelectedTrip(null); //fetch default trip info
-                            console.log('updateSelectedTrip at App Bar');
+                            // this.props.updateSelectedTrip(null); 
+                            if(response.data.tripInfo){
+                                this.props.updateSelectedTripWithInfo(response.data.tripInfo);
+                            }
                             const userInfo = response.data.userInfo;
                             if (userInfo) {
                                 const newUserInfo = {

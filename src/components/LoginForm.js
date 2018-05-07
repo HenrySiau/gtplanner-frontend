@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { withStyles } from 'material-ui/styles';
 import instanceConfig from '../instanceConfig';
 import { Link } from 'react-router-dom';
-import { logout, loginWithPassword, updateUserInfo, updateSelectedTrip, snackbarMessage, loginWithToken } from '../actions';
+import { logout, loginWithPassword, updateUserInfo, snackbarMessage, loginWithToken, updateSelectedTripWithInfo } from '../actions';
 import { push } from 'react-router-redux';
 import { Redirect } from 'react-router';
 import axios from 'axios';
@@ -77,17 +77,13 @@ class LoginForm extends React.Component {
                             facebookProfilePictureURL: profilePictureURL
                         })
                             .then((response) => {
+                                console.log(response.data);
                                 let id_token = response.data.token;
                                 let userInfo = response.data.userInfo;
+                                let tripInfo = response.data.tripInfo;
                                 if (id_token) {
                                     this.props.loginWithToken(id_token);
-                                    // if there is no selected Trip
-                                    // fetch the default Trip
-                                    // if there is a selected Trip from joining a trip do not fetch trip
-                                    if (this.props.invitationCode) {
-                                        this.props.updateSelectedTrip(null);
-                                    }
-                                    this.props.push('/dashboard');
+                                    
                                 }
                                 if (userInfo) {
                                     const newUserInfo = {
@@ -98,6 +94,10 @@ class LoginForm extends React.Component {
                                         profilePictureURL: userInfo.profilePicture ? settings.serverUrl + userInfo.profilePicture : profilePictureURL
                                     }
                                     this.props.updateUserInfo(newUserInfo);
+                                }
+                                if(tripInfo){
+                                    this.props.updateSelectedTripWithInfo(tripInfo);
+                                    this.props.push('/dashboard');
                                 }
                             })
                             .catch((error) => {
@@ -135,9 +135,57 @@ class LoginForm extends React.Component {
 
     handleSubmit = () => {
         // console.log('fetchDefaultTrip: ' + Boolean(!this.props.tripId));
-        const fetchDefaultTrip = this.props.tripId ? false : true;
-        console.log('fetchDefaultTrip: ' + fetchDefaultTrip);
-        this.props.loginWithPassword(this.state.email, this.state.password, this.props.invitationCode, fetchDefaultTrip);
+        // const fetchDefaultTrip = this.props.tripId ? false : true;
+        // console.log('fetchDefaultTrip: ' + fetchDefaultTrip);
+        // this.props.loginWithPassword(this.state.email, this.state.password, this.props.invitationCode, fetchDefaultTrip);
+
+        axios.post(settings.serverUrl + '/api/post/signin', {
+            email: this.state.email,
+            password: this.state.password,
+            invitationCode: this.props.invitationCode
+        })
+            // .then(function (response) {
+            //     let id_token = response.data.token;
+            //     if (id_token) {
+            //         dispatch(loginWithToken(id_token));
+            //         // if there is no selected Trip
+            //         // fetch the default Trip
+            //         // if there is a selected Trip from joining a trip do not fetch trip
+            //         if (fetchDefaultTrip) {
+            //             dispatch(updateSelectedTrip(null));
+            //         }
+            //         dispatch(push('/dashboard'));
+            //     }
+            // })
+            .then((response) => {
+                console.log(response.data);
+                let id_token = response.data.token;
+                let userInfo = response.data.userInfo;
+                let tripInfo = response.data.tripInfo;
+                if (id_token) {
+                    this.props.loginWithToken(id_token);
+                    
+                }
+                if (userInfo) {
+                    const newUserInfo = {
+                        userId: userInfo.userId,
+                        userName: userInfo.userName,
+                        email: userInfo.email ,
+                        phoneNumber: userInfo.phoneNumber || '',
+                        profilePictureURL: settings.serverUrl + userInfo.profilePicture 
+                    }
+                    this.props.updateUserInfo(newUserInfo);
+                }
+                if(tripInfo){
+                    this.props.updateSelectedTripWithInfo(tripInfo);
+                    this.props.push('/dashboard');
+                }
+            })
+            .catch(function (error) {
+                // TODO: show error message and guide user to re submit
+                console.error(error);
+                this.props.snackbarMessage('email or password incorrect');
+            });
     }
 
     handlePressEnter = (e) => {
@@ -228,15 +276,15 @@ const mapDispatchToProps = dispatch => {
         updateUserInfo: (userInfo) => {
             dispatch(updateUserInfo(userInfo))
         },
-        updateSelectedTrip: (trip) => {
-            dispatch(updateSelectedTrip(trip));
-        },
         snackbarMessage: (msg) => {
             dispatch(snackbarMessage(msg));
         },
         loginWithToken: (token) => {
             dispatch(loginWithToken(token));
-        }
+        },
+        updateSelectedTripWithInfo: (tripInfo) => {
+            dispatch(updateSelectedTripWithInfo(tripInfo))
+        },
     }
 }
 
