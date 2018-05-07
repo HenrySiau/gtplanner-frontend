@@ -106,9 +106,16 @@ class JoinATrip extends React.Component {
     }
 
     continueWithToken = () => {
-        axios.post(settings.serverUrl + '/api/post/trip/join', {
-            invitationCode: this.props.location.search.slice(6),
-            token: localStorage.getItem('id_token')
+        axios({
+            method: 'POST',
+            url: settings.serverUrl + '/api/post/trip/join',
+            json: true,
+            headers: {
+                'x-access-token': localStorage.getItem('id_token'),
+            },
+            data: {
+                invitationCode: this.props.location.search.slice(6),
+            }
         })
             .then((response) => {
                 console.log(response.data);
@@ -123,6 +130,7 @@ class JoinATrip extends React.Component {
                             profilePictureURL: userInfo.profilePicture || (userInfo.facebookProfilePictureURL || ''),
                             trips: userInfo.trips,
                         };
+                        
                         this.props.updateUserInfo(newUserInfo);
                     }
                     if (response.data.token) {
