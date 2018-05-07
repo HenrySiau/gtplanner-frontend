@@ -38,7 +38,7 @@ a:link {
     padding: 0 10px 20px 20px;
     /* padding-bottom: 80px; */
     margin: 10px 0 0 0;
-    height: calc(100% - 200px);
+    height: calc(100% - 20px);
     overflow-y: scroll;
     justify-content: flex-end;
 }
