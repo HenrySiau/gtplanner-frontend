@@ -10,6 +10,11 @@ import '../css/chatRoom.css';
 import axios from 'axios';
 import Message from './Message.js';
 import uuidv4 from 'uuid/v4';
+import io from 'socket.io-client';
+import settings from '../config';
+
+
+const socket = io(settings.serverUrl, { path: '/api/chat' });
 
 const styles = theme => ({
     chatRoom: {
@@ -35,7 +40,24 @@ const styles = theme => ({
         marginTop: '0'
     }
 });
-
+class SocketComponent extends React.Component {
+    componentDidMount() {
+        console.log('join channel: ' + this.props.tripId);
+        socket.emit('chat mounted', 'Henry');
+        socket.emit('join channel', { tripId: this.props.tripId });
+        socket.on('new bc message', msg => {
+            console.log('new bc message: ' + msg);
+        });
+        socket.on('bc message', msg => {
+            console.log('bc message: ' + msg);
+        });
+    }
+    render() {
+        return (
+            <div></div>
+        )
+    }
+}
 class ChatRoom extends React.Component {
     state = {
         value: 0,
@@ -91,13 +113,25 @@ class ChatRoom extends React.Component {
     };
     componentDidMount() {
         this.scrollToBot();
-        // axios.get('/api/messages').then(
-        //     (response) => {
-        //         this.setState({ chats: this.state.chats.concat(response.data.chats) });
-        //     }).catch((error) => {
-        //         // TODO: add error handling function
-        //         console.error(error);
-        //     });
+        // socket.emit('chat mounted', 'Henry');
+        // socket.emit('join channel', { tripId: '1' });
+        // // axios.get('/api/messages').then(
+        // //     (response) => {
+        // //         this.setState({ chats: this.state.chats.concat(response.data.chats) });
+        // //     }).catch((error) => {
+        // //         // TODO: add error handling function
+        // //         console.error(error);
+        // //     });
+        // socket.on('new bc message', msg => {
+        //     console.log('new bc message: ' + msg);
+        // }
+        //     // dispatch(actions.receiveRawMessage(msg))
+        // );
+        // socket.on('bc message', msg => {
+        //     console.log('bc message: ' + msg);
+        // }
+        //     // dispatch(actions.receiveRawMessage(msg))
+        // );
     }
 
     componentDidUpdate() {
@@ -116,11 +150,11 @@ class ChatRoom extends React.Component {
 
     submitMessage(e) {
         e.preventDefault();
-
+        const message = ReactDOM.findDOMNode(this.refs.msg).value;
         this.setState({
             chats: this.state.chats.concat([{
                 userName: "Zhiheng Xiao",
-                content: `${ReactDOM.findDOMNode(this.refs.msg).value}`,
+                content: message,
                 img: "/img/user1.jpeg",
                 id: uuidv4().toString(),
                 created: Date.now()
@@ -128,6 +162,9 @@ class ChatRoom extends React.Component {
         }, () => {
             ReactDOM.findDOMNode(this.refs.msg).value = "";
         });
+
+        socket.emit('new message', {message: message, channel: this.props.tripId});
+        console.log('socket.emit: ' + message);
     }
 
     render() {
@@ -183,23 +220,26 @@ class ChatRoom extends React.Component {
         );
 
         return (
-            <Drawer
-                // variant="permanent"
-                variant='persistent'
-                anchor='right'
-                open={this.props.isChatRoomOpen && this.props.isLoggedIn && Boolean(this.props.tripId)}
-                classes={
-                    this.props.isChatRoomOpen && this.props.tripId && this.props.isLoggedIn ?
-                        { paper: classes.drawerPaper, } :
-                        { paper: classes.drawerHidden, }}
-            >
-                <div
-                    tabIndex={0}
-                    role="button"
+            <div>
+                {(this.props.isLoggedIn && this.props.tripId) && <SocketComponent tripId={this.props.tripId} />}
+                <Drawer
+                    // variant="permanent"
+                    variant='persistent'
+                    anchor='right'
+                    open={this.props.isChatRoomOpen && this.props.isLoggedIn && Boolean(this.props.tripId)}
+                    classes={
+                        this.props.isChatRoomOpen && this.props.tripId && this.props.isLoggedIn ?
+                            { paper: classes.drawerPaper, } :
+                            { paper: classes.drawerHidden, }}
                 >
-                    {chatRoom}
-                </div>
-            </Drawer>
+                    <div
+                        tabIndex={0}
+                        role="button"
+                    >
+                        {chatRoom}
+                    </div>
+                </Drawer>
+            </div>
         );
     }
 }

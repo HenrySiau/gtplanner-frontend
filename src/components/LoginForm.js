@@ -83,7 +83,7 @@ class LoginForm extends React.Component {
                                 let tripInfo = response.data.tripInfo;
                                 if (id_token) {
                                     this.props.loginWithToken(id_token);
-                                    
+
                                 }
                                 if (userInfo) {
                                     const newUserInfo = {
@@ -95,7 +95,7 @@ class LoginForm extends React.Component {
                                     }
                                     this.props.updateUserInfo(newUserInfo);
                                 }
-                                if(tripInfo){
+                                if (tripInfo) {
                                     this.props.updateSelectedTripWithInfo(tripInfo);
                                     this.props.push('/dashboard');
                                 }
@@ -164,24 +164,24 @@ class LoginForm extends React.Component {
                 let tripInfo = response.data.tripInfo;
                 if (id_token) {
                     this.props.loginWithToken(id_token);
-                    
+
                 }
                 if (userInfo) {
                     const newUserInfo = {
                         userId: userInfo.userId,
                         userName: userInfo.userName,
-                        email: userInfo.email ,
+                        email: userInfo.email,
                         phoneNumber: userInfo.phoneNumber || '',
-                        profilePictureURL: settings.serverUrl + userInfo.profilePicture 
+                        profilePictureURL: settings.serverUrl + userInfo.profilePicture
                     }
                     this.props.updateUserInfo(newUserInfo);
                 }
-                if(tripInfo){
+                if (tripInfo) {
                     this.props.updateSelectedTripWithInfo(tripInfo);
                     this.props.push('/dashboard');
                 }
             })
-            .catch(function (error) {
+            .catch(error => {
                 // TODO: show error message and guide user to re submit
                 console.error(error);
                 this.props.snackbarMessage('email or password incorrect');
