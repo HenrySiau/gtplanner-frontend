@@ -102,9 +102,9 @@ class ChatRoom extends React.Component {
             console.log('new member');
             this.props.addMember(member);
         });
-        socket.on('new bc message', msg => {
-            console.log('new bc message: ' + msg);
-        });
+        // socket.on('new bc message', msg => {
+        //     console.log('new bc message: ' + msg);
+        // });
         socket.on('new message', msg => {
             console.log('new message: ' + msg);
         });
@@ -139,6 +139,29 @@ class ChatRoom extends React.Component {
         }, () => {
             ReactDOM.findDOMNode(this.refs.msg).value = "";
         });
+
+        axios({
+            method: 'POST',
+            url: settings.serverUrl + '/api/post/chat/message/new',
+            json: true,
+            headers: {
+                'x-access-token': localStorage.getItem('id_token'),
+            },
+            data: {
+                userId: this.props.userInfo.userId,
+                content: message,
+                composedAt: Date.now(),
+                tripId: this.props.tripId
+            }
+        })
+            .then((response) => {
+                console.log('message response: ' + response.data);
+
+            })
+            .catch((error) => {
+                // TODO: show error message and guide user to re submit
+                console.error(error);
+            });
 
         socket.emit('new message', { message: message, channel: this.props.tripId });
         console.log('socket.emit: ' + message);
