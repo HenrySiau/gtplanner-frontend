@@ -76,14 +76,14 @@ class GTPAppBar extends React.Component {
                             }
                             const userInfo = response.data.userInfo;
                             if (userInfo) {
-                                const newUserInfo = {
-                                    userId: userInfo.userId,
-                                    userName: userInfo.userName,
-                                    email: userInfo.email,
-                                    phoneNumber: userInfo.phoneNumber || '',
-                                    profilePictureURL: userInfo.profilePicture || (userInfo.facebookProfilePictureURL || '')
-                                }
-                                this.props.updateUserInfo(newUserInfo);
+                                // const newUserInfo = {
+                                //     userId: userInfo.userId,
+                                //     userName: userInfo.userName,
+                                //     email: userInfo.email,
+                                //     phoneNumber: userInfo.phoneNumber || '',
+                                //     profilePictureURL: userInfo.profilePicture || (userInfo.facebookProfilePictureURL || '')
+                                // }
+                                this.props.updateUserInfo(userInfo);
                             }
                             if (response.data.token) {
                                 this.props.loginWithToken(response.data.token);

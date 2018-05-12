@@ -3,7 +3,7 @@ import settings from '../config';
 import { push } from 'react-router-redux';
 import { LOG_IN, LOG_OUT, TOGGLE_DRAWER, SNACKBAR_OPEN, SNACKBAR_CLOSE, SET_SNACKBAR_MESSAGE, UPDATE_SELECTED_TRIP } from './actionTypes';
 import { SET_INVITE_CODE, REMOVE_INVITE_CODE, UPDATE_RECENT_TRIPS, TOGGLE_CHAT_ROOM_OPEN, CHAT_ROOM_OPEN, CHAT_ROOM_CLOSE } from './actionTypes';
-import { DRAWER_EXTEND, DRAWER_FOLD, UPDATE_USER_INFO } from './actionTypes';
+import { DRAWER_EXTEND, DRAWER_FOLD, UPDATE_USER_INFO, ADD_MEMBER, REMOVE_MEMBER } from './actionTypes';
 
 const login = () => ({ type: LOG_IN });
 
@@ -11,7 +11,6 @@ export function loginWithToken(id_token) {
     localStorage.setItem('id_token', id_token);
     return function (dispatch) {
         dispatch(login());
-        dispatch(fetchRecentTrips());
     }
 };
 
@@ -29,9 +28,6 @@ export function loginWithPassword(email, password, invitationCode, fetchDefaultT
                     // if there is no selected Trip
                     // fetch the default Trip
                     // if there is a selected Trip from joining a trip do not fetch trip
-                    if (fetchDefaultTrip) {
-                        dispatch(updateSelectedTrip(null));
-                    }
                     dispatch(push('/dashboard'));
                 }
             })
@@ -71,19 +67,36 @@ export function updateSelectedTrip(tripId) {
     }
 };
 
-export const updateSelectedTripWithInfo = (tripInfo) => (
-    {
+export const updateSelectedTripWithInfo = (tripInfo) => {
+    let membersMap = new Map();
+    tripInfo.members.forEach(member => {
+        membersMap.set(member.userId, {
+            'userName': member.userName,
+            'email': member.email,
+            'profilePictureURL': member.profilePicture ? settings.serverUrl + member.profilePicture : member.facebookProfilePictureURL || settings.defaultProfilePictureUrl
+        })
+    });
+    return {
         type: UPDATE_SELECTED_TRIP,
         tripId: tripInfo.tripId,
         title: tripInfo.title,
         description: tripInfo.description,
         owner: tripInfo.owner,
-        members: tripInfo.members,
+        members: membersMap,
         startDate: tripInfo.startDate,
         endDate: tripInfo.endDate,
         invitationCode: tripInfo.invitationCode
     }
-)
+}
+
+export const addMember = (member) => {
+    return {
+        type: ADD_MEMBER,
+        member: member,
+    }
+}
+
+
 export function logout() {
     localStorage.removeItem('id_token');
     return {
@@ -111,7 +124,7 @@ export function validateJWT(id_token) {
                     dispatch(updateUserInfo(userInfo))
                     dispatch(loginWithToken(id_token));
                 }
-                else{
+                else {
                     // invalid JWT
                 }
             })
@@ -201,6 +214,6 @@ export const updateUserInfo = (userInfo) => ({
     userName: userInfo.userName,
     email: userInfo.email,
     phoneNumber: userInfo.phoneNumber,
-    profilePictureURL: userInfo.profilePictureURL,
-    trips: userInfo.trips,
+    profilePictureURL: userInfo.profilePicture ? settings.serverUrl + userInfo.profilePicture : userInfo.facebookProfilePictureURL || settings.defaultProfilePictureUrl
+    
 });
