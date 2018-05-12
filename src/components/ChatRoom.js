@@ -12,9 +12,10 @@ import Message from './Message.js';
 import uuidv4 from 'uuid/v4';
 import io from 'socket.io-client';
 import settings from '../config';
+import MemberList from './MemberList';
 
 
-const socket = io(settings.serverUrl, { path: '/api/chat' });
+const socket = io(settings.serverUrl, { path: '/api/trip' });
 
 const styles = theme => ({
     chatRoom: {
@@ -40,24 +41,7 @@ const styles = theme => ({
         marginTop: '0'
     }
 });
-class SocketComponent extends React.Component {
-    componentDidMount() {
-        console.log('join channel: ' + this.props.tripId);
-        socket.emit('chat mounted', 'Henry');
-        socket.emit('join channel', { tripId: this.props.tripId });
-        socket.on('new bc message', msg => {
-            console.log('new bc message: ' + msg);
-        });
-        socket.on('bc message', msg => {
-            console.log('bc message: ' + msg);
-        });
-    }
-    render() {
-        return (
-            <div></div>
-        )
-    }
-}
+
 class ChatRoom extends React.Component {
     state = {
         value: 0,
@@ -113,25 +97,18 @@ class ChatRoom extends React.Component {
     };
     componentDidMount() {
         this.scrollToBot();
-        // socket.emit('chat mounted', 'Henry');
-        // socket.emit('join channel', { tripId: '1' });
-        // // axios.get('/api/messages').then(
-        // //     (response) => {
-        // //         this.setState({ chats: this.state.chats.concat(response.data.chats) });
-        // //     }).catch((error) => {
-        // //         // TODO: add error handling function
-        // //         console.error(error);
-        // //     });
-        // socket.on('new bc message', msg => {
-        //     console.log('new bc message: ' + msg);
-        // }
-        //     // dispatch(actions.receiveRawMessage(msg))
-        // );
-        // socket.on('bc message', msg => {
-        //     console.log('bc message: ' + msg);
-        // }
-        //     // dispatch(actions.receiveRawMessage(msg))
-        // );
+        socket.emit('join channel', { tripId: this.props.tripId });
+        socket.on('new member', member => {
+            console.log('new member');
+            this.props.addMember(member);
+        });
+        socket.on('new bc message', msg => {
+            console.log('new bc message: ' + msg);
+        });
+        socket.on('new message', msg => {
+            console.log('new message: ' + msg);
+        });
+
     }
 
     componentDidUpdate() {
@@ -163,15 +140,16 @@ class ChatRoom extends React.Component {
             ReactDOM.findDOMNode(this.refs.msg).value = "";
         });
 
-        socket.emit('new message', {message: message, channel: this.props.tripId});
+        socket.emit('new message', { message: message, channel: this.props.tripId });
         console.log('socket.emit: ' + message);
+        // this.props.addMember({id:'007kjhjkghgkhkjkkhfff', userName: 'HenryS'});
     }
 
     render() {
         const userName = "Zhiheng Xiao";
-        var messages = [];
+        let messages = [];
         const chats = this.state.chats;
-        var lastMessageTime = this.state.chats[0] ? this.state.chats[0].created : Date.now();
+        let lastMessageTime = this.state.chats[0] ? this.state.chats[0].created : Date.now();
         // show create time if the two messages are 5 minutes away
         // TODO: simiify time indicator, only shows time or add yesterday/Feb 9, 2018 22:22
         // hint: Date.getTimezoneOffset() then tolocaltime
@@ -214,14 +192,15 @@ class ChatRoom extends React.Component {
                         </form>
                     </div>
                 </div>}
-                {value === 1 && <Typography>Members</Typography>}
+                {value === 1 && <div>
+                    {this.props.selectedTrip && <MemberList members={this.props.selectedTrip.members} />}
+                </div>}
 
             </div >
         );
 
         return (
             <div>
-                {(this.props.isLoggedIn && this.props.tripId) && <SocketComponent tripId={this.props.tripId} />}
                 <Drawer
                     // variant="permanent"
                     variant='persistent'
