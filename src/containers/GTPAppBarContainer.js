@@ -40,7 +40,7 @@ const mapDispatchToProps = dispatch => {
             dispatch(updateSelectedTripWithInfo(tripInfo));
         },
         updateUserInfo: userInfo => {
-            dispatch(updateUserInfo(updateUserInfo));
+            dispatch(updateUserInfo(userInfo));
         }
     }
 }

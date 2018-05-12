@@ -70,12 +70,13 @@ class GTPAppBar extends React.Component {
                 })
                     .then((response) => {
                         if (response.data.success) {
-                            if (response.data.tripInfo) {
-                                console.log(response.data.tripInfo);
-                                this.props.updateSelectedTripWithInfo(response.data.tripInfo);
+                            const tripInfo = response.data.tripInfo;
+                            if (tripInfo) {
+                                this.props.updateSelectedTripWithInfo(tripInfo);
                             }
                             const userInfo = response.data.userInfo;
                             if (userInfo) {
+
                                 this.props.updateUserInfo(userInfo);
                             }
                             if (response.data.token) {
