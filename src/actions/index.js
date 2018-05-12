@@ -69,13 +69,15 @@ export function updateSelectedTrip(tripId) {
 
 export const updateSelectedTripWithInfo = (tripInfo) => {
     let membersMap = new Map();
-    tripInfo.members.forEach(member => {
-        membersMap.set(member.userId, {
-            'userName': member.userName,
-            'email': member.email,
-            'profilePictureURL': member.profilePicture ? settings.serverUrl + member.profilePicture : member.facebookProfilePictureURL || settings.defaultProfilePictureUrl
-        })
-    });
+    if (tripInfo.members) {
+        tripInfo.members.forEach(member => {
+            membersMap.set(member.userId, {
+                'userName': member.userName,
+                'email': member.email,
+                'profilePictureURL': member.profilePicture ? settings.serverUrl + member.profilePicture : member.facebookProfilePictureURL || settings.defaultProfilePictureUrl
+            })
+        });
+    }
     return {
         type: UPDATE_SELECTED_TRIP,
         tripId: tripInfo.tripId,
@@ -215,5 +217,5 @@ export const updateUserInfo = (userInfo) => ({
     email: userInfo.email,
     phoneNumber: userInfo.phoneNumber,
     profilePictureURL: userInfo.profilePicture ? settings.serverUrl + userInfo.profilePicture : userInfo.facebookProfilePictureURL || settings.defaultProfilePictureUrl
-    
+
 });
