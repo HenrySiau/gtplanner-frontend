@@ -4,6 +4,7 @@ import { push } from 'react-router-redux';
 import { LOG_IN, LOG_OUT, TOGGLE_DRAWER, SNACKBAR_OPEN, SNACKBAR_CLOSE, SET_SNACKBAR_MESSAGE, UPDATE_SELECTED_TRIP } from './actionTypes';
 import { SET_INVITE_CODE, REMOVE_INVITE_CODE, UPDATE_RECENT_TRIPS, TOGGLE_CHAT_ROOM_OPEN, CHAT_ROOM_OPEN, CHAT_ROOM_CLOSE } from './actionTypes';
 import { DRAWER_EXTEND, DRAWER_FOLD, UPDATE_USER_INFO, ADD_MEMBER, REMOVE_MEMBER, CHANGE_CHAT_ROOM_TABS_VALUE } from './actionTypes';
+import {INCREASE_CHAT_MESSAGE_BADGE_CONTENT,   CLEAR_CHAT_MESSAGE_BADGE_CONTENT, INCREASE_SYSTEM_MESSAGE_BADGE_CONTENT, CLEAR_SYSTEM_MESSAGE_BADGE_CONTENT} from './actionTypes';
 
 const login = () => ({ type: LOG_IN });
 
@@ -225,3 +226,18 @@ export const changeChatRoomTabsValue = (value) => ({
     value: value
 
 });
+export const increaseChatMessageBadgeContent = () =>({
+    type: INCREASE_CHAT_MESSAGE_BADGE_CONTENT
+})
+
+export const clearChatMessageBadgeContent = () =>({
+    type: CLEAR_CHAT_MESSAGE_BADGE_CONTENT
+})
+
+export const increaseSystemMessageBadgeContent = () =>({
+    type: INCREASE_SYSTEM_MESSAGE_BADGE_CONTENT
+})
+
+export const clearSystemMessageBadgeContent = () =>({
+    type: CLEAR_SYSTEM_MESSAGE_BADGE_CONTENT
+})

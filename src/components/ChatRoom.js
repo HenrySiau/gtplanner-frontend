@@ -62,6 +62,10 @@ class ChatRoom extends React.Component {
                 this.setState({
                     chats: this.state.chats.concat([msg])
                 });
+                if(!(this.props.isChatRoomOpen && this.props.chatRoomTabsValue===0)){
+                    this.props.increaseChatMessageBadgeContent();
+                }
+                
             }
         });
         axios({

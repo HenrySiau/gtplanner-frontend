@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { toggleChatRoomOpen, addMember, changeChatRoomTabsValue } from '../actions';
+import { increaseChatMessageBadgeContent, clearChatMessageBadgeContent, increaseSystemMessageBadgeContent, clearSystemMessageBadgeContent } from '../actions';
 import ChatRoom from '../components/ChatRoom';
 // import ChatRoomDrawer from '../components/ChatRoomDrawer';
 
@@ -19,6 +20,10 @@ class ChatRoomContainer extends React.Component {
                     userInfo={this.props.userInfo}
                     chatRoomTabsValue={this.props.chatRoomTabsValue}
                     changeChatRoomTabsValue={this.props.changeChatRoomTabsValue}
+                    increaseChatMessageBadgeContent={this.props.increaseChatMessageBadgeContent}
+                    clearChatMessageBadgeContent={this.props.clearChatMessageBadgeContent}
+                    increaseSystemMessageBadgeContent={this.props.increaseSystemMessageBadgeContent}
+                    clearSystemMessageBadgeContent={this.props.clearSystemMessageBadgeContent}
                 />}
             </div>
         )
@@ -46,7 +51,19 @@ const mapDispatchToProps = dispatch => {
         },
         changeChatRoomTabsValue: value => {
             dispatch(changeChatRoomTabsValue(value));
-        }
+        },
+        increaseChatMessageBadgeContent: () => {
+            dispatch(increaseChatMessageBadgeContent());
+        },
+        clearChatMessageBadgeContent: () => {
+            dispatch(clearChatMessageBadgeContent());
+        },
+        increaseSystemMessageBadgeContent: () => {
+            dispatch(increaseSystemMessageBadgeContent());
+        },
+        clearSystemMessageBadgeContent: () => {
+            dispatch(clearSystemMessageBadgeContent());
+        },
     }
 }
 
