@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { logout, toggleDrawer, loginWithToken, toggleChatRoomOpen, openChatRoom, closeChatRoom } from '../actions';
 import { updateUserInfo, updateSelectedTripWithInfo, chatMessageBadgeContent, systemMessageBadgeContent } from '../actions';
+import { increaseChatMessageBadgeContent, clearChatMessageBadgeContent, increaseSystemMessageBadgeContent, clearSystemMessageBadgeContent } from '../actions';
 import GTPAppBar from '../components/GTPAppBar';
 import { push } from 'react-router-redux';
 
@@ -12,6 +13,7 @@ const mapStateToProps = (state) => {
         tripId: state.selectedTrip.tripId,
         chatMessageBadgeContent: state.chatMessageBadgeContent,
         systemMessageBadgeContent: state.systemMessageBadgeContent,
+        chatRoomTabsValue: state.chatRoomTabsValue
     }
 }
 
@@ -43,7 +45,20 @@ const mapDispatchToProps = dispatch => {
         },
         updateUserInfo: userInfo => {
             dispatch(updateUserInfo(userInfo));
-        }
+        },
+        increaseChatMessageBadgeContent: () => {
+            dispatch(increaseChatMessageBadgeContent());
+        },
+        clearChatMessageBadgeContent: () => {
+            dispatch(clearChatMessageBadgeContent());
+        },
+        increaseSystemMessageBadgeContent: () => {
+            dispatch(increaseSystemMessageBadgeContent());
+        },
+        clearSystemMessageBadgeContent: () => {
+            dispatch(clearSystemMessageBadgeContent());
+        },
+
     }
 }
 

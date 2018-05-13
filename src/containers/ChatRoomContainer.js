@@ -24,6 +24,7 @@ class ChatRoomContainer extends React.Component {
                     clearChatMessageBadgeContent={this.props.clearChatMessageBadgeContent}
                     increaseSystemMessageBadgeContent={this.props.increaseSystemMessageBadgeContent}
                     clearSystemMessageBadgeContent={this.props.clearSystemMessageBadgeContent}
+                    chatMessageBadgeContent={this.props.chatMessageBadgeContent}
                 />}
             </div>
         )
@@ -37,7 +38,8 @@ const mapStateToProps = (state) => {
         isLoggedIn: state.isLoggedIn,
         selectedTrip: state.selectedTrip,
         userInfo: state.userInfo,
-        chatRoomTabsValue: state.chatRoomTabsValue
+        chatRoomTabsValue: state.chatRoomTabsValue,
+        chatMessageBadgeContent: state.chatMessageBadgeContent
     }
 }
 

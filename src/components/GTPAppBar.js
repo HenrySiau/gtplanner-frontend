@@ -105,6 +105,14 @@ class GTPAppBar extends React.Component {
         }
 
     }
+    toggleChatRoomOpen = () => {
+        if(!this.props.isChatRoomOpen && this.props.chatRoomTabsValue===0 && this.props.chatMessageBadgeContent>0){
+            console.log('clearChatMessageBadgeContent');
+            this.props.clearChatMessageBadgeContent();
+        }
+        this.props.toggleChatRoomOpen();
+    }
+    
     render() {
         const { classes } = this.props;
 
@@ -134,7 +142,7 @@ class GTPAppBar extends React.Component {
                     <GTPRightMenu />
                     <div className={classes.messageNotification}>
                         {Boolean(this.props.tripId) &&
-                            <IconButton color="inherit" onClick={this.props.toggleChatRoomOpen} >
+                            <IconButton color="inherit" onClick={this.toggleChatRoomOpen} >
                                 {this.props.chatMessageBadgeContent ? <Badge className={classes.question_answer_badge} badgeContent={this.props.chatMessageBadgeContent} color="secondary">
                                     <Icon className={classes.icon}>textsms</Icon>
                                 </Badge> : <Icon className={classes.icon}>textsms</Icon>}

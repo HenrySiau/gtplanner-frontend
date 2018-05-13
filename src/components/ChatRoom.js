@@ -62,10 +62,10 @@ class ChatRoom extends React.Component {
                 this.setState({
                     chats: this.state.chats.concat([msg])
                 });
-                if(!(this.props.isChatRoomOpen && this.props.chatRoomTabsValue===0)){
+                if (!(this.props.isChatRoomOpen && this.props.chatRoomTabsValue === 0)) {
                     this.props.increaseChatMessageBadgeContent();
                 }
-                
+
             }
         });
         axios({
@@ -86,7 +86,6 @@ class ChatRoom extends React.Component {
             .catch(error => {
                 console.error(error);
             })
-
     }
 
     componentDidUpdate() {
@@ -94,6 +93,9 @@ class ChatRoom extends React.Component {
     }
 
     handleTabChange = (event, value) => {
+        if (value === 0 && this.props.chatMessageBadgeContent > 0) {
+            this.props.clearChatMessageBadgeContent();
+        }
         this.props.changeChatRoomTabsValue(value);
     };
 
