@@ -7,6 +7,8 @@ import { recentTrips } from './recentTrips';
 import isChatRoomOpen from './isChatRoomOpen';
 import isDrawerExtended from './isDrawerExtended';
 import {userInfo} from './userInfo';
+import chatRoomTabsValue from './chatRoomTabsValue';
+import {chatMessageBadgeContent, systemMessageBadgeContent} from './messageBadgeContents';
 
 export default combineReducers({
     isLoggedIn,
@@ -18,5 +20,8 @@ export default combineReducers({
     recentTrips,
     isChatRoomOpen,
     isDrawerExtended,
-    userInfo
+    userInfo,
+    chatRoomTabsValue,
+    chatMessageBadgeContent,
+    systemMessageBadgeContent,
 })

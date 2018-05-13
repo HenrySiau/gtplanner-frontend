@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { logout, toggleDrawer, loginWithToken, toggleChatRoomOpen, openChatRoom, closeChatRoom } from '../actions';
-import { updateUserInfo, updateSelectedTripWithInfo } from '../actions';
+import { updateUserInfo, updateSelectedTripWithInfo, chatMessageBadgeContent, systemMessageBadgeContent } from '../actions';
 import GTPAppBar from '../components/GTPAppBar';
 import { push } from 'react-router-redux';
 
@@ -10,6 +10,8 @@ const mapStateToProps = (state) => {
         selectedTrip: state.selectedTrip,
         isChatRoomOpen: state.isChatRoomOpen,
         tripId: state.selectedTrip.tripId,
+        chatMessageBadgeContent: state.chatMessageBadgeContent,
+        systemMessageBadgeContent: state.systemMessageBadgeContent,
     }
 }
 

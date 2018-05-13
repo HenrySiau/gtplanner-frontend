@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { toggleChatRoomOpen, addMember } from '../actions';
+import { toggleChatRoomOpen, addMember, changeChatRoomTabsValue } from '../actions';
 import ChatRoom from '../components/ChatRoom';
 // import ChatRoomDrawer from '../components/ChatRoomDrawer';
 
@@ -17,6 +17,8 @@ class ChatRoomContainer extends React.Component {
                     toggleChatRoomOpen={this.props.toggleChatRoomOpen}
                     addMember={this.props.addMember}
                     userInfo={this.props.userInfo}
+                    chatRoomTabsValue={this.props.chatRoomTabsValue}
+                    changeChatRoomTabsValue={this.props.changeChatRoomTabsValue}
                 />}
             </div>
         )
@@ -30,6 +32,7 @@ const mapStateToProps = (state) => {
         isLoggedIn: state.isLoggedIn,
         selectedTrip: state.selectedTrip,
         userInfo: state.userInfo,
+        chatRoomTabsValue: state.chatRoomTabsValue
     }
 }
 
@@ -40,6 +43,9 @@ const mapDispatchToProps = dispatch => {
         },
         addMember: (member) => {
             dispatch(addMember(member));
+        },
+        changeChatRoomTabsValue: value => {
+            dispatch(changeChatRoomTabsValue(value));
         }
     }
 }

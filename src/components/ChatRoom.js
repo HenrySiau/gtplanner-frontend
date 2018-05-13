@@ -44,7 +44,6 @@ const styles = theme => ({
 
 class ChatRoom extends React.Component {
     state = {
-        value: 0,
         chats: []
     };
     componentDidMount() {
@@ -90,8 +89,8 @@ class ChatRoom extends React.Component {
         this.scrollToBot();
     }
 
-    handleChange = (event, value) => {
-        this.setState({ value });
+    handleTabChange = (event, value) => {
+        this.props.changeChatRoomTabsValue(value);
     };
 
     scrollToBot() {
@@ -146,7 +145,6 @@ class ChatRoom extends React.Component {
     }
 
     render() {
-        const userName = "Zhiheng Xiao";
         let messages = [];
         const chats = this.state.chats;
         let lastMessageTime = this.state.chats[0] ? this.state.chats[0].composedAt : Date.now();
@@ -186,18 +184,18 @@ class ChatRoom extends React.Component {
             <div className={classes.chatRoom}>
                 <AppBar position="static" color="default">
                     <Tabs
-                        value={value}
-                        onChange={this.handleChange}
+                        value={this.props.chatRoomTabsValue}
+                        onChange={this.handleTabChange}
                         // scrollable
                         // scrollButtons="on"
                         indicatorColor="primary"
                         textColor="primary"
                     >
-                        <Tab label="Discussion" className={classes.tab} />
+                        <Tab label="Chat" className={classes.tab} />
                         <Tab label="Members" className={classes.tab} />
                     </Tabs>
                 </AppBar>
-                {value === 0 && <div>
+                {this.props.chatRoomTabsValue === 0 && <div>
                     <div className="chatroom">
                         <ul className="chats" ref="chats">
                             {messages}
@@ -208,7 +206,7 @@ class ChatRoom extends React.Component {
                         </form>
                     </div>
                 </div>}
-                {value === 1 && <div>
+                {this.props.chatRoomTabsValue === 1 && <div>
                     {this.props.selectedTrip && <MemberList members={this.props.selectedTrip.members} />}
                 </div>}
 

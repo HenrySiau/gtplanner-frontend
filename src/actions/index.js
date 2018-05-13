@@ -3,7 +3,7 @@ import settings from '../config';
 import { push } from 'react-router-redux';
 import { LOG_IN, LOG_OUT, TOGGLE_DRAWER, SNACKBAR_OPEN, SNACKBAR_CLOSE, SET_SNACKBAR_MESSAGE, UPDATE_SELECTED_TRIP } from './actionTypes';
 import { SET_INVITE_CODE, REMOVE_INVITE_CODE, UPDATE_RECENT_TRIPS, TOGGLE_CHAT_ROOM_OPEN, CHAT_ROOM_OPEN, CHAT_ROOM_CLOSE } from './actionTypes';
-import { DRAWER_EXTEND, DRAWER_FOLD, UPDATE_USER_INFO, ADD_MEMBER, REMOVE_MEMBER } from './actionTypes';
+import { DRAWER_EXTEND, DRAWER_FOLD, UPDATE_USER_INFO, ADD_MEMBER, REMOVE_MEMBER, CHANGE_CHAT_ROOM_TABS_VALUE } from './actionTypes';
 
 const login = () => ({ type: LOG_IN });
 
@@ -217,5 +217,11 @@ export const updateUserInfo = (userInfo) => ({
     email: userInfo.email,
     phoneNumber: userInfo.phoneNumber,
     profilePictureURL: userInfo.profilePicture ? settings.serverUrl + userInfo.profilePicture : userInfo.facebookProfilePictureURL || settings.defaultProfilePictureURL
+
+});
+
+export const changeChatRoomTabsValue = (value) => ({
+    type: CHANGE_CHAT_ROOM_TABS_VALUE,
+    value: value
 
 });

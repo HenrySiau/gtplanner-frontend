@@ -122,9 +122,11 @@ class GTPAppBar extends React.Component {
                 <div className={classes.container} >
                     <div className={classes.notification}>
                         <IconButton color="inherit" >
-                            <Badge badgeContent={3} color="secondary">
+                            {this.props.systemMessageBadgeContent ? <Badge
+                                badgeContent={this.props.systemMessageBadgeContent}
+                                color="secondary">
                                 <Icon className={classes.icon} style={{ fontSize: 28 }}>notifications</Icon>
-                            </Badge>
+                            </Badge> : <Icon className={classes.icon} style={{ fontSize: 28 }}>notifications</Icon>}
                         </IconButton>
                     </div>
 
@@ -132,10 +134,10 @@ class GTPAppBar extends React.Component {
                     <GTPRightMenu />
                     <div className={classes.messageNotification}>
                         {Boolean(this.props.tripId) &&
-                            <IconButton color="inherit" onClick={this.props.toggleChatRoomOpen}>
-                                <Badge className={classes.question_answer_badge} badgeContent={6} color="secondary">
+                            <IconButton color="inherit" onClick={this.props.toggleChatRoomOpen} >
+                                {this.props.chatMessageBadgeContent ? <Badge className={classes.question_answer_badge} badgeContent={this.props.chatMessageBadgeContent} color="secondary">
                                     <Icon className={classes.icon}>textsms</Icon>
-                                </Badge>
+                                </Badge> : <Icon className={classes.icon}>textsms</Icon>}
                             </IconButton>
                         }
                     </div>
