@@ -45,55 +45,7 @@ const styles = theme => ({
 class ChatRoom extends React.Component {
     state = {
         value: 0,
-        chats: [{
-            userName: "Zhiheng Xiao",
-            content: `Hello!`,
-            img: "/img/user1.jpeg",
-            id: "3745ce45-d5ae-469b-a5fd-f73a94c4b142",
-            created: "1519155014769"
-        }, {
-            userName: "Alice Chow",
-            content: `Hi~ `,
-            img: "/img/user1.jpeg",
-            id: "2b58d172-c1a2-4ef6-a788-aafe23352760",
-            created: "1519155024769"
-        }, {
-            userName: "Zhiheng Xiao",
-            content: `It is going to rain next week`,
-            img: "/img/user1.jpeg",
-            id: "9ec0b75f-cf9d-405d-a90b-b97b248ca25d",
-            created: "1519155034769"
-        }, {
-            userName: "I really hate people have long names like this",
-            content: `Yes, shall we reschedule then? I have to three weedings to attend next month, omg...`,
-            img: "/img/zhiheng.jpg",
-            id: "729615b8-4f95-4628-b125-43c2367f241d",
-            created: "1519155044769"
-        }, {
-            userName: "Zhiheng Xiao",
-            content: `🤔️`,
-            img: "/img/user1.jpeg",
-            id: "e5482960-fd2c-486b-9f7a-9c7e3c3d2bd3",
-            created: "1519155054769"
-        }, {
-            userName: "Zhiheng Xiao",
-            content: `或许我们可以往北边走`,
-            img: "/img/user1.jpeg",
-            id: "555df5b4-a394-4040-a8dd-f140b0e2fccf",
-            created: "1519155064769"
-        }, {
-            userName: "Zhiheng Xiao",
-            content: `We can go fishing at Bodaga Bay`,
-            img: "/img/user1.jpeg",
-            id: "a8e77beb-4fc1-402a-9023-0919add14734",
-            created: "1519155074769"
-        }, {
-            userName: "Alice Chow",
-            content: `Definitely! Sounds great!`,
-            img: "/img/user1.jpeg",
-            id: "a87753b3-2cc1-4cbb-9d4f-09a41e5ffc43",
-            created: "1519155584769"
-        }],
+        chats: []
     };
     componentDidMount() {
         this.scrollToBot();
@@ -107,7 +59,30 @@ class ChatRoom extends React.Component {
         // });
         socket.on('new message', msg => {
             console.log('new message: ' + msg);
+            if (msg.userId != this.props.userInfo.userId) {
+                this.setState({
+                    chats: this.state.chats.concat([msg])
+                });
+            }
         });
+        axios({
+            method: 'GET',
+            url: settings.serverUrl + '/api/get/chat/message',
+            json: true,
+            headers: {
+                'x-access-token': localStorage.getItem('id_token'),
+            },
+            params: {
+                tripId: this.props.tripId
+            }
+        })
+            .then(response => {
+                console.log(response.data.messages);
+                this.setState({ chats: response.data.messages });
+            })
+            .catch(error => {
+                console.error(error);
+            })
 
     }
 
@@ -130,11 +105,11 @@ class ChatRoom extends React.Component {
         const message = ReactDOM.findDOMNode(this.refs.msg).value;
         this.setState({
             chats: this.state.chats.concat([{
-                userName: "Zhiheng Xiao",
+                userId: this.props.userInfo.userId,
                 content: message,
-                img: "/img/user1.jpeg",
                 id: uuidv4().toString(),
-                created: Date.now()
+                composedAt: Date.now(),
+                tripId: this.props.tripId
             }])
         }, () => {
             ReactDOM.findDOMNode(this.refs.msg).value = "";
@@ -148,10 +123,12 @@ class ChatRoom extends React.Component {
                 'x-access-token': localStorage.getItem('id_token'),
             },
             data: {
-                userId: this.props.userInfo.userId,
-                content: message,
-                composedAt: Date.now(),
-                tripId: this.props.tripId
+                message: {
+                    userId: this.props.userInfo.userId,
+                    content: message,
+                    composedAt: Date.now(),
+                    tripId: this.props.tripId
+                }
             }
         })
             .then((response) => {
@@ -163,8 +140,8 @@ class ChatRoom extends React.Component {
                 console.error(error);
             });
 
-        socket.emit('new message', { message: message, channel: this.props.tripId });
-        console.log('socket.emit: ' + message);
+        // socket.emit('new message', { message: message, channel: this.props.tripId });
+        // console.log('socket.emit: ' + message);
         // this.props.addMember({id:'007kjhjkghgkhkjkkhfff', userName: 'HenryS'});
     }
 
@@ -172,18 +149,34 @@ class ChatRoom extends React.Component {
         const userName = "Zhiheng Xiao";
         let messages = [];
         const chats = this.state.chats;
-        let lastMessageTime = this.state.chats[0] ? this.state.chats[0].created : Date.now();
+        let lastMessageTime = this.state.chats[0] ? this.state.chats[0].composedAt : Date.now();
         // show create time if the two messages are 5 minutes away
         // TODO: simiify time indicator, only shows time or add yesterday/Feb 9, 2018 22:22
         // hint: Date.getTimezoneOffset() then tolocaltime
         chats.forEach((chat) => {
-            if (chat.created - lastMessageTime > 300000) {
-                var currentChatTime = new Date(parseInt(chat.created)).toUTCString();
+            if (chat.composedAt - lastMessageTime > 300000) {
+                // add time indicator
+                var currentChatTime = new Date(parseInt(chat.composedAt)).toUTCString();
                 messages.push(<li className="time" key={uuidv4()}>{currentChatTime}</li>);
-                messages.push(<Message chat={chat} userName={userName} key={chat.id} />);
-            } else {
-                messages.push(<Message chat={chat} userName={userName} key={chat.id} />);
             }
+            if (chat.userId === this.props.userInfo.userId) {
+                messages.push(<Message
+                    key={chat.id}
+                    content={chat.content}
+                    self={true}
+                />);
+            }
+            else if (this.props.selectedTrip.members.has(chat.userId)) {
+                messages.push(<Message
+                    key={chat.id}
+                    userName={this.props.selectedTrip.members.get(chat.userId).userName}
+                    content={chat.content}
+                    self={false}
+                    profilePictureURL={this.props.selectedTrip.members.get(chat.userId).profilePictureURL}
+                />);
+            }
+
+
             lastMessageTime = chat.created;
         });
 

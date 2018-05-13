@@ -24,7 +24,7 @@ export const selectedTrip = (state = '', action) => {
                 members: state.members.set(action.member.userId, {
                     userName: action.member.userName,
                     email: action.email,
-                    profilePictureUrl: action.profilePicture ? settings.serverUrl + action.profilePicture : action.facebookProfilePictureURL || settings.defaultProfilePictureUrl,
+                    profilePictureURL: action.profilePicture ? settings.serverUrl + action.profilePicture : action.facebookProfilePictureURL || settings.defaultProfilePictureURL,
                 }),
                 startDate: state.startDate,
                 endDate: state.endDate,
