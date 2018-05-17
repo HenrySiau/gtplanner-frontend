@@ -5,6 +5,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import Dialog from '@material-ui/core/Dialog';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import NewIdeal from './NewIdeal';
 
 const styles = theme => ({
     dialogButton: {
@@ -16,6 +18,8 @@ class GoogleMaps extends React.Component {
     constructor(props) {
         super(props);
         this.map = null;
+        this.autocomplete = null;
+        this.addressInput = React.createRef();
         this.state = {
             isDialogOpen: false,
 
@@ -39,18 +43,25 @@ class GoogleMaps extends React.Component {
                     map: this.map,
                 })
             })
+            console.log('addressInput: ' + this.addressInput.current)
         } else {
             console.log('google map did not load');
         }
 
     }
-    componentDidUpdate(prevProps, prevState) {
-        // console.log('prevProps: ' + prevProps);
-        // console.log('preState: ' + prevState);
+    componentDidUpdate(prevProps) {
         if (prevProps.filteredMarkerList !== this.props.filteredMarkerList) {
             console.log('componentDidUpdate');
         }
 
+    }
+
+    handleDialogOpen = () => {
+
+    }
+
+    handleAddressChange = (event) => {
+        console.log(event.target.value);
     }
 
 
@@ -67,6 +78,7 @@ class GoogleMaps extends React.Component {
                 >
                     New Ideal
             </Button>
+
                 <Dialog
                     disableBackdropClick={true}
                     open={this.state.isDialogOpen}
@@ -74,6 +86,19 @@ class GoogleMaps extends React.Component {
                     <DialogTitle >
                         {"add new ideal"}
                     </DialogTitle>
+                    <DialogContent>
+                        {/* <input type="text" name="autocomplete" ref={this.addressInput} />
+                        <Button
+                            variant="raised"
+                            color="primary"
+                            // onClick={() => { console.log('value: ' + document.getElementById('googleMapAutocomplete').value)} }
+                            onClick={() => { console.log('value: ' + this.addressInput.current.value) }}
+                            className={classes.dialogButton}
+                        >
+                            Get Address
+            </Button> */}
+                        <NewIdeal />
+                    </DialogContent>
                     <DialogActions>
                         <Button
                             variant="raised"

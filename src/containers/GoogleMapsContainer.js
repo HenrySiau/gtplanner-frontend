@@ -43,5 +43,5 @@ GoogleMapsContainer = connect(
 )(GoogleMapsContainer)
 
 export default scriptLoader(
-    ["https://maps.googleapis.com/maps/api/js?key=" + instanceConfig.googleMapApiKey]
+    ["https://maps.googleapis.com/maps/api/js?key=" + instanceConfig.googleMapApiKey + '&libraries=places']
 )(GoogleMapsContainer);
