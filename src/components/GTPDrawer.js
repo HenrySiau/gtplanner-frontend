@@ -1,7 +1,7 @@
 import React from 'react';
 import Drawer from 'material-ui/Drawer';
 import compose from 'recompose/compose';
-import { withStyles } from 'material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import withWidth from 'material-ui/utils/withWidth';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import InboxIcon from 'material-ui-icons/Inbox';

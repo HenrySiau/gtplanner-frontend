@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui/styles';
-import AppBar from 'material-ui/AppBar';
-import Toolbar from 'material-ui/Toolbar';
-import Typography from 'material-ui/Typography';
-import Button from 'material-ui/Button';
+import { withStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 import IconButton from 'material-ui/IconButton';
 import { Link } from 'react-router-dom';
 import Badge from 'material-ui/Badge';
@@ -16,6 +16,7 @@ import GTPAvatar from './GTPAvatar';
 import GTPRightMenu from './GTPRightMenu';
 import axios from 'axios';
 import settings from '../config';
+
 const styles = theme => ({
     root: {
         flexGrow: 1,
@@ -105,14 +106,21 @@ class GTPAppBar extends React.Component {
         }
 
     }
-    toggleChatRoomOpen = () => {
-        if(!this.props.isChatRoomOpen && this.props.chatRoomTabsValue===0 && this.props.chatMessageBadgeContent>0){
+    toggleChatRoomOpen = event => {
+        event.preventDefault();
+        if (!this.props.isChatRoomOpen && this.props.chatRoomTabsValue === 0 && this.props.chatMessageBadgeContent > 0) {
             console.log('clearChatMessageBadgeContent');
             this.props.clearChatMessageBadgeContent();
         }
         this.props.toggleChatRoomOpen();
+        // console.log('clicked message notification button');
     }
-    
+
+    testEvent = () => {
+        console.log('clicked system notification button');
+        this.props.updateFilteredMarkers([ { lat: 37.7749300, lng: -122.4124200 }]);
+    }
+
     render() {
         const { classes } = this.props;
 
@@ -129,23 +137,28 @@ class GTPAppBar extends React.Component {
             return (
                 <div className={classes.container} >
                     <div className={classes.notification}>
-                        <IconButton color="inherit" >
+                        <IconButton
+                            id='systemMessageNotificationButton'
+                            onClick={this.testEvent}
+                            color="inherit" >
                             {this.props.systemMessageBadgeContent ? <Badge
                                 badgeContent={this.props.systemMessageBadgeContent}
                                 color="secondary">
                                 <Icon className={classes.icon} style={{ fontSize: 28 }}>notifications</Icon>
                             </Badge> : <Icon className={classes.icon} style={{ fontSize: 28 }}>notifications</Icon>}
                         </IconButton>
+
                     </div>
 
                     <GTPAvatar />
                     <GTPRightMenu />
                     <div className={classes.messageNotification}>
                         {Boolean(this.props.tripId) &&
+                            // <IconButton color="inherit" onClick={this.toggleChatRoomOpen} >
                             <IconButton color="inherit" onClick={this.toggleChatRoomOpen} >
                                 {this.props.chatMessageBadgeContent ? <Badge className={classes.question_answer_badge} badgeContent={this.props.chatMessageBadgeContent} color="secondary">
-                                    <Icon className={classes.icon}>textsms</Icon>
-                                </Badge> : <Icon className={classes.icon}>textsms</Icon>}
+                                    <Icon >textsms</Icon>
+                                </Badge> : <Icon >textsms</Icon>}
                             </IconButton>
                         }
                     </div>
@@ -155,7 +168,6 @@ class GTPAppBar extends React.Component {
 
         const Title = () => {
             return (
-
                 <Typography variant="title" color="inherit" className={classes.flex} >
                     {this.props.selectedTrip && (this.props.selectedTrip.title || 'Group Travel Planner')}
                 </Typography>

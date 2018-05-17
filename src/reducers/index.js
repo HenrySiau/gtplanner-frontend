@@ -9,6 +9,7 @@ import isDrawerExtended from './isDrawerExtended';
 import {userInfo} from './userInfo';
 import chatRoomTabsValue from './chatRoomTabsValue';
 import {chatMessageBadgeContent, systemMessageBadgeContent} from './messageBadgeContents';
+import {filteredMarkerList} from './googleMapMarkers';
 
 export default combineReducers({
     isLoggedIn,
@@ -24,4 +25,5 @@ export default combineReducers({
     chatRoomTabsValue,
     chatMessageBadgeContent,
     systemMessageBadgeContent,
+    filteredMarkerList,
 })

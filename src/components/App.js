@@ -3,9 +3,9 @@ import GTPAppBarContainer from '../containers/GTPAppBarContainer';
 import GTPDrawerContainer from '../containers/GTPDrawerContainer';
 import ChatRoomContainer from '../containers/ChatRoomContainer';
 import { Route, Redirect } from 'react-router-dom';
-import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import PrivateRoute from './PrivateRoute';
 import LoginSection from '../sections/LoginSection';
 import CreateTripSection from '../sections/CreateTripSection';
@@ -15,6 +15,7 @@ import GTPSnackbar from './GTPSnackbar';
 import RegisterForm from './RegisterForm';
 import InviteMemberForm from './InviteMemberForm';
 import JoinATrip from './JoinATrip';
+import GTPDashboard from './GTPDashboard';
 
 
 const theme = createMuiTheme({
@@ -68,6 +69,7 @@ class App extends Component {
               <Route exact path="/trip/join" component={JoinATrip} />
               <PrivateRoute exact path="/members/invite" component={InviteMemberForm} />
               <PrivateRoute exact path="/trip/new" component={CreateTripSection} />
+              <PrivateRoute exact path="/dashboard" component={GTPDashboard} />
             </main>
             <ChatRoomContainer />
             <GTPSnackbar />

@@ -1,7 +1,7 @@
 import React from 'react';
-import { withStyles } from 'material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import scriptLoader from 'react-async-script-loader'
-import GoogleMaps from './GoogleMaps';
+import GoogleMapsContainer from '../containers/GoogleMapsContainer';
 
 const styles = theme => ({
     button: {
@@ -34,9 +34,7 @@ class GTPDashboard extends React.Component {
         const { classes } = this.props;
         return (
             <div>
-                {/* <MapContainer /> */}
-                <GoogleMaps />
-
+                <GoogleMapsContainer />
             </div>
         );
     }

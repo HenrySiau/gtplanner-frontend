@@ -1,6 +1,6 @@
 import React from 'react';
-import TextField from 'material-ui/TextField';
-import Button from 'material-ui/Button';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 import Chip from 'material-ui/Chip';
 import axios from 'axios';
 import settings from '../config';
@@ -8,7 +8,7 @@ import {isEmailFormatOK} from './Validator';
 import { connect } from 'react-redux';
 import { snackbarMessage } from '../actions';
 import { push } from 'react-router-redux';
-import { withStyles } from 'material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Icon from 'material-ui/Icon';
 import PropTypes from 'prop-types';
 import Dialog, { DialogActions, DialogContent, DialogContentText, DialogTitle } from 'material-ui/Dialog';

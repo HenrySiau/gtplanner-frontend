@@ -1,12 +1,12 @@
 import React from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { withStyles } from 'material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import instanceConfig from '../instanceConfig';
 import { snackbarMessage, updateSelectedTripWithInfo, setInvitationCode, loginWithToken, updateUserInfo, removeInvitationCode } from '../actions';
 import { push } from 'react-router-redux';
 import Dialog, { DialogActions, DialogContent, DialogContentText, DialogTitle } from 'material-ui/Dialog';
-import Button from 'material-ui/Button';
+import Button from '@material-ui/core/Button';
 import settings from '../config';
 import { validateJWT } from './Validator';
 

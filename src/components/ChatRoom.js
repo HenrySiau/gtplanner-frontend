@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Drawer from 'material-ui/Drawer';
-import { withStyles } from 'material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import Typography from 'material-ui/Typography';
+import Typography from '@material-ui/core/Typography';
 import Tabs, { Tab } from 'material-ui/Tabs';
-import AppBar from 'material-ui/AppBar';
+import AppBar from '@material-ui/core/AppBar';
 import '../css/chatRoom.css';
 import axios from 'axios';
 import Message from './Message.js';

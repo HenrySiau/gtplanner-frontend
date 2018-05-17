@@ -1,6 +1,6 @@
 import React from 'react';
 import LoginForm from '../components/LoginForm';
-import { withStyles } from 'material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import settings from '../config';
 
 const styles = theme => ({

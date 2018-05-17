@@ -19,7 +19,7 @@ a:link {
 
 }
 
-.chatroom h3 {
+/* .chatroom h3 {
     font-family: 'Pacifico', cursive;
     background-color: rgba(30, 228, 148, 0.7);
     color: #FFF;
@@ -31,7 +31,7 @@ a:link {
     justify-content: center;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
-}
+} */
 
 .chatroom .chats {
     box-sizing: border-box;
@@ -74,8 +74,8 @@ a:link {
 }
 
 .chatroom .chats .chat img {
-    width: 30px;
-    height: 30px;
+    width: 26px;
+    height: 26px;
     border-radius: 10%;
     position: absolute;
     top: -20px;

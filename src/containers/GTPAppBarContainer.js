@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import { logout, toggleDrawer, loginWithToken, toggleChatRoomOpen, openChatRoom, closeChatRoom } from '../actions';
 import { updateUserInfo, updateSelectedTripWithInfo, chatMessageBadgeContent, systemMessageBadgeContent } from '../actions';
 import { increaseChatMessageBadgeContent, clearChatMessageBadgeContent, increaseSystemMessageBadgeContent, clearSystemMessageBadgeContent } from '../actions';
+import { updateFilteredMarkers} from '../actions';
 import GTPAppBar from '../components/GTPAppBar';
 import { push } from 'react-router-redux';
 
@@ -58,6 +59,9 @@ const mapDispatchToProps = dispatch => {
         clearSystemMessageBadgeContent: () => {
             dispatch(clearSystemMessageBadgeContent());
         },
+        updateFilteredMarkers: (places) => {
+            dispatch(updateFilteredMarkers(places));
+        }
 
     }
 }
