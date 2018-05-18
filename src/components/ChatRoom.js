@@ -144,24 +144,21 @@ class ChatRoom extends React.Component {
                 // TODO: show error message and guide user to re submit
                 console.error(error);
             });
-
-        // socket.emit('new message', { message: message, channel: this.props.tripId });
-        // console.log('socket.emit: ' + message);
-        // this.props.addMember({id:'007kjhjkghgkhkjkkhfff', userName: 'HenryS'});
     }
 
     render() {
         let messages = [];
         const chats = this.state.chats;
-        let lastMessageTime = this.state.chats[0] ? this.state.chats[0].composedAt : Date.now();
+        let lastMessageTime = this.state.chats[0] ? this.state.chats[0].composedAt : new Date();
         // show create time if the two messages are 5 minutes away
-        // TODO: simiify time indicator, only shows time or add yesterday/Feb 9, 2018 22:22
-        // hint: Date.getTimezoneOffset() then tolocaltime
         chats.forEach((chat) => {
-            if (chat.composedAt - lastMessageTime > 300000) {
+            if (new Date(chat.composedAt).getTime() - new Date(lastMessageTime).getTime() > 300000) {
+                console.log('add Time');
                 // add time indicator
-                var currentChatTime = new Date(parseInt(chat.composedAt)).toUTCString();
-                messages.push(<li className="time" key={uuidv4()}>{currentChatTime}</li>);
+                let currentChatTime = new Date(chat.composedAt);
+                let timeString = currentChatTime.getMonth() + '/' + currentChatTime.getDate() + ' ' +
+                    currentChatTime.getHours() + ':' + currentChatTime.getMinutes()
+                messages.push(<li className="time" key={uuidv4()}>{timeString}</li>);
             }
             if (chat.userId === this.props.userInfo.userId) {
                 messages.push(<Message
@@ -179,9 +176,7 @@ class ChatRoom extends React.Component {
                     profilePictureURL={this.props.selectedTrip.members.get(chat.userId).profilePictureURL}
                 />);
             }
-
-
-            lastMessageTime = chat.created;
+            lastMessageTime = chat.composedAt;
         });
 
         const { classes } = this.props;
