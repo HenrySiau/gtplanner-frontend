@@ -6,7 +6,7 @@ import Dialog from '@material-ui/core/Dialog';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import NewIdeal from './NewIdeal';
+import NewIdeal from '../forms/NewIdeal';
 
 const styles = theme => ({
     dialogButton: {
@@ -64,7 +64,9 @@ class GoogleMaps extends React.Component {
         console.log(event.target.value);
     }
 
-
+    toggleDialogClose = () => {
+        this.setState({ isDialogOpen: false })
+    }
     render() {
         const { classes } = this.props;
         return (
@@ -87,19 +89,14 @@ class GoogleMaps extends React.Component {
                         {"add new ideal"}
                     </DialogTitle>
                     <DialogContent>
-                        {/* <input type="text" name="autocomplete" ref={this.addressInput} />
-                        <Button
-                            variant="raised"
-                            color="primary"
-                            // onClick={() => { console.log('value: ' + document.getElementById('googleMapAutocomplete').value)} }
-                            onClick={() => { console.log('value: ' + this.addressInput.current.value) }}
-                            className={classes.dialogButton}
-                        >
-                            Get Address
-            </Button> */}
-                        <NewIdeal />
+                        <NewIdeal
+                            snackbarMessage={this.props.snackbarMessage}
+                            selectedTrip={this.props.selectedTrip}
+                            userInfo={this.props.userInfo}
+                            toggleDialogClose={this.toggleDialogClose}
+                        />
                     </DialogContent>
-                    <DialogActions>
+                    {/* <DialogActions>
                         <Button
                             variant="raised"
                             color="primary"
@@ -117,7 +114,7 @@ class GoogleMaps extends React.Component {
                             Cancel
             </Button>
 
-                    </DialogActions>
+                    </DialogActions> */}
                 </Dialog>
             </div>
         )

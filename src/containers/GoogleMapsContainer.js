@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { updateFilteredMarkers } from '../actions';
+import { updateFilteredMarkers, snackbarMessage } from '../actions';
 import scriptLoader from 'react-async-script-loader';
 import instanceConfig from '../instanceConfig';
 import GoogleMaps from '../components/maps/GoogleMaps';
@@ -14,7 +14,10 @@ class GoogleMapsContainer extends React.Component {
                     isScriptLoadSucceed={this.props.isScriptLoadSucceed}
                     filteredMarkerList={this.props.filteredMarkerList}
                     tripId={this.props.tripId}
+                    selectedTrip={this.props.selectedTrip}
+                    userInfo={this.props.userInfo}
                     updateFilteredMarkers={this.props.updateFilteredMarkers}
+                    snackbarMessage={this.props.snackbarMessage}
                 />}
             </div>
         )
@@ -24,8 +27,10 @@ class GoogleMapsContainer extends React.Component {
 const mapStateToProps = (state) => {
     return {
         tripId: state.selectedTrip.tripId,
+        selectedTrip: state.selectedTrip,
+        userInfo: state.userInfo,
+        selectedTrip: state.selectedTrip,
         filteredMarkerList: state.filteredMarkerList,
-
     }
 }
 
@@ -33,6 +38,9 @@ const mapDispatchToProps = dispatch => {
     return {
         updateFilteredMarkers: (markers) => {
             dispatch(updateFilteredMarkers(markers));
+        },
+        snackbarMessage: (msg) => {
+            dispatch(snackbarMessage(msg));
         },
     }
 }

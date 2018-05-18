@@ -10,7 +10,7 @@
     "history": "^4.7.2",
     "material-ui": "^1.0.0-beta.40",
     "material-ui-icons": "^1.0.0-beta.36",
-    "material-ui-pickers": "^1.0.0-rc.5",
+    "material-ui-pickers": "^1.0.0-rc.9",
     "react": "^16.2.0",
     "react-async-script-loader": "^0.3.0",
     "react-dom": "^16.2.0",
