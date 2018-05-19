@@ -28,6 +28,8 @@ class NewIdeal extends React.Component {
             idealEndDate: this.props.selectedTrip.startDate > Date.now() ? this.props.selectedTrip.startDate : Date.now(),
             lat: null,
             lng: null,
+            idealTitle: '',
+            idealTitleErrText: '',
         }
     }
 
@@ -36,8 +38,43 @@ class NewIdeal extends React.Component {
         this.geocoder = new window.google.maps.Geocoder();
     }
 
-    validateIdealTitleLength = () => {
-        console.log('validateIdealTitleLength');
+    handleTitleBlur = (event) => {
+        if (event.target.value.length === 1) {
+            this.setState({
+                isIdealTitleErr: true,
+                idealTitleErrText: 'Title must be at least 2 characters'
+            });
+        }
+        if (event.target.value.length === 0) {
+            this.setState({
+                isIdealTitleErr: false,
+                idealTitleErrText: ''
+            });
+        }
+
+    }
+    handleTitleChange = (event) => {
+        if (this.state.isIdealTitleErr) {
+            if (event.target.value.length > 1 && event.target.value.length < 31) {
+                this.setState({
+                    isIdealTitleErr: false,
+                    idealTitle: event.target.value,
+                    idealTitleErrText: '',
+                })
+            }
+        } else {
+            if (event.target.value.length > 30) {
+                this.setState({
+                    isIdealTitleErr: true,
+                    idealTitleErrText: 'Title must less than 30 characters',
+                    idealTitle: event.target.value,
+                });
+            } else {
+                this.setState({
+                    idealTitle: event.target.value
+                });
+            }
+        }
     }
     handleEndDateChange = stateName => (date) => {
         console.log(stateName);
@@ -76,7 +113,8 @@ class NewIdeal extends React.Component {
                     helperText={this.state.idealTitleErrText}
                     className={classes.input}
                     margin="normal"
-                    onBlur={this.validateIdealTitleLength}
+                    onBlur={this.handleTitleBlur}
+                    onChange={this.handleTitleChange}
                 /><br />
                 <TextField
                     id="googleMapAutocomplete"
