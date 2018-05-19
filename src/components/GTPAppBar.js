@@ -83,6 +83,9 @@ class GTPAppBar extends React.Component {
                             if (response.data.token) {
                                 this.props.loginWithToken(response.data.token);
                             }
+                        } else {
+                            // token error or expired
+                            this.props.logout();
                         }
                         console.log(response.data);
                     })
@@ -118,7 +121,7 @@ class GTPAppBar extends React.Component {
 
     testEvent = () => {
         console.log('clicked system notification button');
-        this.props.updateFilteredMarkers([ { lat: 37.7749300, lng: -122.4124200 }]);
+        this.props.updateFilteredMarkers([{ lat: 37.7749300, lng: -122.4124200 }]);
     }
 
     render() {
