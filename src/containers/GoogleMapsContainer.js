@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { updateFilteredMarkers, snackbarMessage } from '../actions';
+import { updateFilteredMarkers, snackbarMessage, updateIdeas } from '../actions';
 import scriptLoader from 'react-async-script-loader';
 import instanceConfig from '../instanceConfig';
 import GoogleMaps from '../components/maps/GoogleMaps';
@@ -8,16 +8,23 @@ import GoogleMaps from '../components/maps/GoogleMaps';
 class GoogleMapsContainer extends React.Component {
 
     render() {
+        let { ...props } = this.props;
         return (
+            // <div>
+            //     {(this.props.isScriptLoadSucceed && this.props.tripId) && <GoogleMaps
+            //         filteredMarkerList={this.props.filteredMarkerList}
+            //         tripId={this.props.tripId}
+            //         selectedTrip={this.props.selectedTrip}
+            //         userInfo={this.props.userInfo}
+            //         updateFilteredMarkers={this.props.updateFilteredMarkers}
+            //         snackbarMessage={this.props.snackbarMessage}
+            //         updateIdeas={this.props.updateIdeas}
+            //         ideas={this.props.ideas}
+            //     />}
+            // </div>
             <div>
-                {(this.props.isScriptLoadSucceed) && <GoogleMaps
-                    isScriptLoadSucceed={this.props.isScriptLoadSucceed}
-                    filteredMarkerList={this.props.filteredMarkerList}
-                    tripId={this.props.tripId}
-                    selectedTrip={this.props.selectedTrip}
-                    userInfo={this.props.userInfo}
-                    updateFilteredMarkers={this.props.updateFilteredMarkers}
-                    snackbarMessage={this.props.snackbarMessage}
+                {(this.props.isScriptLoadSucceed && this.props.tripId) && <GoogleMaps
+                    {...props}
                 />}
             </div>
         )
@@ -31,6 +38,7 @@ const mapStateToProps = (state) => {
         userInfo: state.userInfo,
         selectedTrip: state.selectedTrip,
         filteredMarkerList: state.filteredMarkerList,
+        ideas: state.ideas,
     }
 }
 
@@ -41,6 +49,9 @@ const mapDispatchToProps = dispatch => {
         },
         snackbarMessage: (msg) => {
             dispatch(snackbarMessage(msg));
+        },
+        updateIdeas: (ideas) => {
+            dispatch(updateIdeas(ideas));
         },
     }
 }

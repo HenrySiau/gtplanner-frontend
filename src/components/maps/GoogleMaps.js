@@ -7,6 +7,10 @@ import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import NewIdea from '../forms/NewIdea';
+import io from 'socket.io-client';
+import settings from '../../config';
+import axios from 'axios';
+
 
 const styles = theme => ({
     dialogButton: {
@@ -18,46 +22,69 @@ class GoogleMaps extends React.Component {
     constructor(props) {
         super(props);
         this.map = null;
+        this.markers = new Map();
         this.autocomplete = null;
         this.addressInput = React.createRef();
         this.state = {
             isDialogOpen: false,
-
         }
     }
 
-
     componentDidMount() {
-        const { isScriptLoadSucceed } = this.props;
-        if (isScriptLoadSucceed) {
-            this.map = new window.google.maps.Map(document.getElementById('googleMap'), {
-                zoom: 12,
-                center: { lat: 37.7749300, lng: -122.4194200 }
-            });
-            console.log('google map loaded');
-            this.props.filteredMarkerList.forEach(place => {
-                console.log('place: ' + place.lat);
-                var marker = new window.google.maps.Marker({
-                    position: place,
-                    title: 'Hello',
-                    map: this.map,
-                })
+        this.map = new window.google.maps.Map(document.getElementById('googleMap'), {
+            zoom: 12,
+            center: { lat: 37.7749300, lng: -122.4194200 }
+        });
+
+        axios({
+            method: 'GET',
+            url: settings.serverUrl + '/api/get/ideas',
+            json: true,
+            headers: {
+                'x-access-token': localStorage.getItem('id_token'),
+            },
+            params: {
+                tripId: this.props.tripId
+            }
+        })
+            .then(response => {
+                let ideas = response.data.ideas;
+                if (ideas) {
+                    ideas.forEach(idea => {
+                        console.log('lat' + idea.lat);
+                        console.log('lng' + idea.lng);
+                        let marker = new window.google.maps.Marker({
+                            position: { lat: Number(idea.lat), lng: Number(idea.lng) },
+                            title: idea.title,
+                            map: this.map,
+                        })
+                    })
+
+                    this.props.updateIdeas(response.data.ideas);
+
+                }
+                // this.setState({ chats: response.data.messages });
             })
-            console.log('addressInput: ' + this.addressInput.current)
-        } else {
-            console.log('google map did not load');
-        }
+            .catch(error => {
+                console.error(error);
+            })
+
+
+        console.log('google map loaded');
+        // this.props.filteredMarkerList.forEach(place => {
+        //     console.log('place: ' + place.lat);
+        //     var marker = new window.google.maps.Marker({
+        //         position: place,
+        //         title: 'Hello',
+        //         map: this.map,
+        //     })
+        // })
 
     }
     componentDidUpdate(prevProps) {
         if (prevProps.filteredMarkerList !== this.props.filteredMarkerList) {
             console.log('componentDidUpdate');
         }
-
-    }
-
-    handleDialogOpen = () => {
-
     }
 
     handleAddressChange = (event) => {
@@ -96,25 +123,6 @@ class GoogleMaps extends React.Component {
                             toggleDialogClose={this.toggleDialogClose}
                         />
                     </DialogContent>
-                    {/* <DialogActions>
-                        <Button
-                            variant="raised"
-                            color="primary"
-                            onClick={() => { }}
-                            className={classes.dialogButton}
-                        >
-                            Create
-            </Button>
-                        <Button
-                            variant="raised"
-                            color="primary"
-                            onClick={() => { this.setState({ isDialogOpen: false }) }}
-                            className={classes.dialogButton}
-                        >
-                            Cancel
-            </Button>
-
-                    </DialogActions> */}
                 </Dialog>
             </div>
         )

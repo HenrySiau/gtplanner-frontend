@@ -53,6 +53,10 @@ class ChatRoom extends React.Component {
             console.log('new member');
             this.props.addMember(member);
         });
+        socket.on('new idea', idea => {
+            console.log('new idea');
+            // TODO add idea to list
+        });
         // socket.on('new bc message', msg => {
         //     console.log('new bc message: ' + msg);
         // });
