@@ -6,7 +6,7 @@ import Dialog from '@material-ui/core/Dialog';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import NewIdeal from '../forms/NewIdeal';
+import NewIdea from '../forms/NewIdea';
 
 const styles = theme => ({
     dialogButton: {
@@ -78,7 +78,7 @@ class GoogleMaps extends React.Component {
                     onClick={() => { this.setState({ isDialogOpen: true }) }}
                     className={classes.dialogButton}
                 >
-                    New Ideal
+                    New Idea
             </Button>
 
                 <Dialog
@@ -86,10 +86,10 @@ class GoogleMaps extends React.Component {
                     open={this.state.isDialogOpen}
                 >
                     <DialogTitle >
-                        {"add new ideal"}
+                        {"add new idea"}
                     </DialogTitle>
                     <DialogContent>
-                        <NewIdeal
+                        <NewIdea
                             snackbarMessage={this.props.snackbarMessage}
                             selectedTrip={this.props.selectedTrip}
                             userInfo={this.props.userInfo}
