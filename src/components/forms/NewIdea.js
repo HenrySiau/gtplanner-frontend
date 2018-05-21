@@ -34,8 +34,6 @@ class NewIdea extends React.Component {
                 new Date(this.props.selectedTrip.startDate) : Date.now(),
             ideaEndDate: new Date(this.props.selectedTrip.startDate) > Date.now() ?
                 new Date(this.props.selectedTrip.startDate) : Date.now(),
-            lat: null,
-            lng: null,
             ideaTitle: '',
             ideaTitleErrText: '',
             isIdeaAddressErr: false,
@@ -47,8 +45,6 @@ class NewIdea extends React.Component {
             inItinerary: false,
             typeHelperText: '',
             isTypeError: false,
-
-
         }
     }
 
@@ -96,26 +92,6 @@ class NewIdea extends React.Component {
         }
     }
 
-    handleAddressChangeOnBlur = () => {
-        let address = document.getElementById('googleMapAutocomplete').value;
-        if (address) {
-            this.geocoder.geocode({ 'address': address }, (result, status) => {
-                if (status === 'OK') {
-                    if (result) {
-                        console.log(result[0].geometry.location.lat());
-                        console.log(result[0].geometry.location.lng());
-                        this.setState({
-                            lat: result[0].geometry.location.lat(),
-                            lng: result[0].geometry.location.lng(),
-                        })
-                    }
-                } else {
-                    console.error('can not find this address in the map');
-                }
-            });
-        }
-    }
-
     validateAll = (data) => {
         if (data.title.length > 30 || data.title.length < 2) {
             this.setState({
@@ -123,6 +99,10 @@ class NewIdea extends React.Component {
                 ideaTitleErrText: 'Title must be 2 - 30 characters',
             });
             return false
+        } else {
+            this.setState({
+                isIdeaTitleErr: false,
+            });
         }
         if (!data.address) {
             this.setState({
@@ -130,12 +110,10 @@ class NewIdea extends React.Component {
                 ideaAddressErrText: 'Please complete the address',
             });
             return false
-        } else if (!data.lat || !data.lng) {
+        } else {
             this.setState({
-                isIdeaAddressErr: true,
-                ideaAddressErrText: 'Can not find address at google map',
+                isIdeaAddressErr: false,
             });
-            return false
         }
         if (!data.startAt || !data.endAt) {
             return false
@@ -166,8 +144,6 @@ class NewIdea extends React.Component {
             address: document.getElementById('googleMapAutocomplete').value,
             description: document.getElementById('ideaDescription').value,
             link: document.getElementById('ideaLink').value,
-            lat: this.state.lat,
-            lng: this.state.lng,
             startAt: this.state.ideaStartDate,
             endAt: this.state.ideaEndDate,
             tripId: this.props.selectedTrip.tripId,
@@ -176,30 +152,48 @@ class NewIdea extends React.Component {
             type: this.state.type,
         }
         if (this.validateAll(ideaData)) {
-            this.setState({ submitButtonDisabled: true })
-            axios({
-                method: 'POST',
-                url: settings.serverUrl + '/api/post/idea/new',
-                json: true,
-                headers: {
-                    'x-access-token': localStorage.getItem('id_token'),
-                },
-                data: { idea: ideaData }
-            })
-                .then((response) => {
-                    if (response.data.success) {
-                        this.props.toggleDialogClose();
-                        // TODO add new idea to list and update marker
-                        console.log(response.data);
-                    } else {
-                        console.log('not success');
-                        this.setState({ submitButtonDisabled: false })
+            console.log('address : ' + ideaData.address);
+            this.geocoder.geocode({ 'address': ideaData.address }, (result, status) => {
+                if (status === 'OK') {
+                    if (result) {
+                        console.log(result);
+                        console.log(result[0].geometry.location.lat());
+                        console.log(result[0].geometry.location.lng());
+                        ideaData.lat = result[0].geometry.location.lat();
+                        ideaData.lng = result[0].geometry.location.lng();
+
+                        this.setState({ submitButtonDisabled: true })
+                        axios({
+                            method: 'POST',
+                            url: settings.serverUrl + '/api/post/idea/new',
+                            json: true,
+                            headers: {
+                                'x-access-token': localStorage.getItem('id_token'),
+                            },
+                            data: { idea: ideaData }
+                        })
+                            .then((response) => {
+                                if (response.data.newIdea) {
+                                    this.props.toggleDialogClose();
+                                    this.props.addIdea({
+                                        idea: response.data.newIdea,
+                                        showMarker: true
+                                    });
+                                    console.log(response.data);
+                                } else {
+                                    console.log('not success');
+                                    this.setState({ submitButtonDisabled: false })
+                                }
+                            })
+                            .catch((error) => {
+                                // TODO: show error message and guide user to re submit
+                                console.error(error);
+                            });
                     }
-                })
-                .catch((error) => {
-                    // TODO: show error message and guide user to re submit
-                    console.error(error);
-                });
+                } else {
+                    console.error('can not find this address in the map');
+                }
+            });
         } else {
             this.props.snackbarMessage('Please complete the form');
         }
@@ -243,7 +237,7 @@ class NewIdea extends React.Component {
                     className={classes.input}
                     onChange={this.handleAddressChange}
                     margin="normal"
-                    onBlur={this.handleAddressChangeOnBlur}
+                    // onBlur={this.handleAddressChangeOnBlur}
                     error={this.state.isIdeaAddressErr}
                     helperText={this.state.ideaAddressErrText}
                 /><br />
