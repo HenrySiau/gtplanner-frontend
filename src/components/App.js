@@ -65,24 +65,27 @@ class App extends Component {
     }
   }
   render() {
-    const { classes, isDrawerOpen, isChatRoomOpen, isDrawerExtended } = this.props;
-    const mainSectionStyle = () => {
-      let result = {};
-      if (isChatRoomOpen) {
-        result.marginRight = '360px';
-      } else {
-        result.marginRight = '0';
-      }
-      if (isDrawerOpen) {
-        result.marginLeft = '73px';
-        if (isDrawerExtended) {
-          result.marginLeft = '151px';
-        }
-      } else {
-        result.marginLeft = '0';
-      }
-      return result
-    }
+    // const { classes, isDrawerOpen, isChatRoomOpen, isDrawerExtended } = this.props;
+    const { classes } = this.props;
+    // const mainSectionStyle = () => {
+    //   let result = {};
+    //   if (isDrawerOpen) {
+    //     result.width = 'calc(100% -360px - 73px)'
+    //   } else {
+    //     result.width = 'calc(100% -360px - 73px)'
+    //   }
+
+    //   // if (isDrawerOpen) {
+    //   //   result.marginRight = '360px'
+    //   //   result.marginLeft = '73px';
+    //   //   if (isDrawerExtended) {
+    //   //     result.marginLeft = '0';
+    //   //   }
+    //   // } else {
+    //   //   result.marginLeft = '0';
+    //   // }
+    //   return result
+    // }
     return (
       <MuiThemeProvider theme={theme}>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -90,7 +93,7 @@ class App extends Component {
             <GTPAppBarContainer />
             <GTPDrawerContainer />
             <main className={classes.content}
-            style={mainSectionStyle()}
+            // style={mainSectionStyle()}
             >
               <Route exact path="/" component={LoginSection} />
               <Route exact path="/login" component={LoginSection} />
@@ -121,9 +124,9 @@ const mapStateToProps = (state) => {
   }
 }
 
-// App = connect(mapStateToProps)(App);
+export default withStyles(styles)(App);
 
-App = withStyles(styles)(App);
-export default withRouter(
-  connect(mapStateToProps)(App)
-);
+// App = withStyles(styles)(App);
+// export default withRouter(
+//   connect(mapStateToProps)(App)
+// );

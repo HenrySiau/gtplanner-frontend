@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Drawer from 'material-ui/Drawer';
+import Drawer from '@material-ui/core/Drawer';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';

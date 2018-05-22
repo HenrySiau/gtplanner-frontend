@@ -1,5 +1,5 @@
 import React from 'react';
-import Drawer from 'material-ui/Drawer';
+import Drawer from '@material-ui/core/Drawer';
 import compose from 'recompose/compose';
 import { withStyles } from '@material-ui/core/styles';
 import withWidth from 'material-ui/utils/withWidth';
@@ -24,15 +24,13 @@ const styles = theme => ({
         }),
     },
     drawerPaperFolded: {
+        position: 'relative',
         overflowX: 'hidden',
         transition: theme.transitions.create('width', {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
         }),
-        width: theme.spacing.unit * 7,
-        [theme.breakpoints.up('sm')]: {
-            width: theme.spacing.unit * 9,
-        },
+        width: theme.spacing.unit * 9,
     },
     drawerClosed: {
         width: 0
@@ -104,7 +102,7 @@ class GTPDrawer extends React.Component {
                 <List>
                     {this.generateNavigationIcon()}
                     <ListItem button>
-                        <ListItemIcon>
+                        <ListItemIcon >
                             <Icon >map</Icon>
                         </ListItemIcon>
                         <ListItemText primary="Map" />

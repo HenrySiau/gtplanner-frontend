@@ -10,16 +10,23 @@ import NewIdea from '../forms/NewIdea';
 import io from 'socket.io-client';
 import settings from '../../config';
 import axios from 'axios';
-
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import Typography from '@material-ui/core/Typography';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const styles = theme => ({
     dialogButton: {
         margin: '0 10px 0 10px'
     },
     googleMap: {
-        marginTop: '10px',
-        // height: 'calc(50% - 40px)',
+        marginTop: '0',
         height: 'calc((100vh - 40px)/2)',
+    },
+    ideaExpansionPanels: {
+        height: 'calc((100vh - 40px)/2 - 70px)',
+        overflow: 'scroll',
     }
 });
 
@@ -88,25 +95,41 @@ class GoogleMaps extends React.Component {
         this.setState({ isDialogOpen: false })
     }
     render() {
-        const { classes, isDrawerOpen, isChatRoomOpen, isDrawerExtended } = this.props;
+        const { classes, isDrawerOpen, isChatRoomOpen, isDrawerExtended, ideas } = this.props;
+        let ideaExpansionPanels = []
+        ideas.forEach(idea => {
+            ideaExpansionPanels.push(
+                <ExpansionPanel key={idea.id}>
+                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                        <Typography className={classes.heading}>{idea.title}</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        <Typography>
+                            {idea.description}
+                        </Typography>
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+            );
+        })
 
         const mapContainerStyle = () => {
-            // let result = {};
+            console.log('window.innerWidth: ' + window.innerWidth);
             let spaceTaken = 0;
             if (isChatRoomOpen) {
-              spaceTaken += 360;
-            } 
-            if(isDrawerExtended){
+                spaceTaken += (window.innerWidth > 600) ? 360 : 0;
+            }
+            if (isDrawerExtended) {
                 spaceTaken += 151;
-            }else if(isDrawerOpen){
+            } else if (isDrawerOpen) {
                 spaceTaken += 73;
             }
-            return {width: `calc(100vw - ${spaceTaken}px`}
-          }
+            return { width: `calc(100vw - ${spaceTaken}px` }
+        }
 
         return (
             <div>
                 <div style={mapContainerStyle()} id='googleMap' className={classes.googleMap}></div>
+                <div className={classes.ideaExpansionPanels}>{ideaExpansionPanels}</div>
                 <Button
                     variant="raised"
                     color="primary"

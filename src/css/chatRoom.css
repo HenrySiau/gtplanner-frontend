@@ -138,7 +138,7 @@ a:link {
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    /* transition: all 0.3s ease; */
 }
 
 .chatroom .input input[type="submit"]:hover {
