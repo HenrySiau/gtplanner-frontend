@@ -173,10 +173,16 @@ class NewIdea extends React.Component {
                             data: { idea: ideaData }
                         })
                             .then((response) => {
-                                if (response.data.newIdea) {
+                                let newIdea = response.data.newIdea;
+                                if (newIdea) {
                                     this.props.toggleDialogClose();
-                                    this.props.addIdea(response.data.newIdea);
-                                    console.log(response.data);
+                                    this.props.addIdea(newIdea);
+                                    let marker = new window.google.maps.Marker({
+                                        position: { lat: Number(newIdea.lat), lng: Number(newIdea.lng) },
+                                        title: newIdea.title,
+                                        map: window.map,
+                                    });
+                                    window.markers.set(newIdea.id, marker);
                                 } else {
                                     console.log('not success');
                                     this.setState({ submitButtonDisabled: false })

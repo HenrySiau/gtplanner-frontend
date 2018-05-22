@@ -21,8 +21,8 @@ const styles = theme => ({
 class GoogleMaps extends React.Component {
     constructor(props) {
         super(props);
-        this.map = null;
-        this.markers = new Map();
+        window.map = null;
+        window.markers = new Map();
         this.autocomplete = null;
         this.addressInput = React.createRef();
         this.state = {
@@ -31,7 +31,7 @@ class GoogleMaps extends React.Component {
     }
 
     componentDidMount() {
-        this.map = new window.google.maps.Map(document.getElementById('googleMap'), {
+        window.map = new window.google.maps.Map(document.getElementById('googleMap'), {
             zoom: 12,
             center: { lat: 37.7749300, lng: -122.4194200 }
         });
@@ -55,9 +55,9 @@ class GoogleMaps extends React.Component {
                         let marker = new window.google.maps.Marker({
                             position: { lat: Number(idea.lat), lng: Number(idea.lng) },
                             title: idea.title,
-                            map: this.map,
+                            map: window.map,
                         });
-                        this.markers.set(idea.id, marker);
+                        window.markers.set(idea.id, marker);
                     })
 
                     this.props.updateIdeas(ideas);
@@ -75,33 +75,24 @@ class GoogleMaps extends React.Component {
         //     var marker = new window.google.maps.Marker({
         //         position: place,
         //         title: 'Hello',
-        //         map: this.map,
+        //         map: window.map,
         //     })
         // })
 
     }
     componentDidUpdate(prevProps) {
-        // console.log('componentDidUpdate');
-        // if (prevProps.filteredMarkerList !== this.props.filteredMarkerList) {
-        //     console.log(' filtered marker list changed');
-        //     console.log('prevProps.filteredMarkerList: ' + prevProps.filteredMarkerList);
-        //     console.log('this.props.filteredMarkerList: ' + this.props.filteredMarkerList);
-        //     console.log('props.ideas: ' + this.props.ideas);
-        // }
-        if (prevProps.ideas !== this.props.ideas) {
-            // console.log('props.ideas changed');
-            // console.log('prevProps.ideas: ' + prevProps.ideas);
-            // console.log('props.ideas: ' + this.props.ideas);
-            this.props.ideas.forEach(idea => {
-                let marker = new window.google.maps.Marker({
-                    position: { lat: Number(idea.lat), lng: Number(idea.lng) },
-                    title: idea.title,
-                    map: this.map,
-                });
-                this.markers.set(idea.id, marker);
-            });
 
-        }
+        // if (prevProps.ideas !== this.props.ideas) {
+
+        //     this.props.ideas.forEach(idea => {
+        //         let marker = new window.google.maps.Marker({
+        //             position: { lat: Number(idea.lat), lng: Number(idea.lng) },
+        //             title: idea.title,
+        //             map: window.map,
+        //         });
+        //         window.markers.set(idea.id, marker);
+        //     });
+        // }
     }
 
     handleAddressChange = (event) => {

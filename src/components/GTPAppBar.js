@@ -121,7 +121,12 @@ class GTPAppBar extends React.Component {
 
     testEvent = () => {
         console.log('clicked system notification button');
-        this.props.updateFilteredMarkers([{ lat: 1, lng: 1 }, { lat: 1, lng: 2 }]);
+        // this.props.updateFilteredMarkers([{ lat: 1, lng: 1 }, { lat: 1, lng: 2 }]);
+        // if(window.markers && window.map){
+        //     window.markers.forEach((value, key) => {
+        //         value.setMap(null);
+        //     })
+        // }
     }
 
     render() {

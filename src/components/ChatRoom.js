@@ -110,6 +110,7 @@ class ChatRoom extends React.Component {
     }
 
     submitMessage(e) {
+        window.markers += ':::';
         e.preventDefault();
         const message = ReactDOM.findDOMNode(this.refs.msg).value;
         this.setState({
