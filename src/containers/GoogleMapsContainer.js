@@ -27,6 +27,9 @@ const mapStateToProps = (state) => {
         selectedTrip: state.selectedTrip,
         filteredMarkerList: state.filteredMarkerList,
         ideas: state.ideas,
+        isDrawerOpen: state.isDrawerOpen,
+        isDrawerExtended: state.isDrawerExtended,
+        isChatRoomOpen: state.isChatRoomOpen,
     }
 }
 

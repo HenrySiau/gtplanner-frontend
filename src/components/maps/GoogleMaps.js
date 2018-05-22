@@ -16,6 +16,11 @@ const styles = theme => ({
     dialogButton: {
         margin: '0 10px 0 10px'
     },
+    googleMap: {
+        marginTop: '10px',
+        // height: 'calc(50% - 40px)',
+        height: 'calc((100vh - 40px)/2)',
+    }
 });
 
 class GoogleMaps extends React.Component {
@@ -68,31 +73,11 @@ class GoogleMaps extends React.Component {
                 console.error(error);
             })
 
-
         console.log('google map loaded');
-        // this.props.filteredMarkerList.forEach(place => {
-        //     console.log('place: ' + place.lat);
-        //     var marker = new window.google.maps.Marker({
-        //         position: place,
-        //         title: 'Hello',
-        //         map: window.map,
-        //     })
-        // })
 
     }
     componentDidUpdate(prevProps) {
 
-        // if (prevProps.ideas !== this.props.ideas) {
-
-        //     this.props.ideas.forEach(idea => {
-        //         let marker = new window.google.maps.Marker({
-        //             position: { lat: Number(idea.lat), lng: Number(idea.lng) },
-        //             title: idea.title,
-        //             map: window.map,
-        //         });
-        //         window.markers.set(idea.id, marker);
-        //     });
-        // }
     }
 
     handleAddressChange = (event) => {
@@ -103,10 +88,25 @@ class GoogleMaps extends React.Component {
         this.setState({ isDialogOpen: false })
     }
     render() {
-        const { classes } = this.props;
+        const { classes, isDrawerOpen, isChatRoomOpen, isDrawerExtended } = this.props;
+
+        const mapContainerStyle = () => {
+            // let result = {};
+            let spaceTaken = 0;
+            if (isChatRoomOpen) {
+              spaceTaken += 360;
+            } 
+            if(isDrawerExtended){
+                spaceTaken += 151;
+            }else if(isDrawerOpen){
+                spaceTaken += 73;
+            }
+            return {width: `calc(100vw - ${spaceTaken}px`}
+          }
+
         return (
             <div>
-                <div style={{ height: '800px', width: '800px' }} id='googleMap'></div>
+                <div style={mapContainerStyle()} id='googleMap' className={classes.googleMap}></div>
                 <Button
                     variant="raised"
                     color="primary"
