@@ -51,19 +51,18 @@ class GoogleMaps extends React.Component {
                 let ideas = response.data.ideas;
                 if (ideas) {
                     ideas.forEach(idea => {
-                        console.log('lat' + idea.lat);
-                        console.log('lng' + idea.lng);
+                        console.log('add Marker');
                         let marker = new window.google.maps.Marker({
                             position: { lat: Number(idea.lat), lng: Number(idea.lng) },
                             title: idea.title,
                             map: this.map,
-                        })
+                        });
+                        this.markers.set(idea.id, marker);
                     })
 
-                    this.props.updateIdeas(response.data.ideas);
+                    this.props.updateIdeas(ideas);
 
                 }
-                // this.setState({ chats: response.data.messages });
             })
             .catch(error => {
                 console.error(error);
@@ -82,8 +81,26 @@ class GoogleMaps extends React.Component {
 
     }
     componentDidUpdate(prevProps) {
-        if (prevProps.filteredMarkerList !== this.props.filteredMarkerList) {
-            console.log('componentDidUpdate');
+        // console.log('componentDidUpdate');
+        // if (prevProps.filteredMarkerList !== this.props.filteredMarkerList) {
+        //     console.log(' filtered marker list changed');
+        //     console.log('prevProps.filteredMarkerList: ' + prevProps.filteredMarkerList);
+        //     console.log('this.props.filteredMarkerList: ' + this.props.filteredMarkerList);
+        //     console.log('props.ideas: ' + this.props.ideas);
+        // }
+        if (prevProps.ideas !== this.props.ideas) {
+            // console.log('props.ideas changed');
+            // console.log('prevProps.ideas: ' + prevProps.ideas);
+            // console.log('props.ideas: ' + this.props.ideas);
+            this.props.ideas.forEach(idea => {
+                let marker = new window.google.maps.Marker({
+                    position: { lat: Number(idea.lat), lng: Number(idea.lng) },
+                    title: idea.title,
+                    map: this.map,
+                });
+                this.markers.set(idea.id, marker);
+            });
+
         }
     }
 
@@ -121,6 +138,7 @@ class GoogleMaps extends React.Component {
                             selectedTrip={this.props.selectedTrip}
                             userInfo={this.props.userInfo}
                             toggleDialogClose={this.toggleDialogClose}
+                            addIdea={this.props.addIdea}
                         />
                     </DialogContent>
                 </Dialog>

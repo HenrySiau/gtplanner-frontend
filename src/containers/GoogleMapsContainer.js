@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { updateFilteredMarkers, snackbarMessage, updateIdeas } from '../actions';
+import { updateFilteredMarkers, snackbarMessage, updateIdeas, addIdea } from '../actions';
 import scriptLoader from 'react-async-script-loader';
 import instanceConfig from '../instanceConfig';
 import GoogleMaps from '../components/maps/GoogleMaps';
@@ -10,18 +10,6 @@ class GoogleMapsContainer extends React.Component {
     render() {
         let { ...props } = this.props;
         return (
-            // <div>
-            //     {(this.props.isScriptLoadSucceed && this.props.tripId) && <GoogleMaps
-            //         filteredMarkerList={this.props.filteredMarkerList}
-            //         tripId={this.props.tripId}
-            //         selectedTrip={this.props.selectedTrip}
-            //         userInfo={this.props.userInfo}
-            //         updateFilteredMarkers={this.props.updateFilteredMarkers}
-            //         snackbarMessage={this.props.snackbarMessage}
-            //         updateIdeas={this.props.updateIdeas}
-            //         ideas={this.props.ideas}
-            //     />}
-            // </div>
             <div>
                 {(this.props.isScriptLoadSucceed && this.props.tripId) && <GoogleMaps
                     {...props}
@@ -53,6 +41,9 @@ const mapDispatchToProps = dispatch => {
         updateIdeas: (ideas) => {
             dispatch(updateIdeas(ideas));
         },
+        addIdea: idea => {
+            dispatch(addIdea(idea));
+        }
     }
 }
 

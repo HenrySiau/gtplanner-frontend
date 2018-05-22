@@ -175,10 +175,7 @@ class NewIdea extends React.Component {
                             .then((response) => {
                                 if (response.data.newIdea) {
                                     this.props.toggleDialogClose();
-                                    this.props.addIdea({
-                                        idea: response.data.newIdea,
-                                        showMarker: true
-                                    });
+                                    this.props.addIdea(response.data.newIdea);
                                     console.log(response.data);
                                 } else {
                                     console.log('not success');

@@ -5,7 +5,7 @@ import { LOG_IN, LOG_OUT, TOGGLE_DRAWER, SNACKBAR_OPEN, SNACKBAR_CLOSE, SET_SNAC
 import { SET_INVITE_CODE, REMOVE_INVITE_CODE, UPDATE_RECENT_TRIPS, TOGGLE_CHAT_ROOM_OPEN, CHAT_ROOM_OPEN, CHAT_ROOM_CLOSE } from './actionTypes';
 import { DRAWER_EXTEND, DRAWER_FOLD, UPDATE_USER_INFO, ADD_MEMBER, REMOVE_MEMBER, CHANGE_CHAT_ROOM_TABS_VALUE, UPDATE_FILTERED_MARKER_LIST } from './actionTypes';
 import { INCREASE_CHAT_MESSAGE_BADGE_CONTENT, CLEAR_CHAT_MESSAGE_BADGE_CONTENT, INCREASE_SYSTEM_MESSAGE_BADGE_CONTENT, CLEAR_SYSTEM_MESSAGE_BADGE_CONTENT } from './actionTypes';
-import { UPDATE_IDEAS } from './actionTypes';
+import { UPDATE_IDEAS, ADD_IDEA } from './actionTypes';
 
 const login = () => ({ type: LOG_IN });
 
@@ -251,4 +251,9 @@ export const updateFilteredMarkers = (markers) => ({
 export const updateIdeas = (ideas) => ({
     type: UPDATE_IDEAS,
     ideas: ideas
+});
+
+export const addIdea = (idea) => ({
+    type: ADD_IDEA,
+    idea: idea,
 });
