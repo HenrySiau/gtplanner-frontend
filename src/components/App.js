@@ -16,6 +16,8 @@ import RegisterForm from './RegisterForm';
 import InviteMemberForm from './InviteMemberForm';
 import JoinATrip from './JoinATrip';
 import GTPDashboard from './GTPDashboard';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 
 const theme = createMuiTheme({
@@ -44,25 +46,52 @@ const styles = theme => ({
   content: {
     display: 'flex',
     position: 'relative',
-    // flexGrow: 1,
     padding: theme.spacing.unit * 3,
-    marginTop: '60px',
+    marginTop: '40px',
     justifyContent: 'center',
     width: '100%',
+    height: 'calc(100% - 40px)',
     overflow: 'scroll',
   },
 });
 
 class App extends Component {
+
+  mainSectionStyle = () => {
+    if (this.props.isDrawerExtended) {
+      return { marginRight: '490px' }
+    } else {
+      return { marginRight: '0' }
+    }
+  }
   render() {
+    const { classes, isDrawerOpen, isChatRoomOpen, isDrawerExtended } = this.props;
+    const mainSectionStyle = () => {
+      let result = {};
+      if (isChatRoomOpen) {
+        result.marginRight = '360px';
+      } else {
+        result.marginRight = '0';
+      }
+      if (isDrawerOpen) {
+        result.marginLeft = '73px';
+        if (isDrawerExtended) {
+          result.marginLeft = '151px';
+        }
+      } else {
+        result.marginLeft = '0';
+      }
+      return result
+    }
     return (
       <MuiThemeProvider theme={theme}>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <div className={this.props.classes.root}>
-
+          <div className={classes.root}>
             <GTPAppBarContainer />
             <GTPDrawerContainer />
-            <main className={this.props.classes.content}>
+            <main className={classes.content}
+            style={mainSectionStyle()}
+            >
               <Route exact path="/" component={LoginSection} />
               <Route exact path="/login" component={LoginSection} />
               <Route exact path="/register" component={RegisterForm} />
@@ -84,4 +113,17 @@ App.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(App);
+const mapStateToProps = (state) => {
+  return {
+    isDrawerOpen: state.isDrawerOpen,
+    isDrawerExtended: state.isDrawerExtended,
+    isChatRoomOpen: state.isChatRoomOpen,
+  }
+}
+
+// App = connect(mapStateToProps)(App);
+
+App = withStyles(styles)(App);
+export default withRouter(
+  connect(mapStateToProps)(App)
+);
