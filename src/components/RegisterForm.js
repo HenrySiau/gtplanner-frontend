@@ -14,7 +14,7 @@ import settings from '../config';
 import { isEmailFormatOK } from './Validator';
 import { loginWithToken, removeInvitationCode, snackbarMessage, updateSelectedTripWithInfo, updateUserInfo } from '../actions';
 import { push } from 'react-router-redux';
-import Paper from 'material-ui/Paper';
+import Paper from '@material-ui/core/Paper';
 
 const styles = theme => ({
     container: {
