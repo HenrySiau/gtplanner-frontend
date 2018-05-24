@@ -11,6 +11,7 @@ import chatRoomTabsValue from './chatRoomTabsValue';
 import { chatMessageBadgeContent, systemMessageBadgeContent } from './messageBadgeContents';
 import { filteredMarkerList } from './googleMapMarkers';
 import { ideas } from './ideas';
+import { dashboardView } from './dashboardView';
 
 export default combineReducers({
     isLoggedIn,
@@ -28,4 +29,5 @@ export default combineReducers({
     systemMessageBadgeContent,
     filteredMarkerList,
     ideas,
+    dashboardView,
 })
