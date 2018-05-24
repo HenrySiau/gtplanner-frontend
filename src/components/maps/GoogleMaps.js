@@ -24,6 +24,7 @@ import Typography from '@material-ui/core/Typography';
 import red from '@material-ui/core/colors/red';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import PlaceIcon from '@material-ui/icons/Place';
+import Grid from '@material-ui/core/Grid';
 
 const styles = theme => ({
     dialogButton: {
@@ -34,7 +35,9 @@ const styles = theme => ({
         height: 'calc((100vh - 40px)/2)',
     },
     card: {
-        maxWidth: 300,
+        maxWidth: 500,
+        minWidth: 250,
+        // width: '100%',
         margin: '5px',
     },
     media: {
@@ -53,7 +56,7 @@ const styles = theme => ({
         overflow: 'scroll',
         display: 'flex',
         flexWrap: 'wrap',
-        justifyContent: 'center',
+        // justifyContent: 'center',
         // justifyContent: 'space-around',
     },
     ideaCardContent: {
@@ -145,63 +148,98 @@ class GoogleMaps extends React.Component {
     toggleDialogClose = () => {
         this.setState({ isDialogOpen: false })
     }
+
     render() {
         const { classes, isDrawerOpen, isChatRoomOpen, isDrawerExtended, ideas } = this.props;
-
+        const getIdeaCardWidth = breakPoint => {
+            switch (breakPoint) {
+                case 'xs':
+                    return 12
+                    break
+                case 'sm':
+                    if (isChatRoomOpen) {
+                        return 12
+                    } else {
+                        return 6
+                    }
+                    break
+                    case 'md':
+                    if (isChatRoomOpen) {
+                        return 6
+                    } else {
+                        return 4
+                    }
+                    break
+                    case 'lg':
+                    if (isChatRoomOpen) {
+                        return 4
+                    } else {
+                        return 3
+                    }
+                    break
+                    case 'xl':
+                    if (isChatRoomOpen) {
+                        return 3
+                    } else {
+                        return 2
+                    }
+                    break
+            }
+        }
         let ideaCards = [];
         ideas.forEach(idea => {
             let startAt = new Date(idea.startAt);
             let endAt = new Date(idea.endAt);
             let subHeader = `${startAt.getMonth()}/${startAt.getDay()} ${startAt.getHours()}:${startAt.getMinutes()} -- ${endAt.getMonth()}/${endAt.getDay()} ${endAt.getHours()}:${endAt.getMinutes()}`;
             ideaCards.push(
-                <Card className={classes.card} key={idea.id}>
-                    <CardHeader
-                        avatar={
-                            <Avatar aria-label="User Icon" className={classes.avatar}>
-                                R
+                <Grid item xs={getIdeaCardWidth('xs')} sm={getIdeaCardWidth('sm')} md={getIdeaCardWidth('md')} lg={getIdeaCardWidth('lg')} xl={getIdeaCardWidth('xl')} key={idea.id}>
+                    <Card className={classes.card} key={idea.id}>
+                        <CardHeader
+                            avatar={
+                                <Avatar aria-label="User Icon" className={classes.avatar}>
+                                    R
               </Avatar>
-                        }
-                        action={
-                            <IconButton>
-                                <PlaceIcon />
-                            </IconButton>
-                        }
+                            }
+                            action={
+                                <IconButton>
+                                    <PlaceIcon />
+                                </IconButton>
+                            }
 
-                        title={
-                            <Typography variant="body2" className={classes.ideaCardTitle}>
-                                {idea.title}
-                            </Typography>
-                        }
-                        subheader={subHeader}
-                    />
-
-                    <CardMedia className={classes.media}>
-                        <img src="https://material-ui.com/static/images/grid-list/breakfast.jpg"
-                            alt={idea.title}
-                            className={classes.cardMediaImage}
+                            title={
+                                <Typography variant="body2" className={classes.ideaCardTitle}>
+                                    {idea.title}
+                                </Typography>
+                            }
+                            subheader={subHeader}
                         />
-                    </CardMedia>
-                    <div className={classes.ideaCardContent}>
-                        <CardContent>
+
+                        <CardMedia className={classes.media} image={' '}>
+                            <img src="https://material-ui.com/static/images/grid-list/breakfast.jpg"
+                                alt={idea.title}
+                                className={classes.cardMediaImage}
+                            />
+                        </CardMedia>
+
+                        <CardContent className={classes.ideaCardContent}>
                             <Typography variant="body1">
                                 {idea.description}
                             </Typography>
-
                         </CardContent>
-                    </div>
-                    <CardActions className={classes.actions} disableActionSpacing>
-                        <IconButton aria-label="Add to favorites">
-                            <FavoriteIcon />
-                        </IconButton>
-                        <IconButton aria-label="Add to Itinerary">
-                            <AddCircleIcon />
-                        </IconButton>
-                        <IconButton aria-label="More Info" className={classes.ideaCardMoreInfoButton}>
-                            <InfoIcon />
-                        </IconButton>
-                        {/* Todo: add comment input and submit button */}
-                    </CardActions>
-                </Card>
+                        <CardActions className={classes.actions} disableActionSpacing>
+                            <IconButton aria-label="Add to favorites">
+                                <FavoriteIcon />
+                            </IconButton>
+                            <IconButton aria-label="Add to Itinerary">
+                                <AddCircleIcon />
+                            </IconButton>
+                            <IconButton aria-label="More Info" className={classes.ideaCardMoreInfoButton}>
+                                <InfoIcon />
+                            </IconButton>
+                            {/* Todo: add comment input and submit button */}
+                        </CardActions>
+                    </Card>
+                </Grid>
             );
         });
 
@@ -220,18 +258,15 @@ class GoogleMaps extends React.Component {
         }
 
         return (
-            <div>
-                <div style={mapContainerStyle()} id='googleMap' className={classes.googleMap}></div>
-                {/* <div className={classes.ideaExpansionPanels}>{ideaExpansionPanels}</div> */}
-                {/* <div className={classes.ideaExpansionPanels}>
-                    <GridList cellHeight={180} className={classes.gridList} cols={3}>
-                        <GridListTile key="Subheader" cols={2} style={{ height: 'auto' }}>
-                            <ListSubheader component="div">December</ListSubheader>
-                        </GridListTile>
-                        {ideaGridList}
-                    </GridList>
-                </div> */}
-                <div className={classes.ideaCards}>{ideaCards}</div>
+            // <div>
+            <Grid container direction={'column'}>
+                {/* <div style={mapContainerStyle()} id='googleMap' className={classes.googleMap}></div> */}
+                <Grid style={mapContainerStyle()} id='googleMap' className={classes.googleMap}></Grid>
+                <div className={classes.ideaCards}>
+                    <Grid container spacing={8} justify={'space-between'}>
+                        {ideaCards}
+                    </Grid>
+                </div>
                 <Button
                     variant="raised"
                     color="primary"
@@ -258,7 +293,8 @@ class GoogleMaps extends React.Component {
                         />
                     </DialogContent>
                 </Dialog>
-            </div>
+            {/* </div> */}
+            </Grid>
         )
     }
 }
