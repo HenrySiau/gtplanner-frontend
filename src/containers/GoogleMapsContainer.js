@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { updateFilteredMarkers, snackbarMessage, updateIdeas, addIdea } from '../actions';
 import scriptLoader from 'react-async-script-loader';
 import instanceConfig from '../instanceConfig';
-import GoogleMaps from '../components/maps/GoogleMaps';
+import GoogleMaps from '../components/dashboard/GoogleMaps';
 
 class GoogleMapsContainer extends React.Component {
 

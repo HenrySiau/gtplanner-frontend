@@ -7,26 +7,13 @@ import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import NewIdea from '../forms/NewIdea';
-import io from 'socket.io-client';
 import settings from '../../config';
 import axios from 'axios';
-import InfoIcon from '@material-ui/icons/Info';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Collapse from '@material-ui/core/Collapse';
-import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import red from '@material-ui/core/colors/red';
 import grey from '@material-ui/core/colors/grey';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import PlaceIcon from '@material-ui/icons/Place';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import IdeaCard from './IdeaCard';
 
 const styles = theme => ({
     root: {
@@ -58,53 +45,6 @@ const styles = theme => ({
         overflow: 'scroll',
         display: 'flex',
         flexWrap: 'wrap',
-    },
-    card: {
-        // maxWidth: 800,
-        // minWidth: 250,
-        width: '100%',
-        margin: '5px',
-    },
-    media: {
-        // height: '100px',
-        // width: '100%',
-        // height: 'auto',
-        // paddingTop: '56.25%', // 16:9
-    },
-    avatar: {
-        backgroundColor: red[500],
-        width: 36,
-        height: 36,
-    },
-    ideaCards: {
-        height: 'calc((100vh - 40px)/2 - 70px)',
-        overflow: 'scroll',
-        display: 'flex',
-        flexWrap: 'wrap',
-        // justifyContent: 'center',
-        // justifyContent: 'space-around',
-    },
-    ideaCardContent: {
-        overflow: 'scroll',
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'center',
-        maxHeight: '200px'
-    },
-    cardMediaImage: {
-        width: '100%',
-        maxHeight: '600px',
-    },
-    ideaCardTitle: {
-        overflow: 'scroll',
-        whiteSpace: 'nowrap',
-        width: 165,
-    },
-    actions: {
-        display: 'flex',
-    },
-    ideaCardMoreInfoButton: {
-        marginLeft: 'auto',
     },
     actionsBar: {
         height: 40,
@@ -163,9 +103,7 @@ class GoogleMaps extends React.Component {
                         });
                         window.markers.set(idea.id, marker);
                     })
-
                     this.props.updateIdeas(ideas);
-
                 }
             })
             .catch(error => {
@@ -189,41 +127,6 @@ class GoogleMaps extends React.Component {
 
     render() {
         const { classes, isDrawerOpen, isChatRoomOpen, isDrawerExtended, ideas, dashboardView } = this.props;
-        const getIdeaCardWidth = breakPoint => {
-            switch (breakPoint) {
-                case 'xs':
-                    return 12
-                    break
-                case 'sm':
-                    if (isChatRoomOpen) {
-                        return 12
-                    } else {
-                        return 6
-                    }
-                    break
-                case 'md':
-                    if (isChatRoomOpen) {
-                        return 6
-                    } else {
-                        return 4
-                    }
-                    break
-                case 'lg':
-                    if (isChatRoomOpen) {
-                        return 4
-                    } else {
-                        return 3
-                    }
-                    break
-                case 'xl':
-                    if (isChatRoomOpen) {
-                        return 3
-                    } else {
-                        return 2
-                    }
-                    break
-            }
-        }
         const getSectionClassName = section => {
             console.log(dashboardView);
             if (section === 'map') {
@@ -257,62 +160,15 @@ class GoogleMaps extends React.Component {
                         break;
                 }
             }
-
         }
         let ideaCards = [];
         ideas.forEach(idea => {
-            let startAt = new Date(idea.startAt);
-            let endAt = new Date(idea.endAt);
-            let subHeader = `${startAt.getMonth()}/${startAt.getDay()} ${startAt.getHours()}:${startAt.getMinutes()} -- ${endAt.getMonth()}/${endAt.getDay()} ${endAt.getHours()}:${endAt.getMinutes()}`;
-            ideaCards.push(
-                <Grid item xs={getIdeaCardWidth('xs')} sm={getIdeaCardWidth('sm')} md={getIdeaCardWidth('md')} lg={getIdeaCardWidth('lg')} xl={getIdeaCardWidth('xl')} key={idea.id}>
-                    <Card className={classes.card} key={idea.id}>
-                        <CardHeader
-                            avatar={
-                                <Avatar aria-label="User Icon" className={classes.avatar}>
-                                    R
-              </Avatar>
-                            }
-                            action={
-                                <IconButton>
-                                    <PlaceIcon />
-                                </IconButton>
-                            }
-
-                            title={
-                                <Typography variant="body2" className={classes.ideaCardTitle}>
-                                    {idea.title}
-                                </Typography>
-                            }
-                            subheader={subHeader}
-                        />
-
-                        <CardMedia className={classes.media} image={' '}>
-                            <img src="https://material-ui.com/static/images/grid-list/breakfast.jpg"
-                                alt={idea.title}
-                                className={classes.cardMediaImage}
-                            />
-                        </CardMedia>
-
-                        <CardContent className={classes.ideaCardContent}>
-                            <Typography variant="body1">
-                                {idea.description}
-                            </Typography>
-                        </CardContent>
-                        <CardActions className={classes.actions} disableActionSpacing>
-                            <IconButton aria-label="Add to favorites">
-                                <FavoriteIcon />
-                            </IconButton>
-                            <IconButton aria-label="Add to Itinerary">
-                                <AddCircleIcon />
-                            </IconButton>
-                            <IconButton aria-label="More Info" className={classes.ideaCardMoreInfoButton}>
-                                <InfoIcon />
-                            </IconButton>
-                            {/* Todo: add comment input and submit button */}
-                        </CardActions>
-                    </Card>
-                </Grid>
+                 ideaCards.push(
+                <IdeaCard 
+                idea={idea}
+                isChatRoomOpen={isChatRoomOpen}
+                key={idea.id}
+                />
             );
         });
 
@@ -333,10 +189,7 @@ class GoogleMaps extends React.Component {
         return (
             // <div>
             <Grid container direction={'column'} justify={'space-between'} className={classes.root}>
-                {/* <div style={mapContainerStyle()} id='googleMap' className={classes.googleMap} style={{ height: 'calc((100vh - 40px)/2)' }}></div> */}
                 <Grid style={mapContainerStyle()} id='googleMap' className={getSectionClassName('map')} ></Grid>
-
-                {/* <div className={classes.ideaCards}> */}
                 <div className={getSectionClassName('list')}>
                     <Grid container spacing={8} justify={'space-between'}>
                         {ideaCards}
