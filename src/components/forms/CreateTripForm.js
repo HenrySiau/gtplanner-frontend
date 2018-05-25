@@ -3,9 +3,9 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { DatePicker } from 'material-ui-pickers';
 import axios from 'axios';
-import settings from '../config';
+import settings from '../../config';
 import { connect } from 'react-redux';
-import { snackbarMessage, updateSelectedTripWithInfo } from '../actions';
+import { snackbarMessage, updateSelectedTripWithInfo } from '../../actions';
 import { push } from 'react-router-redux';
 import { withStyles } from '@material-ui/core/styles';
 

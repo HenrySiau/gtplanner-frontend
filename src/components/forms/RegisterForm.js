@@ -10,9 +10,9 @@ import red from 'material-ui/colors/red';
 import lightBlue from 'material-ui/colors/lightBlue';
 import blue from 'material-ui/colors/blue';
 import axios from 'axios';
-import settings from '../config';
-import { isEmailFormatOK } from './Validator';
-import { loginWithToken, removeInvitationCode, snackbarMessage, updateSelectedTripWithInfo, updateUserInfo } from '../actions';
+import settings from '../../config';
+import { isEmailFormatOK } from '../Validator';
+import { loginWithToken, removeInvitationCode, snackbarMessage, updateSelectedTripWithInfo, updateUserInfo } from '../../actions';
 import { push } from 'react-router-redux';
 import Paper from '@material-ui/core/Paper';
 

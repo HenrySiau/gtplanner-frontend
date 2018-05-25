@@ -3,13 +3,13 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
-import instanceConfig from '../instanceConfig';
+import instanceConfig from '../../instanceConfig';
 import { Link } from 'react-router-dom';
-import { logout, loginWithPassword, updateUserInfo, snackbarMessage, loginWithToken, updateSelectedTripWithInfo } from '../actions';
+import { logout, loginWithPassword, updateUserInfo, snackbarMessage, loginWithToken, updateSelectedTripWithInfo } from '../../actions';
 import { push } from 'react-router-redux';
 import { Redirect } from 'react-router';
 import axios from 'axios';
-import settings from '../config';
+import settings from '../../config';
 
 const styles = theme => ({
     form: {
