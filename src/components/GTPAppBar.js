@@ -20,6 +20,7 @@ import settings from '../config';
 const styles = theme => ({
     root: {
         flexGrow: 1,
+        height: 63,
     },
     flex: {
         flex: 1,

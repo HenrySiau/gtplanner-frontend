@@ -22,22 +22,47 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import red from '@material-ui/core/colors/red';
+import grey from '@material-ui/core/colors/grey';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import PlaceIcon from '@material-ui/icons/Place';
 import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 
 const styles = theme => ({
+    root: {
+        height: 'calc(100vh - 63px)',
+    },
     dialogButton: {
         margin: '0 10px 0 10px'
     },
-    googleMap: {
-        marginTop: '0',
-        height: 'calc((100vh - 40px)/2)',
+    googleMapFull: {
+        height: 'calc(100vh - 103px)',
+    },
+    googleMapHidden: {
+        display: 'none'
+    },
+    googleMapHalf: {
+        height: 'calc((100vh - 103px)/2)',
+    },
+    listFull: {
+        height: 'calc(100vh - 103px)',
+        overflow: 'scroll',
+        display: 'flex',
+        flexWrap: 'wrap',
+    },
+    listHidden: {
+        display: 'none'
+    },
+    listHalf: {
+        height: 'calc((100vh - 103px)/2)',
+        overflow: 'scroll',
+        display: 'flex',
+        flexWrap: 'wrap',
     },
     card: {
-        maxWidth: 500,
-        minWidth: 250,
-        // width: '100%',
+        // maxWidth: 800,
+        // minWidth: 250,
+        width: '100%',
         margin: '5px',
     },
     media: {
@@ -80,6 +105,19 @@ const styles = theme => ({
     },
     ideaCardMoreInfoButton: {
         marginLeft: 'auto',
+    },
+    actionsBar: {
+        height: 40,
+        margin: '0',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: grey[100],
+    },
+    filters: {
+        display: 'flex',
+        flexDirection: 'row',
     }
 
 });
@@ -150,7 +188,7 @@ class GoogleMaps extends React.Component {
     }
 
     render() {
-        const { classes, isDrawerOpen, isChatRoomOpen, isDrawerExtended, ideas } = this.props;
+        const { classes, isDrawerOpen, isChatRoomOpen, isDrawerExtended, ideas, dashboardView } = this.props;
         const getIdeaCardWidth = breakPoint => {
             switch (breakPoint) {
                 case 'xs':
@@ -163,21 +201,21 @@ class GoogleMaps extends React.Component {
                         return 6
                     }
                     break
-                    case 'md':
+                case 'md':
                     if (isChatRoomOpen) {
                         return 6
                     } else {
                         return 4
                     }
                     break
-                    case 'lg':
+                case 'lg':
                     if (isChatRoomOpen) {
                         return 4
                     } else {
                         return 3
                     }
                     break
-                    case 'xl':
+                case 'xl':
                     if (isChatRoomOpen) {
                         return 3
                     } else {
@@ -185,6 +223,41 @@ class GoogleMaps extends React.Component {
                     }
                     break
             }
+        }
+        const getSectionClassName = section => {
+            console.log(dashboardView);
+            if (section === 'map') {
+                switch (dashboardView) {
+                    case 'map':
+                        return classes.googleMapFull
+                        break;
+                    case 'list':
+                        return classes.googleMapHidden
+                        break;
+                    case 'split':
+                        return classes.googleMapHalf
+                        break;
+                    default:
+                        break;
+                }
+            } 
+             if (section === 'list') {
+                switch (dashboardView) {
+                    case 'list':
+                        return classes.listFull
+                        break;
+                    case 'map':
+                        return classes.listHidden
+                        break;
+                    case 'split':
+                    console.log('list split');
+                        return classes.listHalf
+                        break;
+                    default:
+                        break;
+                }
+            }
+
         }
         let ideaCards = [];
         ideas.forEach(idea => {
@@ -259,22 +332,35 @@ class GoogleMaps extends React.Component {
 
         return (
             // <div>
-            <Grid container direction={'column'}>
-                {/* <div style={mapContainerStyle()} id='googleMap' className={classes.googleMap}></div> */}
-                <Grid style={mapContainerStyle()} id='googleMap' className={classes.googleMap}></Grid>
-                <div className={classes.ideaCards}>
+            <Grid container direction={'column'} justify={'space-between'} className={classes.root}>
+                {/* <div style={mapContainerStyle()} id='googleMap' className={classes.googleMap} style={{ height: 'calc((100vh - 40px)/2)' }}></div> */}
+                <Grid style={mapContainerStyle()} id='googleMap' className={getSectionClassName('map')} ></Grid>
+
+                {/* <div className={classes.ideaCards}> */}
+                <div className={getSectionClassName('list')}>
                     <Grid container spacing={8} justify={'space-between'}>
                         {ideaCards}
                     </Grid>
                 </div>
-                <Button
-                    variant="raised"
-                    color="primary"
-                    onClick={() => { this.setState({ isDialogOpen: true }) }}
-                    className={classes.dialogButton}
-                >
-                    New Idea
+
+                <Paper className={classes.actionsBar} square={true}>
+                    <div className={classes.filters}>
+                        <Typography variant="body2" >
+                            {`filters...  filters...    .`}
+                        </Typography>
+                        <Typography variant="body2" >
+                            {`filters...   filters...   .`}
+                        </Typography>
+                    </div>
+                    <Button
+                        variant="raised"
+                        color="primary"
+                        onClick={() => { this.setState({ isDialogOpen: true }) }}
+                        className={classes.dialogButton}
+                    >
+                        New Idea
             </Button>
+                </Paper>
 
                 <Dialog
                     disableBackdropClick={true}
@@ -293,7 +379,7 @@ class GoogleMaps extends React.Component {
                         />
                     </DialogContent>
                 </Dialog>
-            {/* </div> */}
+                {/* </div> */}
             </Grid>
         )
     }

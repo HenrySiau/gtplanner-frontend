@@ -46,11 +46,11 @@ const styles = theme => ({
   content: {
     display: 'flex',
     position: 'relative',
-    padding: theme.spacing.unit * 3,
-    marginTop: '40px',
+    // padding: theme.spacing.unit * 3,
+    margin: '63px 0 0 0',
     justifyContent: 'center',
     width: '100%',
-    height: 'calc(100% - 40px)',
+    height: 'calc(100% - 63px)',
     overflow: 'scroll',
   },
 });

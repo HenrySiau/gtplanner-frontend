@@ -30,6 +30,7 @@ const mapStateToProps = (state) => {
         isDrawerOpen: state.isDrawerOpen,
         isDrawerExtended: state.isDrawerExtended,
         isChatRoomOpen: state.isChatRoomOpen,
+        dashboardView: state.dashboardView,
     }
 }
 
@@ -46,7 +47,7 @@ const mapDispatchToProps = dispatch => {
         },
         addIdea: idea => {
             dispatch(addIdea(idea));
-        }
+        }, 
     }
 }
 

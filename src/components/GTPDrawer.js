@@ -101,19 +101,19 @@ class GTPDrawer extends React.Component {
             <div className={classes.list}>
                 <List>
                     {this.generateNavigationIcon()}
-                    <ListItem button>
+                    <ListItem button onClick={this.props.setDashboardViewToMap}>
                         <ListItemIcon >
                             <Icon >map</Icon>
                         </ListItemIcon>
                         <ListItemText primary="Map" />
                     </ListItem>
-                    <ListItem button>
+                    <ListItem button onClick={this.props.setDashboardViewToList}>
                         <ListItemIcon>
                             <Icon >view_list</Icon>
                         </ListItemIcon>
                         <ListItemText primary="Events" />
                     </ListItem>
-                    <ListItem button>
+                    <ListItem button onClick={this.props.setDashboardViewToSplit}>
                         <ListItemIcon>
                             <Icon >pie_chart</Icon>
                         </ListItemIcon>

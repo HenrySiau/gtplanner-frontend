@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { toggleDrawer, updateSelectedTrip, toggleDrawerExtend, toggleDrawerFold } from '../actions';
+import { setDashboardViewToMap, setDashboardViewToList, setDashboardViewToSplit } from '../actions';
 import GTPDrawer from '../components/GTPDrawer';
 
 const mapStateToProps = (state) => {
@@ -26,6 +27,15 @@ const mapDispatchToProps = dispatch => {
         },
         toggleDrawerFold: () => {
             dispatch(toggleDrawerFold());
+        },
+        setDashboardViewToMap: () => {
+            dispatch(setDashboardViewToMap());
+        },
+        setDashboardViewToList: () => {
+            dispatch(setDashboardViewToList());
+        },
+        setDashboardViewToSplit: () => {
+            dispatch(setDashboardViewToSplit());
         },
     }
 }

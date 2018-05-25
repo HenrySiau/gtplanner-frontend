@@ -5,7 +5,7 @@ import { LOG_IN, LOG_OUT, TOGGLE_DRAWER, SNACKBAR_OPEN, SNACKBAR_CLOSE, SET_SNAC
 import { SET_INVITE_CODE, REMOVE_INVITE_CODE, UPDATE_RECENT_TRIPS, TOGGLE_CHAT_ROOM_OPEN, CHAT_ROOM_OPEN, CHAT_ROOM_CLOSE } from './actionTypes';
 import { DRAWER_EXTEND, DRAWER_FOLD, UPDATE_USER_INFO, ADD_MEMBER, REMOVE_MEMBER, CHANGE_CHAT_ROOM_TABS_VALUE, UPDATE_FILTERED_MARKER_LIST } from './actionTypes';
 import { INCREASE_CHAT_MESSAGE_BADGE_CONTENT, CLEAR_CHAT_MESSAGE_BADGE_CONTENT, INCREASE_SYSTEM_MESSAGE_BADGE_CONTENT, CLEAR_SYSTEM_MESSAGE_BADGE_CONTENT } from './actionTypes';
-import { UPDATE_IDEAS, ADD_IDEA } from './actionTypes';
+import { UPDATE_IDEAS, ADD_IDEA, SET_DASHBOARD_VIEW_MAP, SET_DASHBOARD_VIEW_LIST, SET_DASHBOARD_VIEW_SPLIT } from './actionTypes';
 
 const login = () => ({ type: LOG_IN });
 
@@ -257,3 +257,7 @@ export const addIdea = (idea) => ({
     type: ADD_IDEA,
     idea: idea,
 });
+
+export const setDashboardViewToMap = () => ({ type: SET_DASHBOARD_VIEW_MAP });
+export const setDashboardViewToList = () => ({ type: SET_DASHBOARD_VIEW_LIST });
+export const setDashboardViewToSplit = () => ({ type: SET_DASHBOARD_VIEW_SPLIT });
