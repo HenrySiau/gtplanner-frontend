@@ -16,6 +16,7 @@ import Card from '@material-ui/core/Card';
 import InfoIcon from '@material-ui/icons/Info';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Tooltip from '@material-ui/core/Tooltip';
+import '../../css/ideaCard.css';
 
 
 const styles = theme => ({
@@ -115,8 +116,6 @@ class ideaCard extends React.Component {
                     break
             }
         }
-        // let userName = 'Posted by: ' + members.get(idea.userId).userName || '';
-        // let userName = 'Posted by: ' + members.get(idea.id).userName || '';
         const getUserName = userId => {
             let member = members.get(userId);
             if (member) {
@@ -125,6 +124,7 @@ class ideaCard extends React.Component {
                 return ''
             }
         }
+        const userName = getUserName(idea.userId);
         return (
             <Grid item
                 xs={getIdeaCardWidth('xs')} sm={getIdeaCardWidth('sm')}
@@ -134,18 +134,16 @@ class ideaCard extends React.Component {
                 <Card className={classes.card} key={idea.id}>
                     <CardHeader
                         avatar={
-                            <Tooltip title={'Posted by: ' + getUserName(idea.userId)} placement="top">
-                                <Avatar aria-label="User Icon" className={classes.avatar}>
-                                    R
-      </Avatar>
-                            </Tooltip>
+                            <div className="tooltip">
+                                <Avatar aria-label="User Icon" className={classes.avatar}>R</Avatar>
+                                <span className="tooltiptext">{userName}</span>
+                            </div>
                         }
                         action={
-                            <Tooltip title='Show on the map' placement="top">
-                                <IconButton>
-                                    <PlaceIcon />
-                                </IconButton>
-                            </Tooltip>
+                            <IconButton className="leftTooltip">
+                                <PlaceIcon />
+                                <span className="tooltiptext">{'Show on the map'}</span>
+                            </IconButton>
                         }
 
                         title={
@@ -169,22 +167,20 @@ class ideaCard extends React.Component {
                         </Typography>
                     </CardContent>
                     <CardActions className={classes.actions} disableActionSpacing>
-                        <Tooltip title='Like this idea' placement="top">
-                            <IconButton aria-label="Add to favorites">
-                                <FavoriteIcon />
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title='Add to itinerary' placement="top">
-                            <IconButton aria-label="Add to Itinerary">
-                                <AddCircleIcon />
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title='More Info' placement="top">
-                            <IconButton aria-label="More Info" className={classes.ideaCardMoreInfoButton}>
+                        <IconButton aria-label="Like this idea" className="tooltip">
+                            <FavoriteIcon />
+                            <span className="tooltiptext">{'Like this idea'}</span>
+                        </IconButton>
+                        <IconButton aria-label="Add to Itinerary" className="tooltip">
+                            <AddCircleIcon />
+                            <span className="tooltiptext">{'Add to Itinerary'}</span>
+                        </IconButton>
+                        <div className={classes.ideaCardMoreInfoButton}>
+                            <IconButton aria-label="More Info" className="leftTooltip" >
                                 <InfoIcon />
+                                <span className="tooltiptext">{'More Info'}</span>
                             </IconButton>
-                        </Tooltip>
-                        {/* Todo: add comment input and submit button */}
+                        </div>
                     </CardActions>
                 </Card>
             </Grid>

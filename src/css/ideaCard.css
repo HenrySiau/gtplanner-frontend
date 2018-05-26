@@ -1,0 +1,72 @@
+/* reference: https://www.w3schools.com/css/css_tooltip.asp */
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 3px;
+    padding: 2px 0;
+    margin-left: 5px;
+    font-size: 15px;
+    position: absolute;
+    z-index: 9999;
+    top: 14px;
+    left: 105%;
+}
+
+.tooltip .tooltiptext::after {
+    content: " ";
+    position: absolute;
+    top: 50%;
+    right: 100%;
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent #555 transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+
+.leftTooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.leftTooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 3px;
+    padding: 2px 0;
+    font-size: 15px;
+    position: absolute;
+    z-index: 9999;
+    top: 8px;
+    right: 105%;
+}
+
+.leftTooltip .tooltiptext::after {
+    content: " ";
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent transparent #555;
+}
+
+.leftTooltip:hover .tooltiptext {
+    visibility: visible;
+}
