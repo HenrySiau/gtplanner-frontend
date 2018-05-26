@@ -15,56 +15,57 @@ import CardActions from '@material-ui/core/CardActions';
 import Card from '@material-ui/core/Card';
 import InfoIcon from '@material-ui/icons/Info';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import Tooltip from '@material-ui/core/Tooltip';
 
 
 const styles = theme => ({
-        card: {
-            // maxWidth: 800,
-            // minWidth: 250,
-            width: '100%',
-            margin: '5px',
-        },
-        media: {
-            // height: '100px',
-            // width: '100%',
-            // height: 'auto',
-            // paddingTop: '56.25%', // 16:9
-        },
-        avatar: {
-            backgroundColor: red[500],
-            width: 36,
-            height: 36,
-        },
-        ideaCards: {
-            height: 'calc((100vh - 40px)/2 - 70px)',
-            overflow: 'scroll',
-            display: 'flex',
-            flexWrap: 'wrap',
-            // justifyContent: 'center',
-            // justifyContent: 'space-around',
-        },
-        ideaCardContent: {
-            overflow: 'scroll',
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-            maxHeight: '200px'
-        },
-        cardMediaImage: {
-            width: '100%',
-            maxHeight: '600px',
-        },
-        ideaCardTitle: {
-            overflow: 'scroll',
-            whiteSpace: 'nowrap',
-            width: 165,
-        },
-        actions: {
-            display: 'flex',
-        },
-        ideaCardMoreInfoButton: {
-            marginLeft: 'auto',
-        },
+    card: {
+        // maxWidth: 800,
+        // minWidth: 250,
+        width: '100%',
+        margin: '5px',
+    },
+    media: {
+        // height: '100px',
+        // width: '100%',
+        // height: 'auto',
+        // paddingTop: '56.25%', // 16:9
+    },
+    avatar: {
+        backgroundColor: red[500],
+        width: 36,
+        height: 36,
+    },
+    ideaCards: {
+        height: 'calc((100vh - 40px)/2 - 70px)',
+        overflow: 'scroll',
+        display: 'flex',
+        flexWrap: 'wrap',
+        // justifyContent: 'center',
+        // justifyContent: 'space-around',
+    },
+    ideaCardContent: {
+        overflow: 'scroll',
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        maxHeight: '200px'
+    },
+    cardMediaImage: {
+        width: '100%',
+        maxHeight: '600px',
+    },
+    ideaCardTitle: {
+        overflow: 'scroll',
+        whiteSpace: 'nowrap',
+        width: 165,
+    },
+    actions: {
+        display: 'flex',
+    },
+    ideaCardMoreInfoButton: {
+        marginLeft: 'auto',
+    },
 });
 
 class ideaCard extends React.Component {
@@ -75,7 +76,7 @@ class ideaCard extends React.Component {
         }
     }
     render() {
-        const { classes, idea, isChatRoomOpen } = this.props;
+        const { classes, idea, isChatRoomOpen, members } = this.props;
         let startAt = new Date(idea.startAt);
         let endAt = new Date(idea.endAt);
         let subHeader = `${startAt.getMonth()}/${startAt.getDay()} ${startAt.getHours()}:${startAt.getMinutes()} -- ${endAt.getMonth()}/${endAt.getDay()} ${endAt.getHours()}:${endAt.getMinutes()}`;
@@ -114,23 +115,37 @@ class ideaCard extends React.Component {
                     break
             }
         }
+        // let userName = 'Posted by: ' + members.get(idea.userId).userName || '';
+        // let userName = 'Posted by: ' + members.get(idea.id).userName || '';
+        const getUserName = userId => {
+            let member = members.get(userId);
+            if (member) {
+                return member.userName;
+            } else {
+                return ''
+            }
+        }
         return (
             <Grid item
                 xs={getIdeaCardWidth('xs')} sm={getIdeaCardWidth('sm')}
                 md={getIdeaCardWidth('md')} lg={getIdeaCardWidth('lg')}
-                xl={getIdeaCardWidth('xl')} 
+                xl={getIdeaCardWidth('xl')}
             >
                 <Card className={classes.card} key={idea.id}>
                     <CardHeader
                         avatar={
-                            <Avatar aria-label="User Icon" className={classes.avatar}>
-                                R
+                            <Tooltip title={'Posted by: ' + getUserName(idea.userId)} placement="top">
+                                <Avatar aria-label="User Icon" className={classes.avatar}>
+                                    R
       </Avatar>
+                            </Tooltip>
                         }
                         action={
-                            <IconButton>
-                                <PlaceIcon />
-                            </IconButton>
+                            <Tooltip title='Show on the map' placement="top">
+                                <IconButton>
+                                    <PlaceIcon />
+                                </IconButton>
+                            </Tooltip>
                         }
 
                         title={
@@ -154,15 +169,21 @@ class ideaCard extends React.Component {
                         </Typography>
                     </CardContent>
                     <CardActions className={classes.actions} disableActionSpacing>
-                        <IconButton aria-label="Add to favorites">
-                            <FavoriteIcon />
-                        </IconButton>
-                        <IconButton aria-label="Add to Itinerary">
-                            <AddCircleIcon />
-                        </IconButton>
-                        <IconButton aria-label="More Info" className={classes.ideaCardMoreInfoButton}>
-                            <InfoIcon />
-                        </IconButton>
+                        <Tooltip title='Like this idea' placement="top">
+                            <IconButton aria-label="Add to favorites">
+                                <FavoriteIcon />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title='Add to itinerary' placement="top">
+                            <IconButton aria-label="Add to Itinerary">
+                                <AddCircleIcon />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title='More Info' placement="top">
+                            <IconButton aria-label="More Info" className={classes.ideaCardMoreInfoButton}>
+                                <InfoIcon />
+                            </IconButton>
+                        </Tooltip>
                         {/* Todo: add comment input and submit button */}
                     </CardActions>
                 </Card>
@@ -174,5 +195,6 @@ class ideaCard extends React.Component {
 ideaCard.propTypes = {
     idea: PropTypes.object.isRequired,
     isChatRoomOpen: PropTypes.bool.isRequired,
+    members: PropTypes.object.isRequired,
 };
 export default withStyles(styles)(ideaCard)

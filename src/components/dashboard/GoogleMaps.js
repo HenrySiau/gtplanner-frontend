@@ -14,6 +14,11 @@ import grey from '@material-ui/core/colors/grey';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import IdeaCard from './IdeaCard';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
+import withWidth from '@material-ui/core/withWidth';
+import compose from 'recompose/compose';
 
 const styles = theme => ({
     root: {
@@ -95,7 +100,6 @@ class GoogleMaps extends React.Component {
                 let ideas = response.data.ideas;
                 if (ideas) {
                     ideas.forEach(idea => {
-                        console.log('add Marker');
                         let marker = new window.google.maps.Marker({
                             position: { lat: Number(idea.lat), lng: Number(idea.lng) },
                             title: idea.title,
@@ -110,25 +114,19 @@ class GoogleMaps extends React.Component {
                 console.error(error);
             })
 
-        console.log('google map loaded');
-
     }
     componentDidUpdate(prevProps) {
 
     }
 
-    handleAddressChange = (event) => {
-        console.log(event.target.value);
-    }
 
     toggleDialogClose = () => {
         this.setState({ isDialogOpen: false })
     }
 
     render() {
-        const { classes, isDrawerOpen, isChatRoomOpen, isDrawerExtended, ideas, dashboardView } = this.props;
+        const { classes, isDrawerOpen, isChatRoomOpen, isDrawerExtended, ideas, dashboardView, selectedTrip } = this.props;
         const getSectionClassName = section => {
-            console.log(dashboardView);
             if (section === 'map') {
                 switch (dashboardView) {
                     case 'map':
@@ -143,8 +141,8 @@ class GoogleMaps extends React.Component {
                     default:
                         break;
                 }
-            } 
-             if (section === 'list') {
+            }
+            if (section === 'list') {
                 switch (dashboardView) {
                     case 'list':
                         return classes.listFull
@@ -153,7 +151,6 @@ class GoogleMaps extends React.Component {
                         return classes.listHidden
                         break;
                     case 'split':
-                    console.log('list split');
                         return classes.listHalf
                         break;
                     default:
@@ -163,20 +160,21 @@ class GoogleMaps extends React.Component {
         }
         let ideaCards = [];
         ideas.forEach(idea => {
-                 ideaCards.push(
-                <IdeaCard 
-                idea={idea}
-                isChatRoomOpen={isChatRoomOpen}
-                key={idea.id}
+            ideaCards.push(
+                <IdeaCard
+                    idea={idea}
+                    isChatRoomOpen={isChatRoomOpen}
+                    key={idea.id}
+                    members={selectedTrip.members}
                 />
             );
         });
 
         const mapContainerStyle = () => {
-            console.log('window.innerWidth: ' + window.innerWidth);
             let spaceTaken = 0;
             if (isChatRoomOpen) {
-                spaceTaken += (window.innerWidth > 600) ? 360 : 0;
+                // spaceTaken += (window.innerWidth > 600) ? 360 : 0;
+                spaceTaken += (this.props.width !== 'xs') ? 360 : 0;
             }
             if (isDrawerExtended) {
                 spaceTaken += 151;
@@ -205,14 +203,13 @@ class GoogleMaps extends React.Component {
                             {`filters...   filters...   .`}
                         </Typography>
                     </div>
-                    <Button
-                        variant="raised"
-                        color="primary"
-                        onClick={() => { this.setState({ isDialogOpen: true }) }}
-                        className={classes.dialogButton}
-                    >
-                        New Idea
-            </Button>
+                    <Tooltip title="Add an idea" placement="top">
+                        <IconButton aria-label="Add Idea"
+                            onClick={() => { this.setState({ isDialogOpen: true }) }}
+                            className={classes.dialogButton}>
+                            <AddCircleIcon />
+                        </IconButton>
+                    </Tooltip>
                 </Paper>
 
                 <Dialog
@@ -220,12 +217,12 @@ class GoogleMaps extends React.Component {
                     open={this.state.isDialogOpen}
                 >
                     <DialogTitle >
-                        {"add new idea"}
+                        {"Add new idea"}
                     </DialogTitle>
                     <DialogContent>
                         <NewIdea
                             snackbarMessage={this.props.snackbarMessage}
-                            selectedTrip={this.props.selectedTrip}
+                            selectedTrip={selectedTrip}
                             userInfo={this.props.userInfo}
                             toggleDialogClose={this.toggleDialogClose}
                             addIdea={this.props.addIdea}
@@ -239,4 +236,4 @@ class GoogleMaps extends React.Component {
 }
 
 
-export default withStyles(styles)(GoogleMaps) 
+export default compose(withStyles(styles), withWidth())(GoogleMaps) 
