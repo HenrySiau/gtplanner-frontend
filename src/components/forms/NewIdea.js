@@ -12,16 +12,33 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import AvatarEditor from 'react-avatar-editor'
 
 const styles = theme => ({
+    root: {
+        width: 500,
+        display: 'flex',
+        // alignContent: 'center',
+        flexDirection: 'column',
+        justifyContent: 'center',
+
+    },
     dialogButton: {
         margin: '0 10px 0 10px'
     },
     input: {
-        margin: '0 10px 0 10px'
+        margin: '10px',
+        width: 450,
     },
 });
 
+const handleFileChange = event => {
+    console.log('event: ' + event);
+}
+const handleImageZoom = event => {
+    console.log('handleImageZoom');
+    console.log(event.target.value);
+}
 class NewIdea extends React.Component {
     constructor(props) {
         super(props);
@@ -45,13 +62,43 @@ class NewIdea extends React.Component {
             inItinerary: false,
             typeHelperText: '',
             isTypeError: false,
+            imageFile: '',
+            imageScale: 1,
+            imageType: 'image/png',
+            isImageReady: false,
         }
     }
 
     componentDidMount() {
         this.autocomplete = new window.google.maps.places.Autocomplete(document.getElementById('googleMapAutocomplete'));
         this.geocoder = new window.google.maps.Geocoder();
+        this.imageFileInput = document.getElementById('imageFileInput');
+        this.imageZoomSlider = document.getElementById('imageZoomSlider');
+        const that = this;
+        this.imageZoomSlider.oninput = function () {
+            that.setState({ imageScale: Number(this.value) / 100 });
+        }
+
+        let fileReader = new FileReader();
+        fileReader.addEventListener("load", () => {
+            this.setState({
+                imageFile: fileReader.result,
+                isImageReady: true,
+            });
+
+        }, false);
+        this.imageFileInput.addEventListener('change', () => {
+            let file = this.imageFileInput.files[0];
+
+            if (file) {
+                fileReader.readAsDataURL(file);
+                console.log('imageType: ' + file.type);
+                this.setState({ imageType: file.type })
+            }
+        })
     }
+
+    setImageEditorRef = (editor) => this.ImageEditor = editor
 
     handleTitleBlur = (event) => {
         if (event.target.value.length === 1) {
@@ -93,12 +140,13 @@ class NewIdea extends React.Component {
     }
 
     validateAll = (data) => {
+        let result = true;
         if (data.title.length > 30 || data.title.length < 2) {
             this.setState({
                 isIdeaTitleErr: true,
                 ideaTitleErrText: 'Title must be 2 - 30 characters',
             });
-            return false
+            result = false
         } else {
             this.setState({
                 isIdeaTitleErr: false,
@@ -109,34 +157,79 @@ class NewIdea extends React.Component {
                 isIdeaAddressErr: true,
                 ideaAddressErrText: 'Please complete the address',
             });
-            return false
+            result = false
         } else {
             this.setState({
                 isIdeaAddressErr: false,
             });
         }
         if (!data.startAt || !data.endAt) {
-            return false
+            result = false
         }
         if (!data.tripId) {
-            return false
+            result = false
         }
         if (data.description.length > 500) {
             this.setState({
                 isIdeaDescriptionErr: true,
                 ideaDescriptionErrText: 'Description must less than 500 characters',
             });
-            return false
+            result = false
         }
         if (!data.type) {
             this.setState({
                 isTypeError: true,
                 typeHelperText: 'please select a idea type',
             });
-            return false
+            result = false
+        }
+        if (!this.state.isImageReady) {
+            // TODO add warning label for missing image
+            result = false
         }
 
-        return true
+        return result;
+    }
+    testImageUpload = () => {
+        console.log('testImageUpload');
+        if (this.state.isImageReady) {
+            const canvas = this.ImageEditor.getImage();
+            // const image = canvas.toDataURL();
+            let data = new FormData();
+            canvas.toBlob(blob => {
+                data.append('imageData', blob);
+                data.append('message', 'hello World, lol');
+                data.append('imageType', this.state.imageType);
+                console.log('blob: ' + blob);
+                axios({
+                    method: 'POST',
+                    url: settings.serverUrl + '/api/post/image/upload',
+                    json: true,
+                    headers: {
+                        'x-access-token': localStorage.getItem('id_token'),
+                        // 'Content-Type': 'multipart/form-data',
+                    },
+                    // data: { 
+                    //     imageData: data ,
+                    //     message: 'Hello... lol',
+                    //     imageType: this.state.imageType,
+                    // }
+                    data: data,
+                })
+                    .then(response => {
+                        console.log(response);
+
+
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    })
+
+            }, this.state.imageType, 1)
+        }
+        else {
+            console.log('please add image');
+        }
     }
     handleSubmit = () => {
         let ideaData = {
@@ -152,59 +245,64 @@ class NewIdea extends React.Component {
             type: this.state.type,
         }
         if (this.validateAll(ideaData)) {
-            console.log('address : ' + ideaData.address);
             this.geocoder.geocode({ 'address': ideaData.address }, (result, status) => {
                 if (status === 'OK') {
                     if (result) {
-                        console.log(result);
-                        console.log(result[0].geometry.location.lat());
-                        console.log(result[0].geometry.location.lng());
                         ideaData.lat = result[0].geometry.location.lat();
                         ideaData.lng = result[0].geometry.location.lng();
-
-                        this.setState({ submitButtonDisabled: true })
-                        axios({
-                            method: 'POST',
-                            url: settings.serverUrl + '/api/post/idea/new',
-                            json: true,
-                            headers: {
-                                'x-access-token': localStorage.getItem('id_token'),
-                            },
-                            data: { idea: ideaData }
-                        })
-                            .then((response) => {
-                                let newIdea = response.data.newIdea;
-                                if (newIdea) {
-                                    this.props.toggleDialogClose();
-                                    this.props.addIdea(newIdea);
-                                    let marker = new window.google.maps.Marker({
-                                        position: { lat: Number(newIdea.lat), lng: Number(newIdea.lng) },
-                                        title: newIdea.title,
-                                        map: window.map,
-                                    });
-                                    window.markers.set(newIdea.id, marker);
-                                } else {
-                                    console.log('not success');
-                                    this.setState({ submitButtonDisabled: false })
-                                }
+                        let data = new FormData();
+                        const canvas = this.ImageEditor.getImage();
+                        canvas.toBlob(blob => {
+                            data.append('imageData', blob);
+                            data.append('idea', ideaData);
+                            data.append('imageType', this.state.imageType);
+                            this.setState({ submitButtonDisabled: true });
+                            axios({
+                                method: 'POST',
+                                url: settings.serverUrl + '/api/post/idea/new',
+                                json: true,
+                                headers: {
+                                    'x-access-token': localStorage.getItem('id_token'),
+                                },
+                                data: data,
                             })
-                            .catch((error) => {
-                                // TODO: show error message and guide user to re submit
-                                console.error(error);
-                            });
-                    }
-                } else {
+                                .then(response => {
+                                    console.log(response);
+                                    let newIdea = response.data.newIdea;
+                                    if (newIdea) {
+                                        this.props.toggleDialogClose();
+                                        this.props.addIdea(newIdea);
+                                        let marker = new window.google.maps.Marker({
+                                            position: { lat: Number(newIdea.lat), lng: Number(newIdea.lng) },
+                                            title: newIdea.title,
+                                            map: window.map,
+                                        });
+                                        window.markers.set(newIdea.id, marker);
+                                    } else {
+                                        console.log('not success');
+                                        this.setState({ submitButtonDisabled: false });
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error(error);
+                                })
+
+                        }, this.state.imageType, 1);
+                    } // if result
+                } // if status === ok
+                else {
                     console.error('can not find this address in the map');
                 }
-            });
+            }); // geocode()
         } else {
             this.props.snackbarMessage('Please complete the form');
         }
     }
+
     render() {
         const { classes } = this.props;
         return (
-            <div>
+            <div className={classes.root}>
                 <TextField
                     id='ideaTitleInput'
                     label="Title"
@@ -215,7 +313,7 @@ class NewIdea extends React.Component {
                     onBlur={this.handleTitleBlur}
                     onChange={this.handleTitleChange}
                 /><br />
-                <FormControl className={classes.formControl} error={this.state.isTypeError}>
+                <FormControl className={classes.input} error={this.state.isTypeError}>
                     <InputLabel htmlFor="type-native-simple">Type</InputLabel>
                     <Select
                         native
@@ -232,7 +330,23 @@ class NewIdea extends React.Component {
                         <option value={'Transport'}>Transport</option>
                     </Select>
                     <FormHelperText>{this.state.typeHelperText}</FormHelperText>
-                </FormControl>
+                </FormControl><br />
+                <div className={classes.input}>
+                    <AvatarEditor
+                        ref={this.setImageEditorRef}
+                        image={this.state.imageFile}
+                        width={400}
+                        height={300}
+                        border={[40, 30]}
+                        scale={this.state.imageScale}
+                        rotate={this.state.imageRotate}
+                    />
+                    <input id='imageFileInput' name="Image File" type="file" accept="image/*" /><br />
+                    {/* <p>Zoom</p> */}
+                    <label>Zoom  </label><br />
+                    <input id="imageZoomSlider" type="range" min="100" max="400" defaultValue="100" style={{ width: '450px' }} />
+                    <br />
+                </div>
                 <br />
                 <TextField
                     id="googleMapAutocomplete"
@@ -259,6 +373,7 @@ class NewIdea extends React.Component {
                     onChange={(date) => { this.setState({ ideaStartDate: date }) }}
                     label="Start Date"
                     format="YYYY/MM/DD hh:mm A"
+                    className={classes.input}
                 /><br />
                 <DateTimePicker
                     id="ideaEndDate"
@@ -269,6 +384,7 @@ class NewIdea extends React.Component {
                     onChange={(date) => { this.setState({ ideaEndDate: date }) }}
                     label="End Date"
                     format="YYYY/MM/DD hh:mm A"
+                    className={classes.input}
                 /><br />
 
                 <TextField
@@ -291,24 +407,28 @@ class NewIdea extends React.Component {
                         />
                     }
                     label="Add to itinerary"
+                    className={classes.input}
                 /><br />
-                <Button
-                    variant="raised"
-                    color="primary"
-                    onClick={this.handleSubmit}
-                    className={classes.dialogButton}
-                    disabled={this.state.submitButtonDisabled}
-                >
-                    Submit
+                <div>
+                    <Button
+                        variant="raised"
+                        color="primary"
+                        // onClick={this.handleSubmit}
+                        onClick={this.testImageUpload}
+                        className={classes.dialogButton}
+                        disabled={this.state.submitButtonDisabled}
+                    >
+                        Submit
             </Button>
-                <Button
-                    variant="raised"
-                    color="primary"
-                    onClick={this.props.toggleDialogClose}
-                    className={classes.dialogButton}
-                >
-                    Cancel
+                    <Button
+                        variant="raised"
+                        color="primary"
+                        onClick={this.props.toggleDialogClose}
+                        className={classes.dialogButton}
+                    >
+                        Cancel
             </Button>
+                </div>
             </div >
         )
     }
