@@ -352,7 +352,6 @@ class NewIdea extends React.Component {
                         height={300}
                         border={[40, 30]}
                         scale={this.state.imageScale}
-                        rotate={this.state.imageRotate}
                     />
                     <input id='imageFileInput' name="Image File" type="file" accept="image/*" /><br />
                     {/* <p>Zoom</p> */}

@@ -18,6 +18,7 @@ import JoinATrip from './JoinATrip';
 import GTPDashboard from './GTPDashboard';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import MyAccount from '../sections/MyAccount';
 
 
 const theme = createMuiTheme({
@@ -102,6 +103,7 @@ class App extends Component {
               <PrivateRoute exact path="/members/invite" component={InviteMemberForm} />
               <PrivateRoute exact path="/trip/new" component={CreateTripSection} />
               <PrivateRoute exact path="/dashboard" component={GTPDashboard} />
+              <PrivateRoute exact path="/myaccount" component={MyAccount} />
             </main>
             <ChatRoomContainer />
             <GTPSnackbar />
