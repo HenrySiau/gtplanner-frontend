@@ -7,7 +7,8 @@ import AvatarEditor from 'react-avatar-editor'
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-
+import UpdateAvatarForm from '../components/forms/UpdateAvatarForm';
+import UpdateUserProfileForm from '../components/forms/UpdateUserProfileForm';
 const styles = theme => ({
     root: {
         margin: theme.spacing.unit * 2,
@@ -44,10 +45,6 @@ const styles = theme => ({
     input: {
         marginTop: theme.spacing.unit,
     },
-    imageEditor: {
-        marginTop: theme.spacing.unit,
-        // marginTop: 5,
-    },
     button: {
         margin: theme.spacing.unit,
     },
@@ -65,18 +62,21 @@ class MyAccount extends React.Component {
         }
     }
 
+    componentDidMount() {
+
+    }
+
+    setImageEditorRef = editor => this.ImageEditor = editor
+
     toggleEditUserInfo = () => {
         this.setState({ editUserInfo: true });
     }
-    toggleUserInfo = () => {
+    CloseImageEditor = () => {
+        this.setState({ editImage: false });
+    }
+    CloseProfileEditor = () => {
         this.setState({ editUserInfo: false });
     }
-    handleChange = name => event => {
-        this.setState({
-            [name]: event.target.value,
-        });
-    };
-
     onSubmit = () => {
 
     }
@@ -111,13 +111,13 @@ class MyAccount extends React.Component {
         const EditUserInfo = () => {
             return (
                 <div className={classes.form}>
-                    <div className={classes.row}>
-                    <Avatar
-                        alt="Profile Photo"
-                        src={this.props.userInfo.profilePictureURL}
-                        className={classes.avatar}
-                    />
-                        {!this.state.editImage && <Button
+                    {!this.state.editImage && <div className={classes.row}>
+                        <Avatar
+                            alt="Profile Photo"
+                            src={this.props.userInfo.profilePictureURL}
+                            className={classes.avatar}
+                        />
+                        <Button
                             variant="outlined"
                             // color="primary"
                             className={classes.changePhoto}
@@ -126,102 +126,28 @@ class MyAccount extends React.Component {
                             }}
                         >
                             Change Photo
-      </Button>}
+      </Button>
 
-                    </div>
-                    {this.state.editImage ? <ImageEditor /> : <UserInfoEditor />}
+                    </div>}
+                    {this.state.editImage ?
+                        <UpdateAvatarForm
+                            defaultImage={this.props.userInfo.profilePictureURL}
+                            onCancel={this.CloseImageEditor}
+                        /> :
+                        <UpdateUserProfileForm
+                            onCancel={this.CloseProfileEditor}
+                        />}
                 </div>
             )
         }
-        const ImageEditor = () => {
-            return (
-                <div className={classes.imageEditor}>
-                    <AvatarEditor
-                        ref={this.setImageEditorRef}
-                        image={this.state.imageFile}
-                        width={200}
-                        height={200}
-                        border={[20, 20]}
-                        borderRadius={100}
-                        scale={this.state.imageScale}
-                    /><br />
-                    <input id='imageFileInput' name="Image File" type="file" accept="image/*" />
-                    <br />
-                    <div className={classes.row}>
-                        <Button
-                            variant="raised"
-                            color="primary"
-                            className={classes.button}
-                            onClick={() => {
-                                this.setState({ editImage: false })
-                            }}>
-                            Cancel
-      </Button>
-                        <Button
-                            variant="raised"
-                            color="primary"
-                            className={classes.button}
-                        // onClick={this.onSubmit}
-                        >
-                            Submit
-      </Button>
-                    </div>
-                </div>
-            )
-        }
-        const UserInfoEditor = () => {
-            return (
-                <div className={classes.userInfoEditor}>
-                    <TextField
-                        id="userName"
-                        label="User Name"
-                        className={classes.textField}
-                        value={this.state.userName}
-                        onChange={this.handleChange('userName')}
-                        margin="normal"
-                    /><br />
-                    <TextField
-                        id="email"
-                        label="Email"
-                        className={classes.textField}
-                        value={this.state.email}
-                        onChange={this.handleChange('email')}
-                        margin="normal"
-                    /><br />
-                    <TextField
-                        id="phone"
-                        label="Phone Number"
-                        className={classes.textField}
-                        value={this.state.phone}
-                        onChange={this.handleChange('phone')}
-                        margin="normal"
-                    /><br />
-                    <div className={classes.row}>
-                        <Button
-                            variant="raised"
-                            color="primary"
-                            className={classes.button}
-                            onClick={this.toggleUserInfo}>
-                            Cancel
-      </Button>
-                        <Button
-                            variant="raised"
-                            color="primary"
-                            className={classes.button}
-                            onClick={this.onSubmit}>
-                            Submit
-      </Button>
-                    </div>
-                </div>
-            )
-        }
+
 
         return (
-            <div className={classes.root}>
+            <div className={classes.root} >
                 {/* <h1>{this.props.userInfo.userName}</h1> */}
                 {this.state.editUserInfo ? <EditUserInfo /> : <UserInfo />}
 
-            </div>
+            </div >
 
         );
     }
