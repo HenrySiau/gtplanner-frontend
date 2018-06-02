@@ -248,14 +248,26 @@ class NewIdea extends React.Component {
             this.geocoder.geocode({ 'address': ideaData.address }, (result, status) => {
                 if (status === 'OK') {
                     if (result) {
+                        let data = new FormData();
                         ideaData.lat = result[0].geometry.location.lat();
                         ideaData.lng = result[0].geometry.location.lng();
-                        let data = new FormData();
+                        data.append('lat', result[0].geometry.location.lat());
+                        data.append('lng', result[0].geometry.location.lng());
                         const canvas = this.ImageEditor.getImage();
                         canvas.toBlob(blob => {
                             data.append('imageData', blob);
-                            data.append('idea', ideaData);
+                            data.append('title', ideaData.title);
+                            data.append('address', ideaData.address);
+                            data.append('description', ideaData.description);
+                            data.append('link', ideaData.link);
+                            data.append('startAt', ideaData.startAt);
+                            data.append('endAt', ideaData.endAt.toString());
+                            data.append('tripId', ideaData.tripId.toString());
+                            data.append('userId', ideaData.userId);
+                            data.append('inItinerary', ideaData.inItinerary);
+                            data.append('type', ideaData.type);
                             data.append('imageType', this.state.imageType);
+                            data.append('idea', ideaData);
                             this.setState({ submitButtonDisabled: true });
                             axios({
                                 method: 'POST',
@@ -270,6 +282,7 @@ class NewIdea extends React.Component {
                                     console.log(response);
                                     let newIdea = response.data.newIdea;
                                     if (newIdea) {
+                                        console.log('newIdea: ' + newIdea);
                                         this.props.toggleDialogClose();
                                         this.props.addIdea(newIdea);
                                         let marker = new window.google.maps.Marker({
@@ -413,8 +426,8 @@ class NewIdea extends React.Component {
                     <Button
                         variant="raised"
                         color="primary"
-                        // onClick={this.handleSubmit}
-                        onClick={this.testImageUpload}
+                        onClick={this.handleSubmit}
+                        // onClick={this.testImageUpload}
                         className={classes.dialogButton}
                         disabled={this.state.submitButtonDisabled}
                     >

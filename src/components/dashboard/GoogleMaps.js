@@ -84,7 +84,7 @@ class GoogleMaps extends React.Component {
             zoom: 12,
             center: { lat: 37.7749300, lng: -122.4194200 }
         });
-
+        console.log('get ideas for tripId: ' + this.props.tripId);
         axios({
             method: 'GET',
             url: settings.serverUrl + '/api/get/ideas',
@@ -97,6 +97,7 @@ class GoogleMaps extends React.Component {
             }
         })
             .then(response => {
+                console.log('get/ideas response: ' + response);
                 let ideas = response.data.ideas;
                 if (ideas) {
                     ideas.forEach(idea => {
@@ -189,7 +190,7 @@ class GoogleMaps extends React.Component {
             <Grid container direction={'column'} justify={'space-between'} className={classes.root}>
                 <Grid style={mapContainerStyle()} id='googleMap' className={getSectionClassName('map')} ></Grid>
                 <div className={getSectionClassName('list')}>
-                    <Grid container spacing={8} justify={'space-between'}>
+                    <Grid container spacing={8} justify={'flex-start'}>
                         {ideaCards}
                     </Grid>
                 </div>

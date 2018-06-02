@@ -17,6 +17,7 @@ import InfoIcon from '@material-ui/icons/Info';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Tooltip from '@material-ui/core/Tooltip';
 import '../../css/ideaCard.css';
+import settings from '../../config';
 
 
 const styles = theme => ({
@@ -155,7 +156,8 @@ class ideaCard extends React.Component {
                     />
 
                     <CardMedia className={classes.media} image={' '}>
-                        <img src="https://material-ui.com/static/images/grid-list/breakfast.jpg"
+                        {/* <img src="https://material-ui.com/static/images/grid-list/breakfast.jpg" */}
+                        <img src={settings.imageServerUrl + '/images/' + idea.coverImage}
                             alt={idea.title}
                             className={classes.cardMediaImage}
                         />
