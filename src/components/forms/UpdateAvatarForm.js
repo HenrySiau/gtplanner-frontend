@@ -6,6 +6,8 @@ import AvatarEditor from 'react-avatar-editor'
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import PropTypes from 'prop-types';
+import settings from '../../config';
+import { updateProfilePictureUrl } from '../../actions';
 
 
 const styles = theme => ({
@@ -63,9 +65,53 @@ class UpdateAvatarForm extends React.Component {
                 this.setState({ imageType: file.type })
             }
         })
-    }
-    onSubmit = () => {
 
+        let request = new XMLHttpRequest();
+        console.log('defaultImageUrl: ' + this.props.defaultImageUrl);
+        request.open('GET', this.props.defaultImageUrl, true);
+        request.responseType = 'blob';
+        request.onload = function () {
+            fileReader.readAsDataURL(request.response);
+        };
+        request.send();
+
+    }
+
+    setImageEditorRef = (editor) => this.ImageEditor = editor
+
+    onSubmit = () => {
+        const canvas = this.ImageEditor.getImage();
+        // const image = canvas.toDataURL();
+        let data = new FormData();
+        canvas.toBlob(blob => {
+            data.append('imageData', blob);
+            data.append('imageType', this.state.imageType);
+            axios({
+                method: 'POST',
+                url: settings.serverUrl + '/api/post/avatar/update',
+                json: true,
+                headers: {
+                    'x-access-token': localStorage.getItem('id_token'),
+                },
+                data: data,
+            })
+                .then(response => {
+                    console.log(response);
+                    let newProfilePicture = response.data.newProfilePicture;
+                    if (newProfilePicture) {
+                        // update userInfo
+                        // exit
+                        console.log('newProfilePicture: ' + newProfilePicture);
+                        this.props.updateProfilePictureUrl(newProfilePicture);
+                        this.props.onCancel();
+                    }
+
+                })
+                .catch(error => {
+                    console.error(error);
+                })
+
+        }, this.state.imageType, 1)
     }
     render() {
         const { classes } = this.props;
@@ -73,7 +119,7 @@ class UpdateAvatarForm extends React.Component {
             <div className={classes.imageEditor} >
                 <AvatarEditor
                     ref={this.setImageEditorRef}
-                    // image={this.state.imageFile}
+                    image={this.state.imageFile}
                     width={200}
                     height={200}
                     border={[20, 20]}
@@ -83,7 +129,7 @@ class UpdateAvatarForm extends React.Component {
                 <input id='imageFileInput' name="Image File" type="file" accept="image/*" />
                 <br />
                 <label>Zoom  </label> <br />
-                <input id="imageZoomSlider" type="range" min="100" max="400" defaultValue="100" className={classes.textField} />
+                <input id="imageZoomSlider" type="range" min="70" max="400" defaultValue="100" className={classes.textField} />
                 <br />
                 <div className={classes.row}>
                     <Button
@@ -110,7 +156,7 @@ class UpdateAvatarForm extends React.Component {
 
 UpdateAvatarForm.propTypes = {
     onCancel: PropTypes.func.isRequired,
-    defaultImage: PropTypes.string.isRequired,
+    defaultImageUrl: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => {
@@ -119,5 +165,13 @@ const mapStateToProps = (state) => {
     }
 }
 
+const mapDispatchToProps = dispatch => {
+    return {
+        updateProfilePictureUrl: (imageName) => {
+            dispatch(updateProfilePictureUrl(imageName));
+        },
+    }
+}
+
 UpdateAvatarForm = withStyles(styles)(UpdateAvatarForm);
-export default connect(mapStateToProps)(UpdateAvatarForm);
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateAvatarForm);

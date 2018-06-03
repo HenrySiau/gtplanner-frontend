@@ -86,7 +86,7 @@ class MyAccount extends React.Component {
         const UserInfo = () => {
             let userName = userInfo.userName || '';
             let email = userInfo.email || '';
-            let phone = userInfo.phone || '';
+            let phoneNumber = userInfo.phoneNumber || '';
             return (
                 <div className={classes.form}>
                     <Avatar
@@ -96,7 +96,7 @@ class MyAccount extends React.Component {
                     />
                     <p > {`User Name: ${userName}`}</p>
                     <p > {`Email: ${email}`}</p>
-                    <p > {`Phone Number: ${phone}`}</p>
+                    <p > {`phoneNumber Number: ${phoneNumber}`}</p>
                     <div>
                         <Button
                             variant="raised"
@@ -131,11 +131,12 @@ class MyAccount extends React.Component {
                     </div>}
                     {this.state.editImage ?
                         <UpdateAvatarForm
-                            defaultImage={this.props.userInfo.profilePictureURL}
+                            defaultImageUrl={this.props.userInfo.profilePictureURL}
                             onCancel={this.CloseImageEditor}
                         /> :
                         <UpdateUserProfileForm
                             onCancel={this.CloseProfileEditor}
+                            userInfo={userInfo}
                         />}
                 </div>
             )

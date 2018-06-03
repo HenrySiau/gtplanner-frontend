@@ -30,6 +30,9 @@ class UpdateUserProfileForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            userName: this.props.userInfo.userName,
+            email: this.props.userInfo.email,
+            phoneNumber: this.props.userInfo.phoneNumber,
 
         }
     }
@@ -68,11 +71,11 @@ class UpdateUserProfileForm extends React.Component {
                     margin="normal"
                 /><br />
                 <TextField
-                    id="phone"
-                    label="Phone Number"
+                    id="phoneNumber"
+                    label="phoneNumber Number"
                     className={classes.textField}
-                    value={this.state.phone}
-                    onChange={this.handleChange('phone')}
+                    value={this.state.phoneNumber}
+                    onChange={this.handleChange('phoneNumber')}
                     margin="normal"
                 /><br />
                 <div className={classes.row}>
@@ -99,6 +102,7 @@ class UpdateUserProfileForm extends React.Component {
 
 UpdateUserProfileForm.propTypes = {
     onCancel: PropTypes.func.isRequired,
+    userInfo: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => {
