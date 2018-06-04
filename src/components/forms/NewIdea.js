@@ -291,6 +291,8 @@ class NewIdea extends React.Component {
                                             map: window.map,
                                         });
                                         window.markers.set(newIdea.id, marker);
+                                        window.googleMapBounds.extend({ lat: Number(newIdea.lat), lng: Number(newIdea.lng) });
+                                        window.map.fitBounds(window.googleMapBounds);
                                     } else {
                                         console.log('not success');
                                         this.setState({ submitButtonDisabled: false });
@@ -425,6 +427,14 @@ class NewIdea extends React.Component {
                     <Button
                         variant="raised"
                         color="primary"
+                        onClick={this.props.toggleDialogClose}
+                        className={classes.dialogButton}
+                    >
+                        Cancel
+            </Button>
+                    <Button
+                        variant="raised"
+                        color="primary"
                         onClick={this.handleSubmit}
                         // onClick={this.testImageUpload}
                         className={classes.dialogButton}
@@ -432,14 +442,7 @@ class NewIdea extends React.Component {
                     >
                         Submit
             </Button>
-                    <Button
-                        variant="raised"
-                        color="primary"
-                        onClick={this.props.toggleDialogClose}
-                        className={classes.dialogButton}
-                    >
-                        Cancel
-            </Button>
+
                 </div>
             </div >
         )

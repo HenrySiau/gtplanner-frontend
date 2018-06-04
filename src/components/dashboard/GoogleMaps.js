@@ -82,8 +82,9 @@ class GoogleMaps extends React.Component {
     componentDidMount() {
         window.map = new window.google.maps.Map(document.getElementById('googleMap'), {
             zoom: 12,
-            center: { lat: 37.7749300, lng: -122.4194200 }
+            // center: { lat: 37.7749300, lng: -122.4194200 }
         });
+        window.googleMapBounds = new window.google.maps.LatLngBounds();
         console.log('get ideas for tripId: ' + this.props.tripId);
         axios({
             method: 'GET',
@@ -107,7 +108,9 @@ class GoogleMaps extends React.Component {
                             map: window.map,
                         });
                         window.markers.set(idea.id, marker);
-                    })
+                        window.googleMapBounds.extend({ lat: Number(idea.lat), lng: Number(idea.lng) });
+                    }) // end ideas.forEach
+                    window.map.fitBounds(window.googleMapBounds);
                     this.props.updateIdeas(ideas);
                 }
             })
