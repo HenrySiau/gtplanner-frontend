@@ -12,6 +12,7 @@ import DraftsIcon from 'material-ui-icons/Drafts';
 import Icon from '@material-ui/core/Icon';
 import PropTypes from 'prop-types';
 import Divider from '@material-ui/core/Divider';
+import grey from '@material-ui/core/colors/grey';
 
 const drawerWidth = 150;
 const styles = theme => ({
@@ -46,6 +47,9 @@ const styles = theme => ({
         marginLeft: '0 90 0 0'
     },
     navigationIconFolded: {
+    },
+    selected: {
+        backgroundColor: grey[200]
     }
 });
 
@@ -60,10 +64,10 @@ class GTPDrawer extends React.Component {
     }
 
     getDrawerClass = () => {
-        if(!Boolean(this.props.tripId)){
+        if (!Boolean(this.props.tripId)) {
             return ({ paper: this.props.classes.drawerClosed })
         }
-        if (!this.props.isLoggedIn ) {
+        if (!this.props.isLoggedIn) {
             return ({ paper: this.props.classes.drawerClosed })
         } else {
             if (!this.props.isDrawerOpen) {
@@ -99,37 +103,37 @@ class GTPDrawer extends React.Component {
     }
 
     render() {
-        const { classes } = this.props;
+        const { classes, dashboardView, ideasOrItinerary, showItinerary, showIdeas } = this.props;
         const sideList = (
             <div className={classes.list}>
                 <List>
                     {this.generateNavigationIcon()}
-                    <ListItem button onClick={this.props.setDashboardViewToMap}>
+                    <ListItem button onClick={this.props.setDashboardViewToMap} className={dashboardView === 'map' && classes.selected}>
                         <ListItemIcon >
                             <Icon >map</Icon>
                         </ListItemIcon>
                         <ListItemText primary="Map" />
                     </ListItem>
-                    <ListItem button onClick={this.props.setDashboardViewToList}>
+                    <ListItem button onClick={this.props.setDashboardViewToList} className={dashboardView === 'list' && classes.selected}>
                         <ListItemIcon>
                             <Icon >view_list</Icon>
                         </ListItemIcon>
                         <ListItemText primary="Events" />
                     </ListItem>
-                    <ListItem button onClick={this.props.setDashboardViewToSplit}>
+                    <ListItem button onClick={this.props.setDashboardViewToSplit} className={dashboardView === 'split' && classes.selected}>
                         <ListItemIcon>
                             <Icon >pie_chart</Icon>
                         </ListItemIcon>
                         <ListItemText primary="Split" />
                     </ListItem>
                     <Divider />
-                    <ListItem button>
+                    <ListItem button onClick={showItinerary} className={ideasOrItinerary === 'itinerary' && classes.selected}>
                         <ListItemIcon>
                             <Icon >event</Icon>
                         </ListItemIcon>
-                        <ListItemText primary="Calender" />
+                        <ListItemText primary="Itinerary" />
                     </ListItem>
-                    <ListItem button>
+                    <ListItem button onClick={showIdeas} className={ideasOrItinerary === 'idea' && classes.selected}>
                         <ListItemIcon>
                             <Icon >favorite</Icon>
                         </ListItemIcon>

@@ -12,6 +12,7 @@ import { chatMessageBadgeContent, systemMessageBadgeContent } from './messageBad
 import { filteredMarkerList } from './googleMapMarkers';
 import { ideas } from './ideas';
 import { dashboardView } from './dashboardView';
+import { ideasOrItinerary } from './ideasOrItinerary';
 
 export default combineReducers({
     isLoggedIn,
@@ -30,4 +31,5 @@ export default combineReducers({
     filteredMarkerList,
     ideas,
     dashboardView,
+    ideasOrItinerary,
 })
