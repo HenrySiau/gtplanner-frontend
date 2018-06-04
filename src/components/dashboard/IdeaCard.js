@@ -157,7 +157,7 @@ class ideaCard extends React.Component {
 
                     <CardMedia className={classes.media} image={' '}>
                         {/* <img src="https://material-ui.com/static/images/grid-list/breakfast.jpg" */}
-                        <img src={settings.imageServerUrl + '/images/' + idea.coverImage}
+                        <img src={settings.imageServerUrl + settings.imagePath+ idea.coverImage}
                             alt={idea.title}
                             className={classes.cardMediaImage}
                         />
