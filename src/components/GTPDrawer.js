@@ -2,13 +2,16 @@ import React from 'react';
 import Drawer from '@material-ui/core/Drawer';
 import compose from 'recompose/compose';
 import { withStyles } from '@material-ui/core/styles';
-import withWidth from 'material-ui/utils/withWidth';
-import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
+import withWidth from '@material-ui/core/withWidth';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from 'material-ui-icons/Inbox';
 import DraftsIcon from 'material-ui-icons/Drafts';
-import Icon from 'material-ui/Icon';
+import Icon from '@material-ui/core/Icon';
 import PropTypes from 'prop-types';
-import Divider from 'material-ui/Divider';
+import Divider from '@material-ui/core/Divider';
 
 const drawerWidth = 150;
 const styles = theme => ({

@@ -1,7 +1,7 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import Chip from 'material-ui/Chip';
+import Chip from '@material-ui/core/Chip';
 import axios from 'axios';
 import settings from '../../config';
 import {isEmailFormatOK} from '../Validator';
@@ -9,11 +9,15 @@ import { connect } from 'react-redux';
 import { snackbarMessage } from '../../actions';
 import { push } from 'react-router-redux';
 import { withStyles } from '@material-ui/core/styles';
-import Icon from 'material-ui/Icon';
+import Icon from '@material-ui/core/Icon';
 import PropTypes from 'prop-types';
-import Dialog, { DialogActions, DialogContent, DialogContentText, DialogTitle } from 'material-ui/Dialog';
-import IconButton from 'material-ui/IconButton';
-import Tooltip from 'material-ui/Tooltip';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const styles = theme => ({
     form: {

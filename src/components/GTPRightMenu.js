@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import IconButton from 'material-ui/IconButton';
-import { MenuItem, MenuList } from 'material-ui/Menu';
-import Icon from 'material-ui/Icon';
+import IconButton from '@material-ui/core/IconButton';
+import MenuItem from '@material-ui/core/MenuItem';
+import MenuList from '@material-ui/core/MenuList';
+import Icon from '@material-ui/core/Icon';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import Popover from 'material-ui/Popover';
