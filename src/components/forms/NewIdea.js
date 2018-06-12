@@ -48,9 +48,9 @@ class NewIdea extends React.Component {
             isIdeaTitleErr: false,
             // default date will be either now or current trip's start date
             ideaStartDate: new Date(this.props.selectedTrip.startDate) > Date.now() ?
-                new Date(this.props.selectedTrip.startDate) : Date.now(),
+                new Date(this.props.selectedTrip.startDate) : new Date(),
             ideaEndDate: new Date(this.props.selectedTrip.startDate) > Date.now() ?
-                new Date(this.props.selectedTrip.startDate) : Date.now(),
+                new Date(this.props.selectedTrip.startDate) : new Date(),
             ideaTitle: '',
             ideaTitleErrText: '',
             isIdeaAddressErr: false,
@@ -237,11 +237,11 @@ class NewIdea extends React.Component {
             address: document.getElementById('googleMapAutocomplete').value,
             description: document.getElementById('ideaDescription').value,
             link: document.getElementById('ideaLink').value,
-            startAt: this.state.ideaStartDate,
-            endAt: this.state.ideaEndDate,
+            startAt: this.state.ideaStartDate.toString(),
+            endAt: this.state.ideaEndDate.toString(),
             tripId: this.props.selectedTrip.tripId,
             userId: this.props.userInfo.userId,
-            inItinerary: this.state.inItinerary,
+            inItinerary: this.state.inItinerary? 1: 0,
             type: this.state.type,
         }
         if (this.validateAll(ideaData)) {
