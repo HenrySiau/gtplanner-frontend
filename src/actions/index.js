@@ -6,6 +6,7 @@ import { SET_INVITE_CODE, REMOVE_INVITE_CODE, UPDATE_RECENT_TRIPS, TOGGLE_CHAT_R
 import { DRAWER_EXTEND, DRAWER_FOLD, UPDATE_USER_INFO, ADD_MEMBER, REMOVE_MEMBER, CHANGE_CHAT_ROOM_TABS_VALUE, UPDATE_FILTERED_MARKER_LIST } from './actionTypes';
 import { INCREASE_CHAT_MESSAGE_BADGE_CONTENT, CLEAR_CHAT_MESSAGE_BADGE_CONTENT, INCREASE_SYSTEM_MESSAGE_BADGE_CONTENT, CLEAR_SYSTEM_MESSAGE_BADGE_CONTENT } from './actionTypes';
 import { UPDATE_IDEAS, ADD_IDEA, SET_DASHBOARD_VIEW_MAP, SET_DASHBOARD_VIEW_LIST, SET_DASHBOARD_VIEW_SPLIT, UPDATE_PROFILE_PICTURE_URL, SET_VIEW_ITINERARY, SET_VIEW_IDEA } from './actionTypes';
+import { UPDATE_FILTERED_IDEAS } from './actionTypes';
 
 const login = () => ({ type: LOG_IN });
 
@@ -268,3 +269,7 @@ export const setDashboardViewToList = () => ({ type: SET_DASHBOARD_VIEW_LIST });
 export const setDashboardViewToSplit = () => ({ type: SET_DASHBOARD_VIEW_SPLIT });
 export const showItinerary = () => ({ type: SET_VIEW_ITINERARY });
 export const showIdeas = () => ({ type: SET_VIEW_IDEA });
+export const updateFilteredIdeas = (ideas) => ({
+    type: UPDATE_FILTERED_IDEAS,
+    ideas: ideas,
+});

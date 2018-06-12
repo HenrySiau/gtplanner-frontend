@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { updateFilteredMarkers, snackbarMessage, updateIdeas, addIdea } from '../actions';
+import { updateFilteredMarkers, snackbarMessage, updateIdeas, addIdea, updateFilteredIdeas } from '../actions';
 import scriptLoader from 'react-async-script-loader';
 import instanceConfig from '../instanceConfig';
 import GoogleMaps from '../components/dashboard/GoogleMaps';
@@ -31,6 +31,8 @@ const mapStateToProps = (state) => {
         isDrawerExtended: state.isDrawerExtended,
         isChatRoomOpen: state.isChatRoomOpen,
         dashboardView: state.dashboardView,
+        ideasOrItinerary: state.ideasOrItinerary,
+        filteredIdeas: state.filteredIdeas
     }
 }
 
@@ -48,6 +50,9 @@ const mapDispatchToProps = dispatch => {
         addIdea: idea => {
             dispatch(addIdea(idea));
         }, 
+        updateFilteredIdeas: ideas => {
+            dispatch(updateFilteredIdeas(ideas));
+        },
     }
 }
 

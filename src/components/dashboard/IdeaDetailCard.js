@@ -22,10 +22,7 @@ import settings from '../../config';
 
 const styles = theme => ({
     card: {
-        // maxWidth: 800,
-        // minWidth: 250,
-        width: '100%',
-        margin: '5px',
+        maxWidth: 800,
     },
     media: {
         // height: '100px',
@@ -70,7 +67,7 @@ const styles = theme => ({
     },
 });
 
-class IdeaCard extends React.Component {
+class IdeaDetailCard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -78,45 +75,10 @@ class IdeaCard extends React.Component {
         }
     }
     render() {
-        const { classes, idea, isChatRoomOpen, members } = this.props;
+        const { classes, idea, members } = this.props;
         let startAt = new Date(idea.startAt);
         let endAt = new Date(idea.endAt);
         let subHeader = `${startAt.getMonth()}/${startAt.getDay()} ${startAt.getHours()}:${startAt.getMinutes()} -- ${endAt.getMonth()}/${endAt.getDay()} ${endAt.getHours()}:${endAt.getMinutes()}`;
-        const getIdeaCardWidth = breakPoint => {
-            switch (breakPoint) {
-                case 'xs':
-                    return 12
-                    break
-                case 'sm':
-                    if (isChatRoomOpen) {
-                        return 12
-                    } else {
-                        return 6
-                    }
-                    break
-                case 'md':
-                    if (isChatRoomOpen) {
-                        return 6
-                    } else {
-                        return 4
-                    }
-                    break
-                case 'lg':
-                    if (isChatRoomOpen) {
-                        return 4
-                    } else {
-                        return 3
-                    }
-                    break
-                case 'xl':
-                    if (isChatRoomOpen) {
-                        return 3
-                    } else {
-                        return 2
-                    }
-                    break
-            }
-        }
         const getUserName = userId => {
             let member = members.get(userId);
             if (member) {
@@ -127,11 +89,7 @@ class IdeaCard extends React.Component {
         }
         const userName = getUserName(idea.userId);
         return (
-            <Grid item
-                xs={getIdeaCardWidth('xs')} sm={getIdeaCardWidth('sm')}
-                md={getIdeaCardWidth('md')} lg={getIdeaCardWidth('lg')}
-                xl={getIdeaCardWidth('xl')}
-            >
+            <Grid item xs={12}>
                 <Card className={classes.card} key={idea.id}>
                     <CardHeader
                         avatar={
@@ -157,7 +115,7 @@ class IdeaCard extends React.Component {
 
                     <CardMedia className={classes.media} image={' '}>
                         {/* <img src="https://material-ui.com/static/images/grid-list/breakfast.jpg" */}
-                        <img src={settings.imageServerUrl + settings.imagePath+ idea.coverImage}
+                        <img src={settings.imageServerUrl + settings.imagePath + idea.coverImage}
                             alt={idea.title}
                             className={classes.cardMediaImage}
                         />
@@ -190,9 +148,8 @@ class IdeaCard extends React.Component {
     }
 }
 
-IdeaCard.propTypes = {
+IdeaDetailCard.propTypes = {
     idea: PropTypes.object.isRequired,
-    isChatRoomOpen: PropTypes.bool.isRequired,
     members: PropTypes.object.isRequired,
 };
-export default withStyles(styles)(IdeaCard)
+export default withStyles(styles)(IdeaDetailCard)

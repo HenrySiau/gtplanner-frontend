@@ -19,6 +19,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import withWidth from '@material-ui/core/withWidth';
 import compose from 'recompose/compose';
+import IdeaDetailCard from './IdeaDetailCard';
 
 const styles = theme => ({
     root: {
@@ -89,6 +90,17 @@ class GoogleMaps extends React.Component {
         // window.googleMapDefaultIcon = this.makeMarkerIcon('0091ff');
         window.googleMapDefaultIcon = this.makeMarkerIcon('ff5151');
         window.googleMapHighlightedIcon = this.makeMarkerIcon('fff051');
+        let filteredIdeasList = [];
+        if(this.props.ideasOrItinerary === 'itinerary'){
+            this.props.ideas.forEach(idea => {
+                if(idea.inItinerary){
+                    filteredIdeasList.push(idea);
+                }
+            })
+            this.props.updateFilteredIdeas(filteredIdeasList);
+        } else if(this.props.ideasOrItinerary === 'ideas'){
+            this.props.updateFilteredIdeas(this.props.ideas);
+        }
         console.log('get ideas for tripId: ' + this.props.tripId);
         axios({
             method: 'GET',
@@ -127,9 +139,9 @@ class GoogleMaps extends React.Component {
                 console.error(error);
             })
 
-            window.map.addListener('click', function() {
-                window.googleMapInfoWindow.close();
-              });
+        window.map.addListener('click', function () {
+            window.googleMapInfoWindow.close();
+        });
 
     }
     componentDidUpdate(prevProps) {
@@ -165,10 +177,10 @@ class GoogleMaps extends React.Component {
         });
         marker.addListener('mouseover', function () {
             this.setIcon(window.googleMapHighlightedIcon);
-            if(window.googleMapInfoWindow.marker !== marker ){
+            if (window.googleMapInfoWindow.marker !== marker) {
                 that.populateInfoWindow(marker, window.googleMapInfoWindow, window.map);
             }
-            
+
         });
         marker.addListener('mouseout', function () {
             this.setIcon(window.window.googleMapDefaultIcon);
@@ -182,7 +194,7 @@ class GoogleMaps extends React.Component {
         <h4>${marker.title}</h4>
         <img src="${marker.coverImageUrl}" alt="" style="width: 100px"/>
         </div>`;
-        
+
         infoWindow.setContent(content);
         infoWindow.open(map, marker);
     }
@@ -192,7 +204,7 @@ class GoogleMaps extends React.Component {
     }
 
     render() {
-        const { classes, isDrawerOpen, isChatRoomOpen, isDrawerExtended, ideas, dashboardView, selectedTrip } = this.props;
+        const { classes, isDrawerOpen, isChatRoomOpen, isDrawerExtended, ideas, dashboardView, selectedTrip, ideasOrItinerary, filteredIdeas} = this.props;
         const getSectionClassName = section => {
             if (section === 'map') {
                 switch (dashboardView) {
@@ -226,7 +238,7 @@ class GoogleMaps extends React.Component {
             }
         }
         let ideaCards = [];
-        ideas.forEach(idea => {
+        filteredIdeas.forEach(idea => {
             ideaCards.push(
                 <IdeaCard
                     idea={idea}
@@ -251,39 +263,52 @@ class GoogleMaps extends React.Component {
             return { width: `calc(100vw - ${spaceTaken}px` }
         }
 
+        const Ideas = () => {
+            return (
+                <div>
+                    <div className={getSectionClassName('list')}>
+                        <Grid container spacing={8} justify={'flex-start'}>
+                            {ideaCards}
+                        </Grid>
+                    </div>
+                    <Paper className={classes.actionsBar} square={true}>
+                        <div className={classes.filters}>
+                            <Typography variant="body2" >
+                                {`filters...  filters...    .`}
+                            </Typography>
+                            <Typography variant="body2" >
+                                {`filters...   filters...   .`}
+                            </Typography>
+                        </div>
+                        <Tooltip title="Add an idea" placement="top">
+                            <IconButton aria-label="Add Idea"
+                                onClick={() => { this.setState({ isDialogOpen: true }) }}
+                                className={classes.dialogButton}>
+                                <AddCircleIcon />
+                            </IconButton>
+                        </Tooltip>
+                    </Paper>
+                </div>
+            )
+        }
+        const IdeaDetail = () => {
+            return (
+                <h1>{'idea detail '}</h1>
+            )
+        }
+
         return (
-            // <div>
             <Grid container direction={'column'} justify={'space-between'} className={classes.root}>
                 <Grid style={mapContainerStyle()} id='googleMap' className={getSectionClassName('map')} ></Grid>
-                <div className={getSectionClassName('list')}>
-                    <Grid container spacing={8} justify={'flex-start'}>
-                        {ideaCards}
-                    </Grid>
-                </div>
 
-                <Paper className={classes.actionsBar} square={true}>
-                    <div className={classes.filters}>
-                        <Typography variant="body2" >
-                            {`filters...  filters...    .`}
-                        </Typography>
-                        <Typography variant="body2" >
-                            {`filters...   filters...   .`}
-                        </Typography>
-                    </div>
-                    <Tooltip title="Add an idea" placement="top">
-                        <IconButton aria-label="Add Idea"
-                            onClick={() => { this.setState({ isDialogOpen: true }) }}
-                            className={classes.dialogButton}>
-                            <AddCircleIcon />
-                        </IconButton>
-                    </Tooltip>
-                </Paper>
-
+                <Ideas />
+                {/* {ideasOrItinerary === 'itinerary' && <IdeaDetail />} */}
                 <Dialog
                     disableBackdropClick={true}
                     open={this.state.isDialogOpen}
                 >
                     <DialogTitle >
+
                         {"Add new idea"}
                     </DialogTitle>
                     <DialogContent>
@@ -296,7 +321,6 @@ class GoogleMaps extends React.Component {
                         />
                     </DialogContent>
                 </Dialog>
-                {/* </div> */}
             </Grid>
         )
     }

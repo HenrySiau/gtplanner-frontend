@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { toggleDrawer, updateSelectedTrip, toggleDrawerExtend, toggleDrawerFold } from '../actions';
-import { setDashboardViewToMap, setDashboardViewToList, setDashboardViewToSplit, showItinerary,  showIdeas} from '../actions';
+import { setDashboardViewToMap, setDashboardViewToList, setDashboardViewToSplit, showItinerary,  showIdeas, updateFilteredIdeas} from '../actions';
 import GTPDrawer from '../components/GTPDrawer';
 
 const mapStateToProps = (state) => {
@@ -13,6 +13,8 @@ const mapStateToProps = (state) => {
         isLoggedIn: state.isLoggedIn,
         dashboardView: state.dashboardView,
         ideasOrItinerary: state.ideasOrItinerary,
+        // filteredIdeas: state.filteredIdeas,
+        ideas: state.ideas,
     }
 }
 
@@ -44,6 +46,9 @@ const mapDispatchToProps = dispatch => {
         },
         showIdeas: () => {
             dispatch(showIdeas());
+        },
+        updateFilteredIdeas: (ideas) => {
+            dispatch(updateFilteredIdeas(ideas));
         },
     }
 }

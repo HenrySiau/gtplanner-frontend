@@ -13,6 +13,7 @@ import { filteredMarkerList } from './googleMapMarkers';
 import { ideas } from './ideas';
 import { dashboardView } from './dashboardView';
 import { ideasOrItinerary } from './ideasOrItinerary';
+import { filteredIdeas } from './filteredIdeas';
 
 export default combineReducers({
     isLoggedIn,
@@ -32,4 +33,5 @@ export default combineReducers({
     ideas,
     dashboardView,
     ideasOrItinerary,
+    filteredIdeas,
 })

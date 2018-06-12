@@ -39,7 +39,7 @@ const mapStateToProps = (state) => {
         selectedTrip: state.selectedTrip,
         userInfo: state.userInfo,
         chatRoomTabsValue: state.chatRoomTabsValue,
-        chatMessageBadgeContent: state.chatMessageBadgeContent
+        chatMessageBadgeContent: state.chatMessageBadgeContent,
     }
 }
 

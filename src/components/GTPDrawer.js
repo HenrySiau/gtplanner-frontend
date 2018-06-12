@@ -102,8 +102,30 @@ class GTPDrawer extends React.Component {
         }
     }
 
+    showItinerary = () => {
+        let filteredIdeasList = []
+        this.props.ideas.forEach(idea => {
+            if (idea.inItinerary) {
+                filteredIdeasList.push(idea)
+            }
+        })
+        this.props.updateFilteredIdeas(filteredIdeasList);
+        this.props.showItinerary();
+    }
+
+    showIdeas = () => {
+        let filteredIdeasList = []
+        this.props.ideas.forEach(idea => {
+            if (!idea.inItinerary) {
+                filteredIdeasList.push(idea)
+            }
+        })
+        this.props.updateFilteredIdeas(filteredIdeasList);
+        this.props.showIdeas();
+    }
+
     render() {
-        const { classes, dashboardView, ideasOrItinerary, showItinerary, showIdeas } = this.props;
+        const { classes, dashboardView, ideasOrItinerary, } = this.props;
         const sideList = (
             <div className={classes.list}>
                 <List>
@@ -127,13 +149,13 @@ class GTPDrawer extends React.Component {
                         <ListItemText primary="Split" />
                     </ListItem>
                     <Divider />
-                    <ListItem button onClick={showItinerary} className={ideasOrItinerary === 'itinerary' && classes.selected}>
+                    <ListItem button onClick={this.showItinerary} className={ideasOrItinerary === 'itinerary' && classes.selected}>
                         <ListItemIcon>
                             <Icon >event</Icon>
                         </ListItemIcon>
                         <ListItemText primary="Itinerary" />
                     </ListItem>
-                    <ListItem button onClick={showIdeas} className={ideasOrItinerary === 'idea' && classes.selected}>
+                    <ListItem button onClick={this.showIdeas} className={ideasOrItinerary === 'ideas' && classes.selected}>
                         <ListItemIcon>
                             <Icon >favorite</Icon>
                         </ListItemIcon>
