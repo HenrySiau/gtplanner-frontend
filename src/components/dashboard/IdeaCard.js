@@ -77,6 +77,19 @@ class IdeaCard extends React.Component {
 
         }
     }
+    handlePlaceIconOnClick = (position) => {
+        console.log(position);
+        window.map.panTo(position);
+    }
+    populateInfoWindow = (marker, infoWindow, map) => {
+        let content = `<div style="width: 100px, margin: 0">
+        <h4>${marker.title}</h4>
+        <img src="${marker.coverImageUrl}" alt="" style="width: 100px"/>
+        </div>`;
+
+        infoWindow.setContent(content);
+        infoWindow.open(map, marker);
+    }
     render() {
         const { classes, idea, isChatRoomOpen, members } = this.props;
         let startAt = new Date(idea.startAt);
@@ -141,7 +154,15 @@ class IdeaCard extends React.Component {
                             </div>
                         }
                         action={
-                            <IconButton className="leftTooltip">
+                            <IconButton className="leftTooltip" onClick={()=>{
+                                window.map.panTo({lat:Number(idea.lat), lng: Number(idea.lng)});
+                                // this.handlePlaceIconOnClick({lat:Number(idea.lat), lng: Number(idea.lng)})
+                                let marker = window.markers.get(idea.id);
+                                if(marker){
+                                    marker.setIcon(window.googleMapHighlightedIcon);
+                                    this.populateInfoWindow(marker, window.googleMapInfoWindow, window.map);
+                                }
+                            }} >
                                 <PlaceIcon />
                                 <span className="tooltiptext">{'Show on the map'}</span>
                             </IconButton>
@@ -194,5 +215,6 @@ IdeaCard.propTypes = {
     idea: PropTypes.object.isRequired,
     isChatRoomOpen: PropTypes.bool.isRequired,
     members: PropTypes.object.isRequired,
+    className: PropTypes.object,
 };
 export default withStyles(styles)(IdeaCard)
