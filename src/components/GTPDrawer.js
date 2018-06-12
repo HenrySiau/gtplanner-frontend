@@ -50,6 +50,9 @@ const styles = theme => ({
     },
     selected: {
         backgroundColor: grey[200]
+    },
+    unSelected: {
+
     }
 });
 
@@ -130,32 +133,32 @@ class GTPDrawer extends React.Component {
             <div className={classes.list}>
                 <List>
                     {this.generateNavigationIcon()}
-                    <ListItem button onClick={this.props.setDashboardViewToMap} className={dashboardView === 'map' && classes.selected}>
+                    <ListItem button onClick={this.props.setDashboardViewToMap} className={dashboardView === 'map'? classes.selected : classes.unSelected}>
                         <ListItemIcon >
                             <Icon >map</Icon>
                         </ListItemIcon>
                         <ListItemText primary="Map" />
                     </ListItem>
-                    <ListItem button onClick={this.props.setDashboardViewToList} className={dashboardView === 'list' && classes.selected}>
+                    <ListItem button onClick={this.props.setDashboardViewToList} className={dashboardView === 'list' ? classes.selected : classes.unSelected}>
                         <ListItemIcon>
                             <Icon >view_list</Icon>
                         </ListItemIcon>
                         <ListItemText primary="Events" />
                     </ListItem>
-                    <ListItem button onClick={this.props.setDashboardViewToSplit} className={dashboardView === 'split' && classes.selected}>
+                    <ListItem button onClick={this.props.setDashboardViewToSplit} className={dashboardView === 'split' ? classes.selected : classes.unSelected}>
                         <ListItemIcon>
                             <Icon >pie_chart</Icon>
                         </ListItemIcon>
                         <ListItemText primary="Split" />
                     </ListItem>
                     <Divider />
-                    <ListItem button onClick={this.showItinerary} className={ideasOrItinerary === 'itinerary' && classes.selected}>
+                    <ListItem button onClick={this.showItinerary} className={ideasOrItinerary === 'itinerary' ? classes.selected : classes.unSelected}>
                         <ListItemIcon>
                             <Icon >event</Icon>
                         </ListItemIcon>
                         <ListItemText primary="Itinerary" />
                     </ListItem>
-                    <ListItem button onClick={this.showIdeas} className={ideasOrItinerary === 'ideas' && classes.selected}>
+                    <ListItem button onClick={this.showIdeas} className={ideasOrItinerary === 'ideas' ? classes.selected : classes.unSelected}>
                         <ListItemIcon>
                             <Icon >favorite</Icon>
                         </ListItemIcon>
