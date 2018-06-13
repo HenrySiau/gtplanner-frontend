@@ -66,6 +66,7 @@ class NewIdea extends React.Component {
             imageScale: 1,
             imageType: 'image/png',
             isImageReady: false,
+            coverImageError: false,
         }
     }
 
@@ -84,6 +85,7 @@ class NewIdea extends React.Component {
             this.setState({
                 imageFile: fileReader.result,
                 isImageReady: true,
+                coverImageError: false,
             });
 
         }, false);
@@ -104,16 +106,17 @@ class NewIdea extends React.Component {
         if (event.target.value.length === 1) {
             this.setState({
                 isIdeaTitleErr: true,
-                ideaTitleErrText: 'Title must be at least 2 characters'
+                ideaTitleErrText: 'Title must be 2-30 characters'
             });
         }
         if (event.target.value.length === 0) {
-            this.setState({
-                isIdeaTitleErr: false,
-                ideaTitleErrText: ''
-            });
+            if (!this.state.isIdeaTitleErr) {
+                this.setState({
+                    isIdeaTitleErr: false,
+                    ideaTitleErrText: ''
+                });
+            }
         }
-
     }
     handleTitleChange = (event) => {
         if (this.state.isIdeaTitleErr) {
@@ -136,6 +139,19 @@ class NewIdea extends React.Component {
                     ideaTitle: event.target.value
                 });
             }
+        }
+    }
+    handleTypeChange = event => {
+        if (this.state.typeHelperText) {
+            this.setState({
+                isTypeError: false,
+                typeHelperText: '',
+                type: event.target.value
+            });
+        } else {
+            this.setState({
+                type: event.target.value
+            });
         }
     }
 
@@ -184,53 +200,14 @@ class NewIdea extends React.Component {
             result = false
         }
         if (!this.state.isImageReady) {
-            // TODO add warning label for missing image
+            this.setState({
+                coverImageError: true
+            });
             result = false
         }
-
         return result;
     }
-    testImageUpload = () => {
-        console.log('testImageUpload');
-        if (this.state.isImageReady) {
-            const canvas = this.ImageEditor.getImage();
-            // const image = canvas.toDataURL();
-            let data = new FormData();
-            canvas.toBlob(blob => {
-                data.append('imageData', blob);
-                data.append('message', 'hello World, lol');
-                data.append('imageType', this.state.imageType);
-                console.log('blob: ' + blob);
-                axios({
-                    method: 'POST',
-                    url: settings.serverUrl + '/api/post/image/upload',
-                    json: true,
-                    headers: {
-                        'x-access-token': localStorage.getItem('id_token'),
-                        // 'Content-Type': 'multipart/form-data',
-                    },
-                    // data: { 
-                    //     imageData: data ,
-                    //     message: 'Hello... lol',
-                    //     imageType: this.state.imageType,
-                    // }
-                    data: data,
-                })
-                    .then(response => {
-                        console.log(response);
 
-
-                    })
-                    .catch(error => {
-                        console.error(error);
-                    })
-
-            }, this.state.imageType, 1)
-        }
-        else {
-            console.log('please add image');
-        }
-    }
     handleSubmit = () => {
         let ideaData = {
             title: this.state.ideaTitle,
@@ -241,7 +218,7 @@ class NewIdea extends React.Component {
             endAt: this.state.ideaEndDate.toString(),
             tripId: this.props.selectedTrip.tripId,
             userId: this.props.userInfo.userId,
-            inItinerary: this.state.inItinerary? 1: 0,
+            inItinerary: this.state.inItinerary ? 1 : 0,
             type: this.state.type,
         }
         if (this.validateAll(ideaData)) {
@@ -333,7 +310,7 @@ class NewIdea extends React.Component {
                     <Select
                         native
                         value={this.state.type}
-                        onChange={(event) => { this.setState({ type: event.target.value }) }}
+                        onChange={this.handleTypeChange}
                         inputProps={{
                             id: 'type-native-simple',
                         }}
@@ -357,6 +334,7 @@ class NewIdea extends React.Component {
                     />
                     <input id='imageFileInput' name="Image File" type="file" accept="image/*" /><br />
                     {/* <p>Zoom</p> */}
+                    {this.state.coverImageError && <p style={{ color: 'red' }}>{'** image required **'} </p>}
                     <label>Zoom  </label><br />
                     <input id="imageZoomSlider" type="range" min="100" max="400" defaultValue="100" style={{ width: '450px' }} />
                     <br />
