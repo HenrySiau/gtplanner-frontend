@@ -154,13 +154,19 @@ class IdeaCard extends React.Component {
                             </div>
                         }
                         action={
-                            <IconButton className="leftTooltip" onClick={()=>{
-                                window.map.panTo({lat:Number(idea.lat), lng: Number(idea.lng)});
+                            <IconButton className="leftTooltip" onClick={() => {
+                                window.map.panTo({ lat: Number(idea.lat), lng: Number(idea.lng) });
                                 // this.handlePlaceIconOnClick({lat:Number(idea.lat), lng: Number(idea.lng)})
                                 let marker = window.markers.get(idea.id);
-                                if(marker){
-                                    marker.setIcon(window.googleMapHighlightedIcon);
-                                    this.populateInfoWindow(marker, window.googleMapInfoWindow, window.map);
+                                if (marker) {
+                                    if (window.activeMarker != marker) {
+                                        if (window.activeMarker) {
+                                            window.activeMarker.setIcon(window.window.googleMapDefaultIcon);
+                                        }
+                                        window.activeMarker = marker;
+                                        marker.setIcon(window.googleMapHighlightedIcon);
+                                        this.populateInfoWindow(marker, window.googleMapInfoWindow, window.map);
+                                    }
                                 }
                             }} >
                                 <PlaceIcon />
@@ -178,7 +184,7 @@ class IdeaCard extends React.Component {
 
                     <CardMedia className={classes.media} image={' '}>
                         {/* <img src="https://material-ui.com/static/images/grid-list/breakfast.jpg" */}
-                        <img src={settings.imageServerUrl + settings.imagePath+ idea.coverImage}
+                        <img src={settings.imageServerUrl + settings.imagePath + idea.coverImage}
                             alt={idea.title}
                             className={classes.cardMediaImage}
                         />

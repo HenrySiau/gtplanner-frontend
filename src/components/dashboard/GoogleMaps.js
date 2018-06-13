@@ -20,6 +20,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import withWidth from '@material-ui/core/withWidth';
 import compose from 'recompose/compose';
 import IdeaDetailCard from './IdeaDetailCard';
+import { makeMarker, makeMarkerIcon } from '../mapFunctions';
 
 const styles = theme => ({
     root: {
@@ -87,21 +88,10 @@ class GoogleMaps extends React.Component {
         });
         window.googleMapBounds = new window.google.maps.LatLngBounds();
         window.googleMapInfoWindow = new window.google.maps.InfoWindow();
+        window.activeMarker = null;
         // window.googleMapDefaultIcon = this.makeMarkerIcon('0091ff');
-        window.googleMapDefaultIcon = this.makeMarkerIcon('ff5151');
-        window.googleMapHighlightedIcon = this.makeMarkerIcon('fff051');
-        let filteredIdeasList = [];
-        if(this.props.ideasOrItinerary === 'itinerary'){
-            this.props.ideas.forEach(idea => {
-                if(idea.inItinerary){
-                    filteredIdeasList.push(idea);
-                }
-            })
-            this.props.updateFilteredIdeas(filteredIdeasList);
-        } else if(this.props.ideasOrItinerary === 'ideas'){
-            this.props.updateFilteredIdeas(this.props.ideas);
-        }
-        console.log('get ideas for tripId: ' + this.props.tripId);
+        window.googleMapDefaultIcon = makeMarkerIcon('ff5151');
+        window.googleMapHighlightedIcon = makeMarkerIcon('fff051');
         axios({
             method: 'GET',
             url: settings.serverUrl + '/api/get/ideas',
@@ -116,8 +106,19 @@ class GoogleMaps extends React.Component {
             .then(response => {
                 console.log('get/ideas response: ' + response);
                 let ideas = response.data.ideas;
+                let filteredIdeas = [];
                 if (ideas) {
                     ideas.forEach(idea => {
+                        if (this.props.ideasOrItinerary === 'ideas') {
+                            if (!idea.inItinerary) {
+                                filteredIdeas.push(idea);
+                            }
+                        }
+                        if (this.props.ideasOrItinerary === 'itinerary') {
+                            if (idea.inItinerary) {
+                                filteredIdeas.push(idea);
+                            }
+                        }
                         let markerInfo = {
                             id: idea.id,
                             position: { lat: Number(idea.lat), lng: Number(idea.lng) },
@@ -127,12 +128,13 @@ class GoogleMaps extends React.Component {
                             coverImageUrl: settings.imageServerUrl + settings.imagePath + idea.coverImage,
                             description: idea.description
                         }
-                        let marker = this.makeMarker(markerInfo);
+                        let marker = makeMarker(markerInfo);
                         window.markers.set(idea.id, marker);
                         window.googleMapBounds.extend({ lat: Number(idea.lat), lng: Number(idea.lng) });
                     }) // end ideas.forEach
                     window.map.fitBounds(window.googleMapBounds);
                     this.props.updateIdeas(ideas);
+                    this.props.updateFilteredIdeas(filteredIdeas);
                 }
             })
             .catch(error => {
@@ -140,63 +142,12 @@ class GoogleMaps extends React.Component {
             })
 
         window.map.addListener('click', function () {
-            window.googleMapInfoWindow.close();
-        });
-
-    }
-    componentDidUpdate(prevProps) {
-
-    }
-    makeMarkerIcon = markerColor => {
-        var markerImage = new window.google.maps.MarkerImage(
-            'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|' + markerColor +
-            '|40|_|%E2%80%A2',
-            new window.google.maps.Size(21, 34),
-            new window.google.maps.Point(0, 0),
-            new window.google.maps.Point(10, 34),
-            new window.google.maps.Size(21, 34));
-        return markerImage;
-    }
-
-    makeMarker = markerInfo => {
-        let marker = new window.google.maps.Marker({
-            id: markerInfo.id,
-            // position: { lat: Number(idea.lat), lng: Number(idea.lng) },
-            position: markerInfo.position,
-            title: markerInfo.title,
-            icon: markerInfo.icon,
-            map: markerInfo.map,
-            coverImageUrl: markerInfo.coverImageUrl,
-            description: markerInfo.description,
-        });
-        let that = this;
-        marker.addListener('click', function () {
-            // focusPlace(this.placeID, this.position);
-            window.map.panTo(this.position);
-            console.log('you clicked : ' + this.id);
-        });
-        marker.addListener('mouseover', function () {
-            this.setIcon(window.googleMapHighlightedIcon);
-            if (window.googleMapInfoWindow.marker !== marker) {
-                that.populateInfoWindow(marker, window.googleMapInfoWindow, window.map);
+            if(window.activeMarker){
+                window.activeMarker.setIcon(window.window.googleMapDefaultIcon);
+                window.googleMapInfoWindow.close();
             }
-
         });
-        marker.addListener('mouseout', function () {
-            this.setIcon(window.window.googleMapDefaultIcon);
-            // window.googleMapInfoWindow.close();
-        });
-        return marker
-    }
 
-    populateInfoWindow = (marker, infoWindow, map) => {
-        let content = `<div style="width: 100px, margin: 0">
-        <h4>${marker.title}</h4>
-        <img src="${marker.coverImageUrl}" alt="" style="width: 100px"/>
-        </div>`;
-
-        infoWindow.setContent(content);
-        infoWindow.open(map, marker);
     }
 
     toggleDialogClose = () => {
@@ -204,7 +155,7 @@ class GoogleMaps extends React.Component {
     }
 
     render() {
-        const { classes, isDrawerOpen, isChatRoomOpen, isDrawerExtended, ideas, dashboardView, selectedTrip, ideasOrItinerary, filteredIdeas} = this.props;
+        const { classes, isDrawerOpen, isChatRoomOpen, isDrawerExtended, ideas, dashboardView, selectedTrip, ideasOrItinerary, filteredIdeas } = this.props;
         const getSectionClassName = section => {
             if (section === 'map') {
                 switch (dashboardView) {

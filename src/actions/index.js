@@ -7,6 +7,7 @@ import { DRAWER_EXTEND, DRAWER_FOLD, UPDATE_USER_INFO, ADD_MEMBER, REMOVE_MEMBER
 import { INCREASE_CHAT_MESSAGE_BADGE_CONTENT, CLEAR_CHAT_MESSAGE_BADGE_CONTENT, INCREASE_SYSTEM_MESSAGE_BADGE_CONTENT, CLEAR_SYSTEM_MESSAGE_BADGE_CONTENT } from './actionTypes';
 import { UPDATE_IDEAS, ADD_IDEA, SET_DASHBOARD_VIEW_MAP, SET_DASHBOARD_VIEW_LIST, SET_DASHBOARD_VIEW_SPLIT, UPDATE_PROFILE_PICTURE_URL, SET_VIEW_ITINERARY, SET_VIEW_IDEA } from './actionTypes';
 import { UPDATE_FILTERED_IDEAS } from './actionTypes';
+import {makeMarker} from '../components/mapFunctions';
 
 const login = () => ({ type: LOG_IN });
 
@@ -269,7 +270,34 @@ export const setDashboardViewToList = () => ({ type: SET_DASHBOARD_VIEW_LIST });
 export const setDashboardViewToSplit = () => ({ type: SET_DASHBOARD_VIEW_SPLIT });
 export const showItinerary = () => ({ type: SET_VIEW_ITINERARY });
 export const showIdeas = () => ({ type: SET_VIEW_IDEA });
-export const updateFilteredIdeas = (ideas) => ({
-    type: UPDATE_FILTERED_IDEAS,
-    ideas: ideas,
-});
+export const updateFilteredIdeas = (ideas) => {
+    if(window.markers){
+        console.log('clear markers');
+        window.markers.forEach(((value, key)=>{
+            value.setMap(null);
+        }));
+    }
+    ideas.forEach(idea => {
+        let marker = window.markers.get(idea.id);
+        if(!marker){
+            let markerInfo = {
+                id: idea.id,
+                position: { lat: Number(idea.lat), lng: Number(idea.lng) },
+                title: idea.title,
+                icon: window.googleMapDefaultIcon,
+                map: window.map,
+                coverImageUrl: settings.imageServerUrl + settings.imagePath + idea.coverImage,
+                description: idea.description
+            }
+            marker = makeMarker(markerInfo);
+            window.markers.set(idea.id, marker);
+        }else{
+            marker.setMap(window.map);
+        }
+    })
+    return ({
+
+        type: UPDATE_FILTERED_IDEAS,
+        ideas: ideas,
+    });
+}
