@@ -277,6 +277,7 @@ export const updateFilteredIdeas = (ideas) => {
             value.setMap(null);
         }));
     }
+    let bounds = new window.google.maps.LatLngBounds();
     ideas.forEach(idea => {
         let marker = window.markers.get(idea.id);
         if(!marker){
@@ -291,10 +292,12 @@ export const updateFilteredIdeas = (ideas) => {
             }
             marker = makeMarker(markerInfo);
             window.markers.set(idea.id, marker);
+            bounds.extend(markerInfo.position);
         }else{
             marker.setMap(window.map);
         }
-    })
+    });
+    window.map.fitBounds(bounds);
     return ({
 
         type: UPDATE_FILTERED_IDEAS,

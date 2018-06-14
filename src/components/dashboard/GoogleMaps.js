@@ -86,7 +86,7 @@ class GoogleMaps extends React.Component {
             zoom: 12,
             // center: { lat: 37.7749300, lng: -122.4194200 }
         });
-        window.googleMapBounds = new window.google.maps.LatLngBounds();
+        // window.googleMapBounds = new window.google.maps.LatLngBounds();
         window.googleMapInfoWindow = new window.google.maps.InfoWindow();
         window.activeMarker = null;
         // window.googleMapDefaultIcon = this.makeMarkerIcon('0091ff');
@@ -119,20 +119,7 @@ class GoogleMaps extends React.Component {
                                 filteredIdeas.push(idea);
                             }
                         }
-                        let markerInfo = {
-                            id: idea.id,
-                            position: { lat: Number(idea.lat), lng: Number(idea.lng) },
-                            title: idea.title,
-                            icon: window.googleMapDefaultIcon,
-                            map: window.map,
-                            coverImageUrl: settings.imageServerUrl + settings.imagePath + idea.coverImage,
-                            description: idea.description
-                        }
-                        let marker = makeMarker(markerInfo);
-                        window.markers.set(idea.id, marker);
-                        window.googleMapBounds.extend({ lat: Number(idea.lat), lng: Number(idea.lng) });
                     }) // end ideas.forEach
-                    window.map.fitBounds(window.googleMapBounds);
                     this.props.updateIdeas(ideas);
                     this.props.updateFilteredIdeas(filteredIdeas);
                 }
