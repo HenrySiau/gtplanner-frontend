@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { updateFilteredMarkers, snackbarMessage, updateIdeas, addIdea, updateFilteredIdeas } from '../actions';
+import { updateFilteredMarkers, snackbarMessage, updateIdeas, addIdea, updateFilteredIdeas, addFilteredIdea } from '../actions';
 import scriptLoader from 'react-async-script-loader';
 import instanceConfig from '../instanceConfig';
 import GoogleMaps from '../components/dashboard/GoogleMaps';
@@ -52,6 +52,9 @@ const mapDispatchToProps = dispatch => {
         }, 
         updateFilteredIdeas: ideas => {
             dispatch(updateFilteredIdeas(ideas));
+        },
+        addFilteredIdea: idea => {
+            dispatch(addFilteredIdea(idea));
         },
     }
 }

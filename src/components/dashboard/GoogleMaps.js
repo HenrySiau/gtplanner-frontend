@@ -20,7 +20,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import withWidth from '@material-ui/core/withWidth';
 import compose from 'recompose/compose';
 import IdeaDetailCard from './IdeaDetailCard';
-import { makeMarker, makeMarkerIcon } from '../mapFunctions';
+import { makeMarkerIcon } from '../mapFunctions';
 
 const styles = theme => ({
     root: {
@@ -84,12 +84,10 @@ class GoogleMaps extends React.Component {
     componentDidMount() {
         window.map = new window.google.maps.Map(document.getElementById('googleMap'), {
             zoom: 12,
-            // center: { lat: 37.7749300, lng: -122.4194200 }
         });
-        // window.googleMapBounds = new window.google.maps.LatLngBounds();
+        window.googleMapBounds = new window.google.maps.LatLngBounds();
         window.googleMapInfoWindow = new window.google.maps.InfoWindow();
         window.activeMarker = null;
-        // window.googleMapDefaultIcon = this.makeMarkerIcon('0091ff');
         window.googleMapDefaultIcon = makeMarkerIcon('ff5151');
         window.googleMapHighlightedIcon = makeMarkerIcon('fff051');
         axios({
@@ -129,7 +127,7 @@ class GoogleMaps extends React.Component {
             })
 
         window.map.addListener('click', function () {
-            if(window.activeMarker){
+            if (window.activeMarker) {
                 window.activeMarker.setIcon(window.window.googleMapDefaultIcon);
                 window.googleMapInfoWindow.close();
             }
@@ -141,8 +139,24 @@ class GoogleMaps extends React.Component {
         this.setState({ isDialogOpen: false })
     }
 
+    handleNewIdea = (idea) => {
+        this.props.addIdea(idea);
+        if (this.props.ideasOrItinerary === 'ideas') {
+            if (!idea.inItinerary) {
+                this.props.addFilteredIdea(idea);
+            }
+        }
+        if (this.props.ideasOrItinerary === 'itinerary') {
+            if (idea.inItinerary) {
+                this.props.addFilteredIdea(idea);
+            }
+        }
+    }
+
+
+
     render() {
-        const { classes, isDrawerOpen, isChatRoomOpen, isDrawerExtended, ideas, dashboardView, selectedTrip, ideasOrItinerary, filteredIdeas } = this.props;
+        const { classes, isDrawerOpen, isChatRoomOpen, isDrawerExtended, dashboardView, selectedTrip, filteredIdeas } = this.props;
         const getSectionClassName = section => {
             if (section === 'map') {
                 switch (dashboardView) {
@@ -255,7 +269,7 @@ class GoogleMaps extends React.Component {
                             selectedTrip={selectedTrip}
                             userInfo={this.props.userInfo}
                             toggleDialogClose={this.toggleDialogClose}
-                            addIdea={this.props.addIdea}
+                            handleNewIdea={this.handleNewIdea}
                         />
                     </DialogContent>
                 </Dialog>
