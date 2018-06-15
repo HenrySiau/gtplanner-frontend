@@ -13,6 +13,7 @@ import Icon from '@material-ui/core/Icon';
 import PropTypes from 'prop-types';
 import Divider from '@material-ui/core/Divider';
 import grey from '@material-ui/core/colors/grey';
+import { populateMarkers, clearMarkers } from './mapFunctions';
 
 const drawerWidth = 150;
 const styles = theme => ({
@@ -113,6 +114,9 @@ class GTPDrawer extends React.Component {
             }
         })
         this.props.updateFilteredIdeas(filteredIdeasList);
+        window.googleMapBounds = new window.google.maps.LatLngBounds();
+        clearMarkers(window.markers);
+        populateMarkers(filteredIdeasList, this.props.updateFocusedIdea, window.map);
         this.props.showItinerary();
     }
 
@@ -124,6 +128,9 @@ class GTPDrawer extends React.Component {
             }
         })
         this.props.updateFilteredIdeas(filteredIdeasList);
+        window.googleMapBounds = new window.google.maps.LatLngBounds();
+        clearMarkers(window.markers);
+        populateMarkers(filteredIdeasList, this.props.updateFocusedIdea, window.map);
         this.props.showIdeas();
     }
 
@@ -133,7 +140,7 @@ class GTPDrawer extends React.Component {
             <div className={classes.list}>
                 <List>
                     {this.generateNavigationIcon()}
-                    <ListItem button onClick={this.props.setDashboardViewToMap} className={dashboardView === 'map'? classes.selected : classes.unSelected}>
+                    <ListItem button onClick={this.props.setDashboardViewToMap} className={dashboardView === 'map' ? classes.selected : classes.unSelected}>
                         <ListItemIcon >
                             <Icon >map</Icon>
                         </ListItemIcon>

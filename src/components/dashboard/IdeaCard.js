@@ -205,7 +205,10 @@ class IdeaCard extends React.Component {
                             <span className="tooltiptext">{'Add to Itinerary'}</span>
                         </IconButton>
                         <div className={classes.ideaCardMoreInfoButton}>
-                            <IconButton aria-label="More Info" className="leftTooltip" >
+                            <IconButton aria-label="More Info" className="leftTooltip" onClick={
+                                () => {
+                                    this.props.updateFocusedIdea(idea.id);
+                                }}>
                                 <InfoIcon />
                                 <span className="tooltiptext">{'More Info'}</span>
                             </IconButton>
@@ -222,5 +225,6 @@ IdeaCard.propTypes = {
     isChatRoomOpen: PropTypes.bool.isRequired,
     members: PropTypes.object.isRequired,
     className: PropTypes.object,
+    updateFocusedIdea: PropTypes.func.isRequired,
 };
 export default withStyles(styles)(IdeaCard)

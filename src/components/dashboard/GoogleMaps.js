@@ -20,7 +20,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import withWidth from '@material-ui/core/withWidth';
 import compose from 'recompose/compose';
 import IdeaDetailCard from './IdeaDetailCard';
-import { makeMarkerIcon } from '../mapFunctions';
+import { makeMarkerIcon, populateMarkers, populateMarker } from '../mapFunctions';
 
 const styles = theme => ({
     root: {
@@ -120,16 +120,18 @@ class GoogleMaps extends React.Component {
                     }) // end ideas.forEach
                     this.props.updateIdeas(ideas);
                     this.props.updateFilteredIdeas(filteredIdeas);
+                    populateMarkers(filteredIdeas, this.props.updateFocusedIdea, window.map);
                 }
             })
             .catch(error => {
                 console.error(error);
             })
 
-        window.map.addListener('click', function () {
+        window.map.addListener('click', () => {
             if (window.activeMarker) {
                 window.activeMarker.setIcon(window.window.googleMapDefaultIcon);
                 window.googleMapInfoWindow.close();
+                this.props.updateFocusedIdea('');
             }
         });
 
@@ -143,11 +145,13 @@ class GoogleMaps extends React.Component {
         this.props.addIdea(idea);
         if (this.props.ideasOrItinerary === 'ideas') {
             if (!idea.inItinerary) {
+                populateMarker(idea, this.props.updateFocusedIdea(idea.id), window.map);
                 this.props.addFilteredIdea(idea);
             }
         }
         if (this.props.ideasOrItinerary === 'itinerary') {
             if (idea.inItinerary) {
+                populateMarker(idea, this.props.updateFocusedIdea(idea.id), window.map);
                 this.props.addFilteredIdea(idea);
             }
         }
@@ -156,7 +160,7 @@ class GoogleMaps extends React.Component {
 
 
     render() {
-        const { classes, isDrawerOpen, isChatRoomOpen, isDrawerExtended, dashboardView, selectedTrip, filteredIdeas } = this.props;
+        const { classes, isDrawerOpen, isChatRoomOpen, isDrawerExtended, dashboardView, selectedTrip, filteredIdeas, updateFocusedIdea } = this.props;
         const getSectionClassName = section => {
             if (section === 'map') {
                 switch (dashboardView) {
@@ -197,6 +201,7 @@ class GoogleMaps extends React.Component {
                     isChatRoomOpen={isChatRoomOpen}
                     key={idea.id}
                     members={selectedTrip.members}
+                    updateFocusedIdea={updateFocusedIdea}
                 />
             );
         });
@@ -260,7 +265,6 @@ class GoogleMaps extends React.Component {
                     open={this.state.isDialogOpen}
                 >
                     <DialogTitle >
-
                         {"Add new idea"}
                     </DialogTitle>
                     <DialogContent>

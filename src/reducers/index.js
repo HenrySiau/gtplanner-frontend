@@ -14,6 +14,7 @@ import { ideas } from './ideas';
 import { dashboardView } from './dashboardView';
 import { ideasOrItinerary } from './ideasOrItinerary';
 import { filteredIdeas } from './filteredIdeas';
+import { focusedIdea } from './focusedIdea';
 
 export default combineReducers({
     isLoggedIn,
@@ -34,4 +35,5 @@ export default combineReducers({
     dashboardView,
     ideasOrItinerary,
     filteredIdeas,
+    focusedIdea,
 })

@@ -1,4 +1,6 @@
-export function makeMarker(markerInfo) {
+import settings from '../config';
+
+export function makeMarker(markerInfo, onClick) {
     let marker = new window.google.maps.Marker({
         id: markerInfo.id,
         position: markerInfo.position,
@@ -19,6 +21,8 @@ export function makeMarker(markerInfo) {
             this.setIcon(window.googleMapHighlightedIcon);
             window.activeMarker = this;
         }
+        // markerInfo.updateFocusedIdea(markerInfo.id);
+        onClick(markerInfo.id);
     });
     marker.addListener('mouseover', function () {
         this.setIcon(window.googleMapHighlightedIcon);
@@ -50,4 +54,52 @@ export function populateInfoWindow(marker, infoWindow, map) {
 
     infoWindow.setContent(content);
     infoWindow.open(map, marker);
+}
+
+export function populateMarkers(ideas, onClick, map) {
+    ideas.forEach(idea => {
+        let marker = window.markers.get(idea.id);
+        if (!marker) {
+            let markerInfo = {
+                id: idea.id,
+                position: { lat: Number(idea.lat), lng: Number(idea.lng) },
+                title: idea.title,
+                icon: window.googleMapDefaultIcon,
+                map: map,
+                coverImageUrl: settings.imageServerUrl + settings.imagePath + idea.coverImage,
+                description: idea.description,
+                // updateFocusedIdea: updateFocusedIdea
+            }
+            marker = makeMarker(markerInfo, onClick);
+            window.markers.set(idea.id, marker);
+            window.googleMapBounds.extend(markerInfo.position);
+        } else {
+            marker.setMap(map);
+            window.googleMapBounds.extend(marker.position);
+        }
+    });
+    map.fitBounds(window.googleMapBounds);
+}
+
+export function populateMarker(idea, onClick, map) {
+    let markerInfo = {
+        id: idea.id,
+        position: { lat: Number(idea.lat), lng: Number(idea.lng) },
+        title: idea.title,
+        icon: window.googleMapDefaultIcon,
+        map: map,
+        coverImageUrl: settings.imageServerUrl + settings.imagePath + idea.coverImage,
+        description: idea.description,
+    }
+    let marker = makeMarker(markerInfo, onClick);
+    window.markers.set(idea.id, marker);
+    window.googleMapBounds.extend(markerInfo.position);
+    map.fitBounds(window.googleMapBounds);
+}
+
+export function clearMarkers(markerMap) {
+    markerMap.forEach(((value, key) => {
+        value.setMap(null);
+    }));
+
 }

@@ -262,14 +262,6 @@ class NewIdea extends React.Component {
                                         console.log('newIdea: ' + newIdea);
                                         this.props.toggleDialogClose();
                                         this.props.handleNewIdea(newIdea);
-                                        // let marker = new window.google.maps.Marker({
-                                        //     position: { lat: Number(newIdea.lat), lng: Number(newIdea.lng) },
-                                        //     title: newIdea.title,
-                                        //     map: window.map,
-                                        // });
-                                        // window.markers.set(newIdea.id, marker);
-                                        // window.googleMapBounds.extend({ lat: Number(newIdea.lat), lng: Number(newIdea.lng) });
-                                        // window.map.fitBounds(window.googleMapBounds);
                                     } else {
                                         console.log('not success');
                                         this.setState({ submitButtonDisabled: false });
