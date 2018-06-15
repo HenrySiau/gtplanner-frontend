@@ -15,7 +15,7 @@ import CardActions from '@material-ui/core/CardActions';
 import Card from '@material-ui/core/Card';
 import InfoIcon from '@material-ui/icons/Info';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
-import Tooltip from '@material-ui/core/Tooltip';
+import { populateInfoWindow } from '../mapFunctions';
 import '../../css/ideaCard.css';
 import settings from '../../config';
 
@@ -80,15 +80,6 @@ class IdeaCard extends React.Component {
     handlePlaceIconOnClick = (position) => {
         console.log(position);
         window.map.panTo(position);
-    }
-    populateInfoWindow = (marker, infoWindow, map) => {
-        let content = `<div style="width: 100px, margin: 0">
-        <h4>${marker.title}</h4>
-        <img src="${marker.coverImageUrl}" alt="" style="width: 100px"/>
-        </div>`;
-
-        infoWindow.setContent(content);
-        infoWindow.open(map, marker);
     }
     render() {
         const { classes, idea, isChatRoomOpen, members } = this.props;
@@ -156,7 +147,6 @@ class IdeaCard extends React.Component {
                         action={
                             <IconButton className="leftTooltip" onClick={() => {
                                 window.map.panTo({ lat: Number(idea.lat), lng: Number(idea.lng) });
-                                // this.handlePlaceIconOnClick({lat:Number(idea.lat), lng: Number(idea.lng)})
                                 let marker = window.markers.get(idea.id);
                                 if (marker) {
                                     if (window.activeMarker != marker) {
@@ -165,7 +155,7 @@ class IdeaCard extends React.Component {
                                         }
                                         window.activeMarker = marker;
                                         marker.setIcon(window.googleMapHighlightedIcon);
-                                        this.populateInfoWindow(marker, window.googleMapInfoWindow, window.map);
+                                        populateInfoWindow(marker, window.googleMapInfoWindow, window.map);
                                     }
                                 }
                             }} >
@@ -208,6 +198,18 @@ class IdeaCard extends React.Component {
                             <IconButton aria-label="More Info" className="leftTooltip" onClick={
                                 () => {
                                     this.props.updateFocusedIdea(idea.id);
+                                    let marker = window.markers.get(idea.id);
+                                    if (marker) {
+                                        if (window.activeMarker != marker) {
+                                            if (window.activeMarker) {
+                                                window.activeMarker.setIcon(window.window.googleMapDefaultIcon);
+                                            }
+                                            window.activeMarker = marker;
+                                            marker.setIcon(window.googleMapHighlightedIcon);
+                                            populateInfoWindow(marker, window.googleMapInfoWindow, window.map);
+                                            window.map.panTo(marker.position);
+                                        }
+                                    }
                                 }}>
                                 <InfoIcon />
                                 <span className="tooltiptext">{'More Info'}</span>

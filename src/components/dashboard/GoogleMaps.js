@@ -15,6 +15,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import IdeaCard from './IdeaCard';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import withWidth from '@material-ui/core/withWidth';
@@ -105,8 +106,10 @@ class GoogleMaps extends React.Component {
                 console.log('get/ideas response: ' + response);
                 let ideas = response.data.ideas;
                 let filteredIdeas = [];
+                let ideasMap = new Map();
                 if (ideas) {
                     ideas.forEach(idea => {
+                        ideasMap.set(idea.id, idea);
                         if (this.props.ideasOrItinerary === 'ideas') {
                             if (!idea.inItinerary) {
                                 filteredIdeas.push(idea);
@@ -118,7 +121,7 @@ class GoogleMaps extends React.Component {
                             }
                         }
                     }) // end ideas.forEach
-                    this.props.updateIdeas(ideas);
+                    this.props.updateIdeas(ideasMap);
                     this.props.updateFilteredIdeas(filteredIdeas);
                     populateMarkers(filteredIdeas, this.props.updateFocusedIdea, window.map);
                 }
@@ -131,8 +134,8 @@ class GoogleMaps extends React.Component {
             if (window.activeMarker) {
                 window.activeMarker.setIcon(window.window.googleMapDefaultIcon);
                 window.googleMapInfoWindow.close();
-                this.props.updateFocusedIdea('');
             }
+            this.props.updateFocusedIdea('');
         });
 
     }
@@ -160,7 +163,8 @@ class GoogleMaps extends React.Component {
 
 
     render() {
-        const { classes, isDrawerOpen, isChatRoomOpen, isDrawerExtended, dashboardView, selectedTrip, filteredIdeas, updateFocusedIdea } = this.props;
+        const { classes, isDrawerOpen, isChatRoomOpen, isDrawerExtended, dashboardView,
+            selectedTrip, filteredIdeas, updateFocusedIdea, focusedIdea, ideas } = this.props;
         const getSectionClassName = section => {
             if (section === 'map') {
                 switch (dashboardView) {
@@ -220,45 +224,81 @@ class GoogleMaps extends React.Component {
             return { width: `calc(100vw - ${spaceTaken}px` }
         }
 
+        const BotActionBarIdeas = () => {
+            return (
+                <Paper className={classes.actionsBar} square={true}>
+                    <div className={classes.filters}>
+                        <Typography variant="body2" >
+                            {`filters...  filters...    .`}
+                        </Typography>
+                        <Typography variant="body2" >
+                            {`filters...   filters...   .`}
+                        </Typography>
+                    </div>
+                    <Tooltip title="Add an idea" placement="top">
+                        <IconButton aria-label="Add Idea"
+                            onClick={() => { this.setState({ isDialogOpen: true }) }}
+                            className={classes.dialogButton}>
+                            <AddCircleIcon />
+                        </IconButton>
+                    </Tooltip>
+                </Paper>
+            )
+        }
+        const BotActionBarIdea = () => {
+            return (
+                <Paper className={classes.actionsBar} square={true}>
+                    <div className={classes.filters}>
+                    </div>
+                    <Tooltip title="Close" placement="top">
+                        <IconButton aria-label="Close"
+                            onClick={() => {
+                                if(window.activeMarker){
+                                    window.activeMarker.setIcon(window.googleMapDefaultIcon);
+                                }else{
+                                    window.activeMarker = null;
+                                }
+                                window.googleMapInfoWindow.close();
+                                updateFocusedIdea('');
+                            }}
+                            className={classes.dialogButton}>
+                            <RemoveCircleIcon />
+                        </IconButton>
+                    </Tooltip>
+                </Paper>
+            )
+        }
+
         const Ideas = () => {
             return (
-                <div>
-                    <div className={getSectionClassName('list')}>
-                        <Grid container spacing={8} justify={'flex-start'}>
-                            {ideaCards}
-                        </Grid>
-                    </div>
-                    <Paper className={classes.actionsBar} square={true}>
-                        <div className={classes.filters}>
-                            <Typography variant="body2" >
-                                {`filters...  filters...    .`}
-                            </Typography>
-                            <Typography variant="body2" >
-                                {`filters...   filters...   .`}
-                            </Typography>
-                        </div>
-                        <Tooltip title="Add an idea" placement="top">
-                            <IconButton aria-label="Add Idea"
-                                onClick={() => { this.setState({ isDialogOpen: true }) }}
-                                className={classes.dialogButton}>
-                                <AddCircleIcon />
-                            </IconButton>
-                        </Tooltip>
-                    </Paper>
-                </div>
+                <Grid container spacing={8} justify={'flex-start'}>
+                    {ideaCards}
+                </Grid>
             )
         }
         const IdeaDetail = () => {
+            let idea = ideas.get(focusedIdea);
+            console.log('idea: ' + idea);
+            console.log('idea title: ' + idea.title);
             return (
-                <h1>{'idea detail '}</h1>
+
+                <IdeaDetailCard
+                    idea={idea}
+                    members={selectedTrip.members}
+                />
+
             )
         }
 
         return (
             <Grid container direction={'column'} justify={'space-between'} className={classes.root}>
                 <Grid style={mapContainerStyle()} id='googleMap' className={getSectionClassName('map')} ></Grid>
+                <div className={getSectionClassName('list')}>
+                    {focusedIdea ? <IdeaDetail /> : <Ideas />}
+                </div>
+                {focusedIdea ? <BotActionBarIdea /> : <BotActionBarIdeas />}
 
-                <Ideas />
+                {/* <Ideas /> */}
                 {/* {ideasOrItinerary === 'itinerary' && <IdeaDetail />} */}
                 <Dialog
                     disableBackdropClick={true}

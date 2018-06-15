@@ -32,7 +32,8 @@ const mapStateToProps = (state) => {
         isChatRoomOpen: state.isChatRoomOpen,
         dashboardView: state.dashboardView,
         ideasOrItinerary: state.ideasOrItinerary,
-        filteredIdeas: state.filteredIdeas
+        filteredIdeas: state.filteredIdeas,
+        focusedIdea: state.focusedIdea,
     }
 }
 

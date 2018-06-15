@@ -250,9 +250,9 @@ export const updateFilteredMarkers = (markers) => ({
     value: markers
 });
 
-export const updateIdeas = (ideas) => ({
+export const updateIdeas = (ideasMap) => ({
     type: UPDATE_IDEAS,
-    ideas: ideas
+    ideasMap: ideasMap
 });
 
 export const addIdea = (idea) => ({
@@ -271,37 +271,7 @@ export const setDashboardViewToSplit = () => ({ type: SET_DASHBOARD_VIEW_SPLIT }
 export const showItinerary = () => ({ type: SET_VIEW_ITINERARY });
 export const showIdeas = () => ({ type: SET_VIEW_IDEA });
 export const updateFilteredIdeas = (ideas) => {
-    // if (window.markers) {
-    //     console.log('clear markers');
-    //     window.markers.forEach(((value, key) => {
-    //         value.setMap(null);
-    //     }));
-    // }
-    // window.googleMapBounds = new window.google.maps.LatLngBounds();
-    // ideas.forEach(idea => {
-    //     let marker = window.markers.get(idea.id);
-    //     if (!marker) {
-    //         let markerInfo = {
-    //             id: idea.id,
-    //             position: { lat: Number(idea.lat), lng: Number(idea.lng) },
-    //             title: idea.title,
-    //             icon: window.googleMapDefaultIcon,
-    //             map: window.map,
-    //             coverImageUrl: settings.imageServerUrl + settings.imagePath + idea.coverImage,
-    //             description: idea.description,
-    //             updateFocusedIdea: updateFocusedIdea
-    //         }
-    //         marker = makeMarker(markerInfo);
-    //         window.markers.set(idea.id, marker);
-    //         window.googleMapBounds.extend(markerInfo.position);
-    //     } else {
-    //         marker.setMap(window.map);
-    //         window.googleMapBounds.extend(marker.position);
-    //     }
-    // });
-    // window.map.fitBounds(window.googleMapBounds);
     return ({
-
         type: UPDATE_FILTERED_IDEAS,
         ideas: ideas,
     });
