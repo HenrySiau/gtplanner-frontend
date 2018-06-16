@@ -115,7 +115,13 @@ class GTPDrawer extends React.Component {
         window.googleMapBounds = new window.google.maps.LatLngBounds();
         clearMarkers(window.markers);
         populateMarkers(filteredIdeasList, this.props.updateFocusedIdea, window.map);
+        if (window.activeMarker) {
+            window.googleMapInfoWindow.close();
+            window.activeMarker.setIcon(window.window.googleMapDefaultIcon);
+            window.activeMarker = null;
+        }
         this.props.showItinerary();
+        this.props.updateFocusedIdea('');
     }
 
     showIdeas = () => {
@@ -129,7 +135,13 @@ class GTPDrawer extends React.Component {
         window.googleMapBounds = new window.google.maps.LatLngBounds();
         clearMarkers(window.markers);
         populateMarkers(filteredIdeasList, this.props.updateFocusedIdea, window.map);
+        if (window.activeMarker) {
+            window.googleMapInfoWindow.close();
+            window.activeMarker.setIcon(window.window.googleMapDefaultIcon);
+            window.activeMarker = null;
+        }
         this.props.showIdeas();
+        this.props.updateFocusedIdea('');
     }
 
     render() {

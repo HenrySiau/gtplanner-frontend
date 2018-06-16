@@ -13,13 +13,15 @@ export function makeMarker(markerInfo, onClick) {
     marker.addListener('click', function () {
         // window.map.panTo(this.position);
         if (window.activeMarker != this) {
-            console.log('you clicked different marker');
             if (window.activeMarker) {
                 window.activeMarker.setIcon(window.googleMapDefaultIcon);
             }
             populateInfoWindow(marker, window.googleMapInfoWindow, window.map);
             this.setIcon(window.googleMapHighlightedIcon);
             window.activeMarker = this;
+        }else{
+            populateInfoWindow(marker, window.googleMapInfoWindow, window.map);
+            this.setIcon(window.googleMapHighlightedIcon);
         }
         // markerInfo.updateFocusedIdea(markerInfo.id);
         onClick(markerInfo.id);
