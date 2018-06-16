@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { toggleDrawer, updateSelectedTrip, toggleDrawerExtend, toggleDrawerFold } from '../actions';
-import { setDashboardViewToMap, setDashboardViewToList, setDashboardViewToSplit, showItinerary,  showIdeas, updateFilteredIdeas, updateFocusedIdea} from '../actions';
+import { setDashboardViewToMap, setDashboardViewToList, setDashboardViewToSplit, showItinerary, showIdeas, updateFilteredIdeas, updateFocusedIdea } from '../actions';
 import GTPDrawer from '../components/GTPDrawer';
+import { withRouter } from 'react-router-dom';
 
 const mapStateToProps = (state) => {
     return {
@@ -56,9 +57,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-const GTPDrawerContainer = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(GTPDrawer)
-
-export default GTPDrawerContainer;
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(GTPDrawer));

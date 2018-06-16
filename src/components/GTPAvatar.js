@@ -9,7 +9,7 @@ import MenuList from '@material-ui/core/MenuList';
 import { connect } from 'react-redux';
 import { logout } from '../actions';
 import { push } from 'react-router-redux';
-import Popover from 'material-ui/Popover';
+import Popover from '@material-ui/core/Popover';
 
 const styles = theme => ({
     avatar: {

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { toggleChatRoomOpen, addMember, changeChatRoomTabsValue } from '../actions';
 import { increaseChatMessageBadgeContent, clearChatMessageBadgeContent, increaseSystemMessageBadgeContent, clearSystemMessageBadgeContent } from '../actions';
 import ChatRoom from '../components/ChatRoom';
+import { withRouter } from 'react-router-dom';
 // import ChatRoomDrawer from '../components/ChatRoomDrawer';
 
 class ChatRoomContainer extends React.Component {
@@ -69,9 +70,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-ChatRoomContainer = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(ChatRoomContainer)
-
-export default ChatRoomContainer;
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ChatRoomContainer));

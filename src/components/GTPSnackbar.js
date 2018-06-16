@@ -2,6 +2,7 @@ import React from 'react';
 import Snackbar from '@material-ui/core/Snackbar';
 import { connect } from 'react-redux';
 import {snackbarMessageClose} from '../actions';
+import { withRouter } from 'react-router-dom';
 
 
 class GTPSnackbar extends React.Component {
@@ -36,5 +37,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-GTPSnackbar = connect(mapStateToProps, mapDispatchToProps)(GTPSnackbar);
-export default GTPSnackbar
+export default GTPSnackbar = withRouter(connect(mapStateToProps, mapDispatchToProps)(GTPSnackbar));

@@ -2,9 +2,10 @@ import { connect } from 'react-redux';
 import { logout, toggleDrawer, loginWithToken, toggleChatRoomOpen, openChatRoom, closeChatRoom } from '../actions';
 import { updateUserInfo, updateSelectedTripWithInfo, chatMessageBadgeContent, systemMessageBadgeContent } from '../actions';
 import { increaseChatMessageBadgeContent, clearChatMessageBadgeContent, increaseSystemMessageBadgeContent, clearSystemMessageBadgeContent } from '../actions';
-import { updateFilteredMarkers} from '../actions';
+import { updateFilteredMarkers } from '../actions';
 import GTPAppBar from '../components/GTPAppBar';
 import { push } from 'react-router-redux';
+import { withRouter } from 'react-router-dom';
 
 const mapStateToProps = (state) => {
     return {
@@ -66,9 +67,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-const GTPAppBarContainer = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(GTPAppBar)
-
-export default GTPAppBarContainer;
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(GTPAppBar));

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import GTPAppBarContainer from '../containers/GTPAppBarContainer';
 import GTPDrawerContainer from '../containers/GTPDrawerContainer';
 import ChatRoomContainer from '../containers/ChatRoomContainer';
-import { Route, Redirect } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -19,6 +19,7 @@ import GTPDashboard from './GTPDashboard';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import MyAccount from '../sections/MyAccount';
+import TestComponent from './forms/TestComponent';
 
 
 const theme = createMuiTheme({
@@ -88,9 +89,11 @@ class App extends Component {
     //   return result
     // }
     return (
+      // <TestComponent />
       <MuiThemeProvider theme={theme}>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <div className={classes.root}>
+          {/* <TestComponent /> */}
             <GTPAppBarContainer />
             <GTPDrawerContainer />
             <main className={classes.content}

@@ -7,7 +7,7 @@ import MenuList from '@material-ui/core/MenuList';
 import Icon from '@material-ui/core/Icon';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import Popover from 'material-ui/Popover';
+import Popover from '@material-ui/core/Popover';
 
 
 const styles = theme => ({
