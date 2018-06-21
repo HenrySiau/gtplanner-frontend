@@ -22,6 +22,8 @@ import Paper from '@material-ui/core/Paper';
 
 const styles = theme => ({
     container: {
+        margin: '10px',
+        height: 400
     },
     registerButton: {
         margin: '10px 10px 5px 120px'
