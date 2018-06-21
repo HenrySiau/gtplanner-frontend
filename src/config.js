@@ -1,4 +1,4 @@
-const isProductionStage = true;
+const isProductionStage = false;
 const serverUrl = isProductionStage ? 'https://gtplanner.com' : 'http://localhost:8080';
 const defaultProfilePictureURL = serverUrl + '/images/user.png'
 const imageServerUrl = isProductionStage ? 'https://gtplanner.com' : 'http://localhost:8080';

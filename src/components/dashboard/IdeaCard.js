@@ -14,7 +14,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Card from '@material-ui/core/Card';
 import InfoIcon from '@material-ui/icons/Info';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
+import CommentIcon from '@material-ui/icons/Comment';
 import { populateInfoWindow } from '../mapFunctions';
 import '../../css/ideaCard.css';
 import settings from '../../config';
@@ -129,7 +129,18 @@ class IdeaCard extends React.Component {
                 return ''
             }
         }
+
+        const getProfilePictureURL = userId => {
+            let member = members.get(userId);
+            if (member) {
+                return member.profilePictureURL;
+            } else {
+                return ''
+            }
+        }
         const userName = getUserName(idea.userId);
+        const profilePictureURL = getProfilePictureURL(idea.userId);
+        console.log('profilePictureURL: ' + profilePictureURL);
         return (
             <Grid item
                 xs={getIdeaCardWidth('xs')} sm={getIdeaCardWidth('sm')}
@@ -140,7 +151,9 @@ class IdeaCard extends React.Component {
                     <CardHeader
                         avatar={
                             <div className="tooltip">
-                                <Avatar aria-label="User Icon" className={classes.avatar}>R</Avatar>
+                                <Avatar aria-label="User Icon" className={classes.avatar}
+                                src={profilePictureURL}
+                                />
                                 <span className="tooltiptext">{userName}</span>
                             </div>
                         }
@@ -186,13 +199,13 @@ class IdeaCard extends React.Component {
                         </Typography>
                     </CardContent>
                     <CardActions className={classes.actions} disableActionSpacing>
-                        <IconButton aria-label="Like this idea" className="tooltip">
+                        <IconButton aria-label="Likes" className="tooltip">
                             <FavoriteIcon />
                             <span className="tooltiptext">{'Like this idea'}</span>
                         </IconButton>
                         <IconButton aria-label="Add to Itinerary" className="tooltip">
-                            <AddCircleIcon />
-                            <span className="tooltiptext">{'Add to Itinerary'}</span>
+                            <CommentIcon />
+                            <span className="tooltiptext">{'Comments'}</span>
                         </IconButton>
                         <div className={classes.ideaCardMoreInfoButton}>
                             <IconButton aria-label="More Info" className="leftTooltip" onClick={

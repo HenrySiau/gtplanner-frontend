@@ -78,7 +78,7 @@ export const updateSelectedTripWithInfo = (tripInfo) => {
             membersMap.set(member.userId, {
                 'userName': member.userName,
                 'email': member.email,
-                'profilePictureURL': member.profilePicture ? settings.serverUrl + member.profilePicture : member.facebookProfilePictureURL || settings.defaultProfilePictureURL
+                'profilePictureURL': member.profilePicture ? settings.serverUrl + '/images/' + member.profilePicture : member.facebookProfilePictureURL || settings.defaultProfilePictureURL
             })
         });
     }

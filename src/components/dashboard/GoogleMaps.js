@@ -21,6 +21,7 @@ import withWidth from '@material-ui/core/withWidth';
 import compose from 'recompose/compose';
 import IdeaDetailCard from './IdeaDetailCard';
 import { makeMarkerIcon, populateMarkers, populateMarker } from '../mapFunctions';
+import '../../css/googleMaps.css';
 
 const styles = theme => ({
     root: {
@@ -90,6 +91,7 @@ class GoogleMaps extends React.Component {
         window.activeMarker = null;
         window.googleMapDefaultIcon = makeMarkerIcon('ff5151');
         window.googleMapHighlightedIcon = makeMarkerIcon('fff051');
+        this.autocomplete = new window.google.maps.places.Autocomplete(document.getElementById('addressInput'));
         axios({
             method: 'GET',
             url: settings.serverUrl + '/api/get/ideas',
@@ -252,9 +254,9 @@ class GoogleMaps extends React.Component {
                     <Tooltip title="Close" placement="top">
                         <IconButton aria-label="Close"
                             onClick={() => {
-                                if(window.activeMarker){
+                                if (window.activeMarker) {
                                     window.activeMarker.setIcon(window.googleMapDefaultIcon);
-                                }else{
+                                } else {
                                     window.activeMarker = null;
                                 }
                                 window.googleMapInfoWindow.close();
@@ -292,6 +294,7 @@ class GoogleMaps extends React.Component {
         return (
             <Grid container direction={'column'} justify={'space-between'} className={classes.root}>
                 <Grid style={mapContainerStyle()} id='googleMap' className={getSectionClassName('map')} ></Grid>
+               
                 <div className={getSectionClassName('list')}>
                     {focusedIdea ? <IdeaDetail /> : <Ideas />}
                 </div>
