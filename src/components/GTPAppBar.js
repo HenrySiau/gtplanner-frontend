@@ -176,11 +176,14 @@ class GTPAppBar extends React.Component {
         }
 
         const Title = () => {
+
             return (
                 <Typography variant="title" color="inherit" className={classes.flex} >
-                    {this.props.selectedTrip && (this.props.selectedTrip.title || 'Group Travel Planner')}
+                    {this.props.selectedTrip ? this.props.selectedTrip.title : 'Group Travel Planner'}
                 </Typography>
             )
+
+
         }
         const XsTitle = () => {
             return (
