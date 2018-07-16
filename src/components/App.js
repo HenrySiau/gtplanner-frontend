@@ -16,10 +16,8 @@ import RegisterForm from './forms/RegisterForm';
 import InviteMemberForm from './forms/InviteMemberForm';
 import JoinATrip from './JoinATrip';
 import GTPDashboard from './GTPDashboard';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import MyAccount from '../sections/MyAccount';
-import TestComponent from './forms/TestComponent';
+import privacyPolicy from './privacyPolicy';
 
 
 const theme = createMuiTheme({
@@ -103,6 +101,7 @@ class App extends Component {
               <Route exact path="/login" component={LoginSection} />
               <Route exact path="/register" component={RegisterForm} />
               <Route exact path="/trip/join" component={JoinATrip} />
+              <Route exact path="/privacy-policy" component={privacyPolicy} />
               <PrivateRoute exact path="/members/invite" component={InviteMemberForm} />
               <PrivateRoute exact path="/trip/new" component={CreateTripSection} />
               <PrivateRoute exact path="/dashboard" component={GTPDashboard} />
