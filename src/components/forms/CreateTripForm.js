@@ -162,6 +162,7 @@ class CreateTripForm extends React.Component {
         const { classes } = this.props;
         return (
             <div>
+                <h3>Create A Trip</h3>
                 <TextField
                     id='tripNameInput'
                     label="Trip Name"

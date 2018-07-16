@@ -56,7 +56,7 @@ class GTPRightMenu extends React.Component {
 
                     <MenuList role="menu">
                         <MenuItem onClick={() => {
-                            this.props.dispatch(push('/event/new'));
+                            this.props.dispatch(push('/dashboard'));
                             this.setState({ menuAnchor: null });
                         }}>New Event</MenuItem>
                         <MenuItem onClick={() => {

@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
 import axios from 'axios';
 import settings from '../../config';
-import {isEmailFormatOK} from '../Validator';
+import { isEmailFormatOK } from '../Validator';
 import { connect } from 'react-redux';
 import { snackbarMessage } from '../../actions';
 import { push } from 'react-router-redux';
@@ -244,6 +244,7 @@ class InviteMemberForm extends React.Component {
 
         return (
             <div className={classes.form}>
+                <h3>{'Invite Member(s)'}</h3>
                 <input type="text"
                     value={settings.serverUrl + `/trip/join?code=${this.props.invitationCode}`}
                     id="invitationLink"
