@@ -3,10 +3,8 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
-    rightMenuIcon: {
-        marginRight: theme.spacing.unit,
-        fontSize: 30,
-        color: 'white'
+    root: {
+        margin: 15
     },
 });
 
@@ -16,7 +14,7 @@ class PrivacyPolicy extends React.Component {
     render() {
 
         return (
-            <div>
+            <div className={this.props.classes.root}>
                 <h1>Privacy Policy</h1>
 
 
