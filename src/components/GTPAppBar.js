@@ -9,7 +9,6 @@ import IconButton from '@material-ui/core/IconButton';
 import { Link } from 'react-router-dom';
 import Badge from '@material-ui/core/Badge';
 import Icon from '@material-ui/core/Icon';
-import Hidden from '@material-ui/core/Hidden';
 import withWidth from '@material-ui/core/withWidth';
 import compose from 'recompose/compose';
 import GTPAvatar from './GTPAvatar';
@@ -24,6 +23,10 @@ const styles = theme => ({
     },
     flex: {
         flex: 1,
+    },
+    title: {
+        flex: 1,
+        cursor: 'pointer',
     },
     menuButton: {
         marginLeft: -12,
@@ -130,6 +133,15 @@ class GTPAppBar extends React.Component {
         // }
     }
 
+    handleTitleOnClick = () => {
+        if(this.props.selectedTrip){
+            console.log('go to dashboard');
+            this.props.push('/dashboard');
+        }else{
+            console.log('go to homepage');
+            this.props.push('/');
+        }
+    }
     render() {
         const { classes } = this.props;
 
@@ -178,7 +190,7 @@ class GTPAppBar extends React.Component {
         const Title = () => {
 
             return (
-                <Typography variant="title" color="inherit" className={classes.flex} >
+                <Typography variant="title" color="inherit" className={classes.title} onClick={this.handleTitleOnClick}>
                     {this.props.selectedTrip ? this.props.selectedTrip.title : 'Group Travel Planner'}
                 </Typography>
             )
