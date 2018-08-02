@@ -32,13 +32,6 @@ const styles = theme => ({
     },
 });
 
-const handleFileChange = event => {
-    console.log('event: ' + event);
-}
-const handleImageZoom = event => {
-    console.log('handleImageZoom');
-    console.log(event.target.value);
-}
 class NewIdea extends React.Component {
     constructor(props) {
         super(props);

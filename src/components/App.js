@@ -120,14 +120,6 @@ App.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = (state) => {
-  return {
-    isDrawerOpen: state.isDrawerOpen,
-    isDrawerExtended: state.isDrawerExtended,
-    isChatRoomOpen: state.isChatRoomOpen,
-  }
-}
-
 export default withStyles(styles)(App);
 
 // App = withStyles(styles)(App);

@@ -1,5 +1,4 @@
 import { INCREASE_CHAT_MESSAGE_BADGE_CONTENT, CLEAR_CHAT_MESSAGE_BADGE_CONTENT, INCREASE_SYSTEM_MESSAGE_BADGE_CONTENT, CLEAR_SYSTEM_MESSAGE_BADGE_CONTENT } from '../actions/actionTypes';
-import settings from '../config';
 
 export const chatMessageBadgeContent = (state = 0, action) => {
     switch (action.type) {

@@ -1,7 +1,6 @@
 import React from 'react';
 import LoginForm from '../components/forms/LoginForm';
 import { withStyles } from '@material-ui/core/styles';
-import settings from '../config';
 
 const styles = theme => ({
     loginSection: {

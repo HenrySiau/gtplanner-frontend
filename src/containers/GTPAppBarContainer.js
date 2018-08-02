@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { logout, toggleDrawer, loginWithToken, toggleChatRoomOpen, openChatRoom, closeChatRoom } from '../actions';
-import { updateUserInfo, updateSelectedTripWithInfo, chatMessageBadgeContent, systemMessageBadgeContent } from '../actions';
+import { updateUserInfo, updateSelectedTripWithInfo } from '../actions';
 import { increaseChatMessageBadgeContent, clearChatMessageBadgeContent, increaseSystemMessageBadgeContent, clearSystemMessageBadgeContent } from '../actions';
 import { updateFilteredMarkers } from '../actions';
 import GTPAppBar from '../components/GTPAppBar';

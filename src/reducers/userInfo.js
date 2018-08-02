@@ -1,14 +1,5 @@
-import settings from '../config';
-
 import { UPDATE_USER_INFO, UPDATE_PROFILE_PICTURE_URL } from '../actions/actionTypes';
-// const initialState = {
-//     userId: '',
-//     userName: '',
-//     email: '',
-//     phone: '',
-//     profilePictureURL: '',
-//     trips: []
-// }
+
 export const userInfo = (state = {}, action) => {
     switch (action.type) {
         case UPDATE_USER_INFO:

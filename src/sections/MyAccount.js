@@ -1,12 +1,9 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import settings from '../config';
 import { connect } from 'react-redux';
 import { updateUserInfo } from '../actions';
-import AvatarEditor from 'react-avatar-editor'
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import UpdateAvatarForm from '../components/forms/UpdateAvatarForm';
 import UpdateUserProfileForm from '../components/forms/UpdateUserProfileForm';
 const styles = theme => ({

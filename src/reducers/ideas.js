@@ -1,5 +1,4 @@
 import { UPDATE_IDEAS, ADD_IDEA } from '../actions/actionTypes';
-import settings from '../config';
 
 export const ideas = (state = new Map(), action) => {
     switch (action.type) {

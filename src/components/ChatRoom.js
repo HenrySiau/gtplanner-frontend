@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import Drawer from '@material-ui/core/Drawer';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import AppBar from '@material-ui/core/AppBar';
@@ -63,7 +62,7 @@ class ChatRoom extends React.Component {
         // });
         socket.on('new message', msg => {
             console.log('new message: ' + msg);
-            if (msg.userId != this.props.userInfo.userId) {
+            if (msg.userId !== this.props.userInfo.userId) {
                 this.setState({
                     chats: this.state.chats.concat([msg])
                 });
@@ -186,7 +185,6 @@ class ChatRoom extends React.Component {
         });
 
         const { classes } = this.props;
-        const { value } = this.state;
         const chatRoom = (
             <div className={classes.chatRoom}>
                 <AppBar position="static" color="default">

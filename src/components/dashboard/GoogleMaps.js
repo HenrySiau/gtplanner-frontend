@@ -2,9 +2,7 @@ import React from 'react';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import Dialog from '@material-ui/core/Dialog';
-import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
 import NewIdea from '../forms/NewIdea';
 import settings from '../../config';
 import axios from 'axios';
@@ -171,13 +169,10 @@ class GoogleMaps extends React.Component {
                 switch (dashboardView) {
                     case 'map':
                         return classes.googleMapFull
-                        break;
                     case 'list':
                         return classes.googleMapHidden
-                        break;
                     case 'split':
                         return classes.googleMapHalf
-                        break;
                     default:
                         break;
                 }
@@ -186,13 +181,10 @@ class GoogleMaps extends React.Component {
                 switch (dashboardView) {
                     case 'list':
                         return classes.listFull
-                        break;
                     case 'map':
                         return classes.listHidden
-                        break;
                     case 'split':
                         return classes.listHalf
-                        break;
                     default:
                         break;
                 }

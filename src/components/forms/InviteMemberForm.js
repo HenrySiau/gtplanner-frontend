@@ -70,7 +70,6 @@ class InviteMemberForm extends React.Component {
             messageErrMessage: '',
             submitButtonDisable: false,
         };
-        const toggleDialogOpen = this.toggleDialogOpen;
     }
 
     isFormReady = () => {

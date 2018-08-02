@@ -1,20 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-
-const styles = theme => ({
-    rightMenuIcon: {
-        marginRight: theme.spacing.unit,
-        fontSize: 30,
-        color: 'white'
-    },
-});
-
 
 class MemberList extends React.Component {
 
     render() {
-        const { classes, members } = this.props;
+        const { members } = this.props;
         let memberListItems = [];
         for (let key of members.keys()) {
             // console.log(value.userName);
@@ -33,4 +23,4 @@ MemberList.propTypes = {
     // members: PropTypes.object.isRequired,
 };
 
-export default MemberList = withStyles(styles)(MemberList);
+export default MemberList;

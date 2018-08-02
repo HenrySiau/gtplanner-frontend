@@ -1,5 +1,4 @@
 import { SET_VIEW_IDEA, SET_VIEW_ITINERARY } from '../actions/actionTypes';
-import settings from '../config';
 
 export const ideasOrItinerary = (state = 'ideas', action) => {
     switch (action.type) {

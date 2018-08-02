@@ -1,5 +1,4 @@
 import { SET_DASHBOARD_VIEW_MAP, SET_DASHBOARD_VIEW_LIST, SET_DASHBOARD_VIEW_SPLIT } from '../actions/actionTypes';
-import settings from '../config';
 
 export const dashboardView = (state = 'split', action) => {
     switch (action.type) {

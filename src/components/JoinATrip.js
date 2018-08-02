@@ -2,7 +2,6 @@ import React from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
-import instanceConfig from '../instanceConfig';
 import { snackbarMessage, updateSelectedTripWithInfo, setInvitationCode, loginWithToken, updateUserInfo, removeInvitationCode } from '../actions';
 import { push } from 'react-router-redux';
 import Dialog from '@material-ui/core/Dialog';
@@ -12,7 +11,6 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import settings from '../config';
-import { validateJWT } from './Validator';
 
 const styles = theme => ({
     button: {
@@ -40,9 +38,6 @@ const styles = theme => ({
         margin: theme.spacing.unit,
     }
 });
-
-var storedUserInfo = {};
-
 
 class JoinATrip extends React.Component {
     state = {

@@ -107,7 +107,7 @@ class IdeaDetailCard extends React.Component {
                             // this.handlePlaceIconOnClick({lat:Number(idea.lat), lng: Number(idea.lng)})
                             let marker = window.markers.get(idea.id);
                             if (marker) {
-                                if (window.activeMarker != marker) {
+                                if (window.activeMarker !== marker) {
                                     if (window.activeMarker) {
                                         window.activeMarker.setIcon(window.window.googleMapDefaultIcon);
                                     }

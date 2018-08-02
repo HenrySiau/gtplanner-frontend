@@ -63,7 +63,6 @@ class LoginForm extends React.Component {
             window.FB.Event.subscribe('auth.statusChange', (response) => {
                 if (response.authResponse) {
                     const accessToken = response.authResponse.accessToken;
-                    const fetchDefaultTrip = this.props.tripId ? false : true;
                     window.FB.api('/me', 'GET', { fields: 'name,email,picture.width(150).height(150)' }, (response) => {
                         console.log(response);
                         const userName = response.name;

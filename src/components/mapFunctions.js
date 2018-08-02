@@ -12,7 +12,7 @@ export function makeMarker(markerInfo, onClick) {
     });
     marker.addListener('click', function () {
         // window.map.panTo(this.position);
-        if (window.activeMarker != this) {
+        if (window.activeMarker !== this) {
             if (window.activeMarker) {
                 window.activeMarker.setIcon(window.googleMapDefaultIcon);
             }

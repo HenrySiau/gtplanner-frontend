@@ -90,35 +90,32 @@ class IdeaCard extends React.Component {
             switch (breakPoint) {
                 case 'xs':
                     return 12
-                    break
                 case 'sm':
                     if (isChatRoomOpen) {
                         return 12
                     } else {
                         return 6
                     }
-                    break
                 case 'md':
                     if (isChatRoomOpen) {
                         return 6
                     } else {
                         return 4
                     }
-                    break
                 case 'lg':
                     if (isChatRoomOpen) {
                         return 4
                     } else {
                         return 3
                     }
-                    break
                 case 'xl':
                     if (isChatRoomOpen) {
                         return 3
                     } else {
                         return 2
                     }
-                    break
+                default:
+                    return 12
             }
         }
         const getUserName = userId => {
@@ -162,7 +159,7 @@ class IdeaCard extends React.Component {
                                 window.map.panTo({ lat: Number(idea.lat), lng: Number(idea.lng) });
                                 let marker = window.markers.get(idea.id);
                                 if (marker) {
-                                    if (window.activeMarker != marker) {
+                                    if (window.activeMarker !== marker) {
                                         if (window.activeMarker) {
                                             window.activeMarker.setIcon(window.window.googleMapDefaultIcon);
                                         }
@@ -213,7 +210,7 @@ class IdeaCard extends React.Component {
                                     this.props.updateFocusedIdea(idea.id);
                                     let marker = window.markers.get(idea.id);
                                     if (marker) {
-                                        if (window.activeMarker != marker) {
+                                        if (window.activeMarker !== marker) {
                                             if (window.activeMarker) {
                                                 window.activeMarker.setIcon(window.window.googleMapDefaultIcon);
                                             }

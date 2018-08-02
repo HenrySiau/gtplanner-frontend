@@ -1,5 +1,4 @@
 import { UPDATE_FILTERED_IDEAS, ADD_FILTERED_IDEA } from '../actions/actionTypes';
-import settings from '../config';
 
 export const filteredIdeas = (state = [], action) => {
     switch (action.type) {
