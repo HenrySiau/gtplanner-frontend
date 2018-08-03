@@ -3,7 +3,7 @@ import axios from 'axios';
 import settings from '../config';
 
 export const isEmailFormatOK = (email) =>{
-    return(email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)? true : false);
+    return(email.replace(/^\s+|\s+$/g, '').match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)? true : false);
 }
 
 export function validateJWT(id_token) {
