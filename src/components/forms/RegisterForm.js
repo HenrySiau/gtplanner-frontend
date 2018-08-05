@@ -73,7 +73,8 @@ class RegisterForm extends React.Component {
             isPasswordContainNumber: false,
             isPasswordSatisfyLengthRequirement: false,
             isDialogOpen: false,
-            submitButtonDisable: false
+            submitButtonDisable: false,
+            emailAlreadyExist: false,
         };
     }
 
@@ -89,37 +90,75 @@ class RegisterForm extends React.Component {
         return str.replace(/^\s+|\s+$/g, '');
     }
     isFormReady = () => {
-        if (!this.state.isEmailFormatIncorrect && !this.state.isUserNameFormatIncorrect
-            && this.state.isPasswordContainLowercase && this.state.isPasswordContainCapital
-            && this.state.isPasswordContainNumber && this.state.isPasswordSatisfyLengthRequirement
-        ) {
-            return true
-        } else {
-            return false
+        // if (!this.state.isEmailFormatIncorrect && !this.state.isUserNameFormatIncorrect
+        //     && this.state.isPasswordContainLowercase && this.state.isPasswordContainCapital
+        //     && this.state.isPasswordContainNumber && this.state.isPasswordSatisfyLengthRequirement
+        // ) {
+        //     return true
+        // } else {
+        //     return false
+        // }
+        let result = false;
+        if (!this.state.isEmailFormatIncorrect) {
+            this.setState({
+                emailErrMessage: 'Email Format Incorrect',
+            });
         }
+        if (this.state.emailAlreadyExist) {
+            this.setState({
+                emailErrMessage: 'This Email already registered',
+            });
+        }
+        if (!this.state.isUserNameFormatIncorrect) {
+            this.setState({
+                userNameErrMessage: 'User Name must between 2-20 characters'
+            });
+        }
+        if (this.state.isPasswordContainLowercase) {
+
+        }
+        if (this.state.isPasswordContainCapital) {
+
+        }
+        if (this.state.isPasswordContainNumber) {
+
+        }
+        if (this.state.isPasswordSatisfyLengthRequirement) {
+
+        }
+        result = true;
+        return result;
     }
 
     ValidateEmailAvailable = () => {
         let email = this.strip(this.state.email);
         if (isEmailFormatOK(email)) {
-            this.setState({
-                emailErrMessage: '',
-                isEmailFormatIncorrect: false
-            });
             axios.post(settings.serverUrl + '/api/post/email/exist', {
                 email: email,
             })
                 .then((response) => {
-                    if (response.data.exist) {
-                        this.setState({
-                            emailErrMessage: 'This Email already registered',
-                        });
+                    console.log('got the response');
+                    if (response.data) {
+                        if (response.data.exist) {
+                            this.setState({
+                                emailErrMessage: 'This Email already registered',
+                                emailAlreadyExist: true
+                            });
+                        }
+                        if (response.data.exist === false) {
+                            if (this.state.emailAlreadyExist) {
+                                this.setState({
+                                    emailErrMessage: '',
+                                    emailAlreadyExist: true
+                                });
+                            }
+                        }
                     }
                 })
                 .catch((error) => {
                     // TODO: show error message and guide user to re submit
                     console.log(error);
-                    console.log(error.response);
+                    this.props.dispatch(snackbarMessage('Network or Server error'));
                 });
 
 
@@ -128,14 +167,6 @@ class RegisterForm extends React.Component {
                 emailErrMessage: 'Email format incorrect',
                 isEmailFormatIncorrect: true
             });
-        }
-    }
-
-    ValidateEmailFormat = (email) => {
-        if (isEmailFormatOK(this.strip(email))) {
-            return true
-        } else {
-            return false
         }
     }
 
@@ -159,7 +190,6 @@ class RegisterForm extends React.Component {
             userName: event.target.value,
         });
         if (this.state.isUserNameFormatIncorrect) {
-
             if (event.target.value.length < 21 && event.target.value.length > 1) {
                 this.setState({
                     userNameErrMessage: '',
@@ -176,12 +206,12 @@ class RegisterForm extends React.Component {
         }
     };
 
-    handleEmailChange = (event) => {
+    handleEmailInputChange = (event) => {
         this.setState({
             email: event.target.value
         });
         if (this.state.isEmailFormatIncorrect) {
-            if (this.ValidateEmailFormat(event.target.value)) {
+            if (isEmailFormatOK(event.target.value)) {
                 this.setState({
                     isEmailFormatIncorrect: false,
                     emailErrMessage: ''
@@ -194,7 +224,6 @@ class RegisterForm extends React.Component {
             this.state.isPasswordContainNumber && this.state.isPasswordSatisfyLengthRequirement) {
             this.setState({
                 isPasswordFormatCorrect: true
-
             });
         }
     }
@@ -347,7 +376,7 @@ class RegisterForm extends React.Component {
                 });
 
         } else {
-            this.props.dispatch(snackbarMessage('Please fill the form properly'));
+            this.props.dispatch(snackbarMessage('Please fill the form properly according to the hints'));
         }
     }
 
@@ -400,7 +429,7 @@ class RegisterForm extends React.Component {
                     label="Email"
                     helperText={this.state.emailErrMessage}
                     error={Boolean(this.state.emailErrMessage)}
-                    onChange={this.handleEmailChange}
+                    onChange={this.handleEmailInputChange}
                     onBlur={this.ValidateEmailAvailable}
                     className={classes.textField}
                 /><br />

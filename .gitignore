@@ -42,3 +42,5 @@ public/bundle.js.map
 
 /src/instanceConfig.js
 build
+
+*.ignore.js
