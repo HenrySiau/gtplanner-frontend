@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
-import { logout, toggleDrawer, loginWithToken, toggleChatRoomOpen, openChatRoom, closeChatRoom } from '../actions';
-import { updateUserInfo, updateSelectedTripWithInfo } from '../actions';
-import { increaseChatMessageBadgeContent, clearChatMessageBadgeContent, increaseSystemMessageBadgeContent, clearSystemMessageBadgeContent } from '../actions';
-import { updateFilteredMarkers } from '../actions';
-import GTPAppBar from '../components/GTPAppBar';
+import { logout, toggleDrawer, loginWithToken, toggleChatRoomOpen, openChatRoom, closeChatRoom } from '../../actions';
+import { updateUserInfo, updateSelectedTripWithInfo } from '../../actions';
+import { increaseChatMessageBadgeContent, clearChatMessageBadgeContent, increaseSystemMessageBadgeContent, clearSystemMessageBadgeContent } from '../../actions';
+import { updateFilteredMarkers } from '../../actions';
+import GTPAppBar from './GTPAppBar';
 import { push } from 'react-router-redux';
 import { withRouter } from 'react-router-dom';
 

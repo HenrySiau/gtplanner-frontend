@@ -14,7 +14,7 @@ import compose from 'recompose/compose';
 import GTPAvatar from './GTPAvatar';
 import GTPRightMenu from './GTPRightMenu';
 import axios from 'axios';
-import settings from '../config';
+import settings from '../../config';
 
 const styles = theme => ({
     root: {
@@ -135,10 +135,8 @@ class GTPAppBar extends React.Component {
 
     handleTitleOnClick = () => {
         if(this.props.selectedTrip){
-            console.log('go to dashboard');
             this.props.push('/dashboard');
         }else{
-            console.log('go to homepage');
             this.props.push('/');
         }
     }
@@ -149,7 +147,7 @@ class GTPAppBar extends React.Component {
             return (
                 <div>
                     <Button onClick={() => { window.location = "/login"; }} className={classes.link}> Login </Button>
-                    <Button component={Link} to="/register" className={classes.link}> Register </Button>
+                    <Button component={Link} to="/signup" className={classes.link}> Sign Up </Button>
                 </div>
             );
         }

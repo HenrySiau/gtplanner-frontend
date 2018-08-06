@@ -12,7 +12,7 @@ import red from '@material-ui/core/colors/red';
 import blue from '@material-ui/core/colors/blue';
 import axios from 'axios';
 import settings from '../../config';
-import { isEmailFormatOK } from '../Validator';
+import { isEmailFormatOK } from '../utility/Validator';
 import { loginWithToken, removeInvitationCode, snackbarMessage, updateSelectedTripWithInfo, updateUserInfo } from '../../actions';
 import { push } from 'react-router-redux';
 import Paper from '@material-ui/core/Paper';

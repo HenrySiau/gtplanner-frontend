@@ -6,13 +6,12 @@ import Avatar from '@material-ui/core/Avatar';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import { connect } from 'react-redux';
-import { logout } from '../actions';
+import { logout } from '../../actions';
 import { push } from 'react-router-redux';
 import Popover from '@material-ui/core/Popover';
 
 const styles = theme => ({
     avatar: {
-        // margin: 10,
         width: 36,
         height: 36,
         marginRight: theme.spacing.unit * 2,
@@ -81,6 +80,7 @@ class GTPAvatar extends React.Component {
 
 GTPAvatar.propTypes = {
     classes: PropTypes.object.isRequired,
+    profilePictureURL: PropTypes.string.isRequired,
 };
 const mapStateToProps = (state) => {
     return {
