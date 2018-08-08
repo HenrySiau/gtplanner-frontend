@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { toggleChatRoomOpen, addMember, changeChatRoomTabsValue } from '../actions';
-import { increaseChatMessageBadgeContent, clearChatMessageBadgeContent, increaseSystemMessageBadgeContent, clearSystemMessageBadgeContent } from '../actions';
-import ChatRoom from '../components/ChatRoom';
+import { toggleChatRoomOpen, addMember, changeChatRoomTabsValue } from '../../actions';
+import { increaseChatMessageBadgeContent, clearChatMessageBadgeContent, increaseSystemMessageBadgeContent, clearSystemMessageBadgeContent } from '../../actions';
+import ChatRoom from './ChatRoom';
 import { withRouter } from 'react-router-dom';
 // import ChatRoomDrawer from '../components/ChatRoomDrawer';
 

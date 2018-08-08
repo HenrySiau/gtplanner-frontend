@@ -1,11 +1,11 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
-import { updateUserInfo } from '../actions';
+import { updateUserInfo } from '../../actions';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import UpdateAvatarForm from '../components/forms/UpdateAvatarForm';
-import UpdateUserProfileForm from '../components/forms/UpdateUserProfileForm';
+import UpdateAvatarForm from './UpdateAvatarForm';
+import UpdateUserProfileForm from './UpdateUserProfileForm';
 const styles = theme => ({
     root: {
         margin: theme.spacing.unit * 2,

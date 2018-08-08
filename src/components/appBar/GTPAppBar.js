@@ -11,7 +11,7 @@ import Badge from '@material-ui/core/Badge';
 import Icon from '@material-ui/core/Icon';
 import withWidth from '@material-ui/core/withWidth';
 import compose from 'recompose/compose';
-import GTPAvatar from './GTPAvatar';
+import GTPAvatarContainer from './GTPAvatarContainer';
 import GTPRightMenu from './GTPRightMenu';
 import axios from 'axios';
 import settings from '../../config';
@@ -101,10 +101,9 @@ class GTPAppBar extends React.Component {
         }
         if (window.innerWidth < 600) {
             this.props.closeChatRoom();
-            console.log(window.innerWidth);
         }
         window.addEventListener('resize', this.handleResize)
-    }
+    } // end componentDidMount
 
     handleResize = () => {
         if (window.innerWidth < 600) {
@@ -169,7 +168,7 @@ class GTPAppBar extends React.Component {
 
                     </div>
 
-                    <GTPAvatar />
+                    <GTPAvatarContainer />
                     <GTPRightMenu />
                     <div className={classes.messageNotification}>
                         {Boolean(this.props.tripId) &&

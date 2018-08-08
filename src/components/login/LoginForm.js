@@ -10,6 +10,8 @@ import { push } from 'react-router-redux';
 import { Redirect } from 'react-router';
 import axios from 'axios';
 import settings from '../../config';
+import { strip } from '../utility/Validator';
+import Typography from '@material-ui/core/Typography';
 
 const styles = theme => ({
     form: {
@@ -123,68 +125,57 @@ class LoginForm extends React.Component {
 
     handleEmailChange = (event) => {
         this.setState({
-            email: event.target.value
+            email: strip(event.target.value)
         });
     };
     handlePasswordChange = (event) => {
         this.setState({
-            password: event.target.value
+            password: strip(event.target.value)
         });
     };
 
     handleSubmit = () => {
-        // console.log('fetchDefaultTrip: ' + Boolean(!this.props.tripId));
-        // const fetchDefaultTrip = this.props.tripId ? false : true;
-        // console.log('fetchDefaultTrip: ' + fetchDefaultTrip);
-        // this.props.loginWithPassword(this.state.email, this.state.password, this.props.invitationCode, fetchDefaultTrip);
-
-        axios.post(settings.serverUrl + '/api/post/signin', {
-            email: this.state.email,
-            password: this.state.password,
-            invitationCode: this.props.invitationCode
-        })
-            // .then(function (response) {
-            //     let id_token = response.data.token;
-            //     if (id_token) {
-            //         dispatch(loginWithToken(id_token));
-            //         // if there is no selected Trip
-            //         // fetch the default Trip
-            //         // if there is a selected Trip from joining a trip do not fetch trip
-            //         if (fetchDefaultTrip) {
-            //             dispatch(updateSelectedTrip(null));
-            //         }
-            //         dispatch(push('/dashboard'));
-            //     }
-            // })
-            .then((response) => {
-                console.log(response.data);
-                let id_token = response.data.token;
-                let userInfo = response.data.userInfo;
-                let tripInfo = response.data.tripInfo;
-                if (id_token) {
-                    this.props.loginWithToken(id_token);
-
-                }
-                if (userInfo) {
-                    const newUserInfo = {
-                        userId: userInfo.userId,
-                        userName: userInfo.userName,
-                        email: userInfo.email,
-                        phoneNumber: userInfo.phoneNumber || '',
-                        profilePictureURL: settings.serverUrl + userInfo.profilePicture
-                    }
-                    this.props.updateUserInfo(newUserInfo);
-                }
-                if (tripInfo) {
-                    this.props.updateSelectedTripWithInfo(tripInfo);
-                    this.props.push('/dashboard');
-                }
+        const email = this.state.email;
+        const password = this.state.password;
+        if (email && password) {
+            axios.post(settings.serverUrl + '/api/post/signin', {
+                email: this.state.email,
+                password: this.state.password,
+                invitationCode: this.props.invitationCode
             })
-            .catch(error => {
-                // TODO: show error message and guide user to re submit
-                console.error(error);
-                this.props.snackbarMessage('email or password incorrect');
-            });
+                .then((response) => {
+                    console.log(response.data);
+                    let id_token = response.data.token;
+                    let userInfo = response.data.userInfo;
+                    let tripInfo = response.data.tripInfo;
+                    if (id_token) {
+                        this.props.loginWithToken(id_token);
+
+                    }
+                    if (userInfo) {
+                        const newUserInfo = {
+                            userId: userInfo.userId,
+                            userName: userInfo.userName,
+                            email: userInfo.email,
+                            phoneNumber: userInfo.phoneNumber || '',
+                            profilePictureURL: settings.serverUrl + userInfo.profilePicture
+                        }
+                        this.props.updateUserInfo(newUserInfo);
+                    }
+                    if (tripInfo) {
+                        this.props.updateSelectedTripWithInfo(tripInfo);
+                        this.props.push('/dashboard');
+                    }
+                })
+                .catch(error => {
+                    // TODO: show error message and guide user to re submit
+                    console.error(error);
+                    this.props.snackbarMessage('email or password incorrect');
+                });
+        } else {
+            this.props.snackbarMessage('email and password required');
+        }
+
     }
 
     handlePressEnter = (e) => {
@@ -197,6 +188,10 @@ class LoginForm extends React.Component {
         const { classes } = this.props;
         return (
             <div className={classes.form}>
+            <br />
+                <Typography variant="headline" gutterBottom>
+                    Login
+      </Typography>
                 {this.props.isLoggedIn && <Redirect to="/dashboard" />}
                 <TextField
                     label="Email"

@@ -3,7 +3,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import Dialog from '@material-ui/core/Dialog';
 import { withStyles } from '@material-ui/core/styles';
-import NewIdea from '../forms/NewIdea';
+import NewIdea from './NewIdea';
 import settings from '../../config';
 import axios from 'axios';
 import Typography from '@material-ui/core/Typography';
@@ -18,7 +18,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import withWidth from '@material-ui/core/withWidth';
 import compose from 'recompose/compose';
 import IdeaDetailCard from './IdeaDetailCard';
-import { makeMarkerIcon, populateMarkers, populateMarker } from '../mapFunctions';
+import { makeMarkerIcon, populateMarkers, populateMarker } from '../utility/mapFunctions';
 import '../../css/googleMaps.css';
 
 const styles = theme => ({

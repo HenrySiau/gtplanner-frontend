@@ -16,7 +16,7 @@ import InfoIcon from '@material-ui/icons/Info';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import '../../css/ideaCard.css';
 import settings from '../../config';
-import {populateInfoWindow} from '../mapFunctions';
+import {populateInfoWindow} from '../utility/mapFunctions';
 
 
 const styles = theme => ({

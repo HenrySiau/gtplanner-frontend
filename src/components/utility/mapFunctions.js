@@ -1,4 +1,4 @@
-import settings from '../config';
+import settings from '../../config';
 
 export function makeMarker(markerInfo, onClick) {
     let marker = new window.google.maps.Marker({

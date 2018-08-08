@@ -5,19 +5,17 @@ import IconButton from '@material-ui/core/IconButton';
 import Avatar from '@material-ui/core/Avatar';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
-import { connect } from 'react-redux';
-import { logout } from '../../actions';
-import { push } from 'react-router-redux';
 import Popover from '@material-ui/core/Popover';
 
 const styles = theme => ({
     avatar: {
         width: 36,
         height: 36,
-        marginRight: theme.spacing.unit * 2,
     },
+    avatarButton: {
+        marginRight: theme.spacing.unit * 2,
+    }
 });
-
 
 class GTPAvatar extends React.Component {
 
@@ -33,7 +31,6 @@ class GTPAvatar extends React.Component {
         this.setState({ avatarAnchor: null });
     };
 
-
     render() {
         const { classes } = this.props;
         const { avatarAnchor } = this.state;
@@ -43,7 +40,9 @@ class GTPAvatar extends React.Component {
 
                 <IconButton
                     id='appBarAvatar'
-                    onClick={this.handleClick}>
+                    onClick={this.handleClick}
+                    className={classes.avatarButton}
+                    >
                     <Avatar
                         alt="Profile Photo"
                         src={this.props.profilePictureURL}
@@ -59,15 +58,15 @@ class GTPAvatar extends React.Component {
                 >
                     <MenuList role="menu">
                         <MenuItem onClick={() => {
-                            this.props.dispatch(push('/myaccount'));
+                            this.props.push('/myaccount');
                             this.setState({ avatarAnchor: null });
                         }}>My account</MenuItem>
                         <MenuItem onClick={() => {
-                            this.props.dispatch(push('/help'));
+                            this.props.push('/help');
                             this.setState({ avatarAnchor: null });
                         }}>Help</MenuItem>
                         <MenuItem onClick={() => {
-                            this.props.dispatch(logout());
+                            this.props.logout();
                             this.setState({ avatarAnchor: null });
                             window.location = "/";
                         }}>Logout</MenuItem>
@@ -77,16 +76,15 @@ class GTPAvatar extends React.Component {
         )
     }
 }
+GTPAvatar.defaultProps = {
+    profilePictureURL: '/defaultUserIcon.png',
+};
 
 GTPAvatar.propTypes = {
     classes: PropTypes.object.isRequired,
     profilePictureURL: PropTypes.string.isRequired,
+    push: PropTypes.func,
+    logout: PropTypes.func,
 };
-const mapStateToProps = (state) => {
-    return {
-        profilePictureURL: state.userInfo.profilePictureURL
-    }
-}
 
-GTPAvatar = withStyles(styles)(GTPAvatar);
-export default connect(mapStateToProps)(GTPAvatar)
+export default GTPAvatar = withStyles(styles)(GTPAvatar);

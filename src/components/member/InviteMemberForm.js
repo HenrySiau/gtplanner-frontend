@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
 import axios from 'axios';
 import settings from '../../config';
-import { isEmailFormatOK } from '../Validator';
+import { isEmailFormatOK } from '../utility/Validator';
 import { connect } from 'react-redux';
 import { snackbarMessage } from '../../actions';
 import { push } from 'react-router-redux';

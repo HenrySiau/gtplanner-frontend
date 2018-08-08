@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { snackbarMessage, updateSelectedTripWithInfo } from '../../actions';
 import { push } from 'react-router-redux';
 import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 
 axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('id_token');
 
@@ -132,7 +133,7 @@ class CreateTripForm extends React.Component {
                     this.setState({ submitButtonDisable: false });
                     this.props.dispatch(snackbarMessage('Something went wrong, Please submit again'));
                 });
-        }else{
+        } else {
             console.log('Please complete the form');
             this.props.dispatch(snackbarMessage('Please complete the form'));
         }
@@ -162,7 +163,10 @@ class CreateTripForm extends React.Component {
         const { classes } = this.props;
         return (
             <div>
-                <h3>Create A Trip</h3>
+                <br/>
+                <Typography variant="headline" gutterBottom>
+                    Create A Trip
+      </Typography>
                 <TextField
                     id='tripNameInput'
                     label="Trip Name"

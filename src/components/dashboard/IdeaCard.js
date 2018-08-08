@@ -15,7 +15,7 @@ import CardActions from '@material-ui/core/CardActions';
 import Card from '@material-ui/core/Card';
 import InfoIcon from '@material-ui/icons/Info';
 import CommentIcon from '@material-ui/icons/Comment';
-import { populateInfoWindow } from '../mapFunctions';
+import { populateInfoWindow } from '../utility/mapFunctions';
 import '../../css/ideaCard.css';
 import settings from '../../config';
 

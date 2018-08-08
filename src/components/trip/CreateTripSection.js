@@ -1,5 +1,5 @@
 import React from 'react';
-import CreateTripForm from '../components/forms/CreateTripForm';
+import CreateTripForm from './CreateTripForm';
 
 const CreateTripSection = (props) => (
     <div className="createTripSectionContainer">

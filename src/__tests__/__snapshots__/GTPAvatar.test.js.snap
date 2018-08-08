@@ -1,0 +1,87 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Avatar with profilePictureURL 1`] = `
+<div>
+  <button
+    className="MuiButtonBase-root-9 MuiIconButton-root-3 GTPAvatar-avatarButton-2"
+    disabled={false}
+    id="appBarAvatar"
+    onBlur={[Function]}
+    onClick={[Function]}
+    onFocus={[Function]}
+    onKeyDown={[Function]}
+    onKeyUp={[Function]}
+    onMouseDown={[Function]}
+    onMouseLeave={[Function]}
+    onMouseUp={[Function]}
+    onTouchEnd={[Function]}
+    onTouchMove={[Function]}
+    onTouchStart={[Function]}
+    tabIndex="0"
+    type="button"
+  >
+    <span
+      className="MuiIconButton-label-8"
+    >
+      <div
+        className="MuiAvatar-root-12 GTPAvatar-avatar-1"
+      >
+        <img
+          alt="Profile Photo"
+          className="MuiAvatar-img-14"
+          sizes={undefined}
+          src="/henry-XXX-UserIcon.png"
+          srcSet={undefined}
+        />
+      </div>
+       
+    </span>
+    <span
+      className="MuiTouchRipple-root-15"
+    />
+  </button>
+</div>
+`;
+
+exports[`Avatar without profilePictureURL 1`] = `
+<div>
+  <button
+    className="MuiButtonBase-root-9 MuiIconButton-root-3 GTPAvatar-avatarButton-2"
+    disabled={false}
+    id="appBarAvatar"
+    onBlur={[Function]}
+    onClick={[Function]}
+    onFocus={[Function]}
+    onKeyDown={[Function]}
+    onKeyUp={[Function]}
+    onMouseDown={[Function]}
+    onMouseLeave={[Function]}
+    onMouseUp={[Function]}
+    onTouchEnd={[Function]}
+    onTouchMove={[Function]}
+    onTouchStart={[Function]}
+    tabIndex="0"
+    type="button"
+  >
+    <span
+      className="MuiIconButton-label-8"
+    >
+      <div
+        className="MuiAvatar-root-12 GTPAvatar-avatar-1"
+      >
+        <img
+          alt="Profile Photo"
+          className="MuiAvatar-img-14"
+          sizes={undefined}
+          src="/defaultUserIcon.png"
+          srcSet={undefined}
+        />
+      </div>
+       
+    </span>
+    <span
+      className="MuiTouchRipple-root-15"
+    />
+  </button>
+</div>
+`;

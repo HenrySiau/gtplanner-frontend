@@ -11,7 +11,7 @@ import Icon from '@material-ui/core/Icon';
 import PropTypes from 'prop-types';
 import Divider from '@material-ui/core/Divider';
 import grey from '@material-ui/core/colors/grey';
-import { populateMarkers, clearMarkers } from './mapFunctions';
+import { populateMarkers, clearMarkers } from '../utility/mapFunctions';
 
 const drawerWidth = 150;
 const styles = theme => ({

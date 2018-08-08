@@ -1,5 +1,5 @@
 import React from 'react';
-import GoogleMapsContainer from '../containers/GoogleMapsContainer';
+import GoogleMapsContainer from './GoogleMapsContainer';
 
 class GTPDashboard extends React.Component {
     constructor(props) {

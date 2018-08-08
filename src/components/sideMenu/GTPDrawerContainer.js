@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
-import { toggleDrawer, updateSelectedTrip, toggleDrawerExtend, toggleDrawerFold } from '../actions';
-import { setDashboardViewToMap, setDashboardViewToList, setDashboardViewToSplit, showItinerary, showIdeas, updateFilteredIdeas, updateFocusedIdea } from '../actions';
-import GTPDrawer from '../components/GTPDrawer';
+import { toggleDrawer, updateSelectedTrip, toggleDrawerExtend, toggleDrawerFold } from '../../actions';
+import { setDashboardViewToMap, setDashboardViewToList, setDashboardViewToSplit, showItinerary, showIdeas, updateFilteredIdeas, updateFocusedIdea } from '../../actions';
+import GTPDrawer from './GTPDrawer';
 import { withRouter } from 'react-router-dom';
 
 const mapStateToProps = (state) => {

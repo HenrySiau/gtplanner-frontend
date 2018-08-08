@@ -8,6 +8,14 @@ import SignUpFormContainer from './signUp/SignUpFormContainer';
 import LoginForm from './login/LoginForm';
 import StyleWrapper from './StyleWrapper';
 import GTPSnackbar from './snackBar/GTPSnackbar';
+import GTPDrawerContainer from './sideMenu/GTPDrawerContainer';
+import ChatRoomContainer from './chatRoom/ChatRoomContainer';
+import CreateTripSection from './trip/CreateTripSection';
+import JoinATrip from './trip/JoinATrip';
+import privacyPolicy from './privacyPolicy/privacyPolicy';
+import InviteMemberForm from './member/InviteMemberForm';
+import MyAccount from './profile/MyAccount';
+import GTPDashboard from './dashboard/GTPDashboard';
 
 const styles = theme => ({
   root: {
@@ -41,21 +49,20 @@ class App extends Component {
       <StyleWrapper>
         <div className={classes.root}>
           <GTPAppBarContainer />
-          {/* <GTPDrawerContainer /> */}
+          <GTPDrawerContainer />
           <main className={classes.content}
           >
             <Route exact path="/" component={LoginForm} />
             <Route exact path="/login" component={LoginForm} />
             <Route exact path="/signup" component={SignUpFormContainer} />
-            {/* 
-              <Route exact path="/trip/join" component={JoinATrip} />
-              <Route exact path="/privacy-policy" component={privacyPolicy} />
-              <PrivateRoute exact path="/members/invite" component={InviteMemberForm} />
-              <PrivateRoute exact path="/trip/new" component={CreateTripSection} />
-              <PrivateRoute exact path="/dashboard" component={GTPDashboard} />
-              <PrivateRoute exact path="/myaccount" component={MyAccount} /> */}
+            <Route exact path="/trip/join" component={JoinATrip} />
+            <PrivateRoute exact path="/trip/new" component={CreateTripSection} />
+            <Route exact path="/privacy-policy" component={privacyPolicy} />
+            <PrivateRoute exact path="/members/invite" component={InviteMemberForm} />
+            <PrivateRoute exact path="/myaccount" component={MyAccount} />
+            <PrivateRoute exact path="/dashboard" component={GTPDashboard} />
           </main>
-          {/* <ChatRoomContainer /> */}
+          <ChatRoomContainer />
           <GTPSnackbar />
         </div>
       </StyleWrapper>

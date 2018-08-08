@@ -6,12 +6,12 @@ import PropTypes from 'prop-types';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import AppBar from '@material-ui/core/AppBar';
-import '../css/chatRoom.css';
+import '../../css/chatRoom.css';
 import axios from 'axios';
 import Message from './Message.js';
 import uuidv4 from 'uuid/v4';
 import io from 'socket.io-client';
-import settings from '../config';
+import settings from '../../config';
 import MemberList from './MemberList';
 
 

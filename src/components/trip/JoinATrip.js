@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
-import { snackbarMessage, updateSelectedTripWithInfo, setInvitationCode, loginWithToken, updateUserInfo, removeInvitationCode } from '../actions';
+import { snackbarMessage, updateSelectedTripWithInfo, setInvitationCode, loginWithToken, updateUserInfo, removeInvitationCode } from '../../actions';
 import { push } from 'react-router-redux';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -10,7 +10,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
-import settings from '../config';
+import settings from '../../config';
 
 const styles = theme => ({
     button: {
@@ -222,7 +222,7 @@ class JoinATrip extends React.Component {
                         <Button
                             variant="raised"
                             color="primary"
-                            onClick={() => { this.props.push('/register') }}
+                            onClick={() => { this.props.push('/signup') }}
                             className={classes.dialogButton}
                         >
                             Sign Up

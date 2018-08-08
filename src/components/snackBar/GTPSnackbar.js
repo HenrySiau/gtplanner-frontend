@@ -1,7 +1,7 @@
 import React from 'react';
 import Snackbar from '@material-ui/core/Snackbar';
 import { connect } from 'react-redux';
-import {snackbarMessageClose} from '../actions';
+import {snackbarMessageClose} from '../../actions';
 import { withRouter } from 'react-router-dom';
 
 

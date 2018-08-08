@@ -29,3 +29,6 @@ export function validateJWT(id_token) {
 
 }
 
+export const strip = (str) => {
+    return str.replace(/^\s+|\s+$/g, '');
+}
