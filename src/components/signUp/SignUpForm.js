@@ -1,7 +1,6 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -12,15 +11,15 @@ import red from '@material-ui/core/colors/red';
 import blue from '@material-ui/core/colors/blue';
 import axios from 'axios';
 import settings from '../../config';
-import { isEmailFormatOK } from '../utility/Validator';
-import { loginWithToken, removeInvitationCode, snackbarMessage, updateSelectedTripWithInfo, updateUserInfo } from '../../actions';
-import { push } from 'react-router-redux';
+import { isEmailFormatOK, strip } from '../utility/Validator';
 import Paper from '@material-ui/core/Paper';
+import PropTypes from 'prop-types';
+import Typography from '@material-ui/core/Typography';
 
 const styles = theme => ({
     container: {
         margin: '10px',
-        height: 400
+        height: 500
     },
     registerButton: {
         margin: '10px 10px 5px 120px'
@@ -49,95 +48,160 @@ const styles = theme => ({
     }
 });
 
-class RegisterForm extends React.Component {
+class SignUPForm extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            // userName
             userName: '',
-            email: '',
-            phoneNumber: '',
-            password: '',
-            passwordConfirm: '',
             userNameErrMessage: '',
-            passwordErrMessage: '',
-            passwordConfirmErrMessage: '',
+
+            // email
+            email: '',
             emailErrMessage: '',
-            phoneNumberErrMessage: '',
+            emailAlreadyExist: false,
             isEmailFormatIncorrect: false,
-            isUserNameFormatIncorrect: false,
+
+            // phoneNumber
+            phoneNumber: '',
+            phoneNumberErrMessage: '',
+
+            // password
+            password: '',
+            passwordErrMessage: '',
             isPasswordInputOnFocus: false,
             isPasswordContainLowercase: false,
-            isPasswordFormatCorrect: false,
             isPasswordContainCapital: false,
             isPasswordContainNumber: false,
             isPasswordSatisfyLengthRequirement: false,
+            isPasswordFormatCorrect: false,
+
+            // passwordConfirm
+            passwordConfirm: '',
+            passwordConfirmErrMessage: '',
+
+
             isDialogOpen: false,
             submitButtonDisable: false,
-            emailAlreadyExist: false,
+
         };
     }
 
     componentDidMount = () => {
         this.setState({
-            anchorEl: document.querySelector('#passwordInputField'),
+            popoverAnchor: document.querySelector('#passwordInputField'),
             anchorEl2: document.querySelector('#passwordCnfInputField')
         });
 
     }
 
-    strip = (str) => {
-        return str.replace(/^\s+|\s+$/g, '');
+    // userName functions
+    userNameOnChange = (event) => {
+        const userName = strip(event.target.value);
+        this.setState({
+            userName: userName,
+        });
+        if (userName) {
+            // userName format is correct
+            if (userName.length < 21 && userName.length > 1) {
+                if (this.state.userNameErrMessage) {
+                    this.setState({
+                        userName: userName,
+                        userNameErrMessage: '',
+                    });
+                } else {
+                    this.setState({
+                        userName: userName,
+                        isUsernameFormatOk: true,
+                    })
+                }
+
+            } else if (userName.length > 20) {    // userName format incorrect
+                if (!this.state.userNameErrMessage) {
+                    this.setState({
+                        userNameErrMessage: 'User Name must between 2-20 characters',
+                    })
+                }
+            }
+
+        }
     }
-    isFormReady = () => {
-        // if (!this.state.isEmailFormatIncorrect && !this.state.isUserNameFormatIncorrect
-        //     && this.state.isPasswordContainLowercase && this.state.isPasswordContainCapital
-        //     && this.state.isPasswordContainNumber && this.state.isPasswordSatisfyLengthRequirement
-        // ) {
-        //     return true
-        // } else {
-        //     return false
-        // }
-        let result = false;
-        if (!this.state.isEmailFormatIncorrect) {
-            this.setState({
-                emailErrMessage: 'Email Format Incorrect',
-            });
-        }
-        if (this.state.emailAlreadyExist) {
-            this.setState({
-                emailErrMessage: 'This Email already registered',
-            });
-        }
-        if (!this.state.isUserNameFormatIncorrect) {
+    userNameOnBlur = (event) => {
+        const userName = strip(event.target.value);
+        // if userName format does not meet requirements
+        if (userName.length < 2 || userName.length > 21) {
             this.setState({
                 userNameErrMessage: 'User Name must between 2-20 characters'
             });
+        } else {
+            this.setState({
+                userNameErrMessage: ''
+            });
         }
-        if (this.state.isPasswordContainLowercase) {
+    }
+    // end userName functions
 
-        }
-        if (this.state.isPasswordContainCapital) {
+    // email functions
+    emailOnchange = (event) => {
+        const email = strip(event.target.value);
+        if (email) {
+            if (isEmailFormatOK(email)) { // if email format ok
+                this.setState({
+                    email: email
+                })
+                if (this.state.emailAlreadyExist) {
+                    if (email !== this.state.email) {
+                        this.setState({
+                            emailAlreadyExist: false,
+                            emailErrMessage: '',
+                        })
+                    }
+                }
+                if (this.state.isEmailFormatIncorrect) {
+                    this.setState({
+                        isEmailFormatIncorrect: false,
+                        emailErrMessage: '',
+                    })
+                }
+                if (this.state.emailErrMessage) {
+                    this.setState({
+                        emailErrMessage: '',
+                    });
+                }
 
+            }
         }
-        if (this.state.isPasswordContainNumber) {
 
-        }
-        if (this.state.isPasswordSatisfyLengthRequirement) {
 
+        // clear error message if format is ok
+        if (this.state.isEmailFormatIncorrect) {
+            if (isEmailFormatOK(email)) {
+                this.setState({
+                    isEmailFormatIncorrect: false,
+                    emailErrMessage: ''
+                });
+            }
         }
-        result = true;
-        return result;
+
+        // clear emailAlreadyExist err message when updating email
+        if (this.state.emailAlreadyExist) {
+            if (email !== this.state.email) {
+                this.setState({
+                    emailAlreadyExist: false,
+                    emailErrMessage: ''
+                });
+            }
+        }
     }
 
-    ValidateEmailAvailable = () => {
-        let email = this.strip(this.state.email);
+    emailOnBlur = (event) => {
+        let email = strip(event.target.value);
         if (isEmailFormatOK(email)) {
             axios.post(settings.serverUrl + '/api/post/email/exist', {
                 email: email,
             })
                 .then((response) => {
-                    console.log('got the response');
                     if (response.data) {
                         if (response.data.exist) {
                             this.setState({
@@ -158,7 +222,7 @@ class RegisterForm extends React.Component {
                 .catch((error) => {
                     // TODO: show error message and guide user to re submit
                     console.log(error);
-                    this.props.dispatch(snackbarMessage('Network or Server error'));
+                    this.props.snackbarMessage('Network or Server error');
                 });
 
 
@@ -169,91 +233,61 @@ class RegisterForm extends React.Component {
             });
         }
     }
+    // end email functions
 
-    ValidateUserNameFormat = (event) => {
-        const userName = this.strip(this.state.userName);
-        if (userName.length < 2 || userName.length > 21) {
+    // phoneNumber functions
+    phoneNumberOnChange = (event) => {
+        const phoneNumber = strip(event.target.value);
+        if (phoneNumber.length > 20) {
             this.setState({
-                isUserNameFormatIncorrect: true,
-                userNameErrMessage: 'User Name must between 2-20 characters'
+                phoneNumberErrMessage: 'Phone Number must less than 20 characters',
             });
         } else {
             this.setState({
-                isUserNameFormatIncorrect: false,
-                userNameErrMessage: ''
+                phoneNumber: event.target.value,
             });
         }
-    };
-
-    handleUserNameChange = (event) => {
-        this.setState({
-            userName: event.target.value,
-        });
-        if (this.state.isUserNameFormatIncorrect) {
-            if (event.target.value.length < 21 && event.target.value.length > 1) {
+        if (this.state.phoneNumberErrMessage) {
+            if (phoneNumber.length < 21) {
                 this.setState({
-                    userNameErrMessage: '',
-                    isUserNameFormatIncorrect: false
+                    phoneNumberErrMessage: '',
                 });
             }
-        } else {
-            if (event.target.value.length > 21) {
-                this.setState({
-                    userNameErrMessage: 'User Name must between 2-20 characters',
-                    isUserNameFormatIncorrect: true,
-                });
-            }
-        }
-    };
-
-    handleEmailInputChange = (event) => {
-        this.setState({
-            email: event.target.value
-        });
-        if (this.state.isEmailFormatIncorrect) {
-            if (isEmailFormatOK(event.target.value)) {
-                this.setState({
-                    isEmailFormatIncorrect: false,
-                    emailErrMessage: ''
-                });
-            }
-        }
-    };
-    validatePassword = () => {
-        if (this.state.isPasswordContainCapital && this.state.isPasswordContainLowercase &&
-            this.state.isPasswordContainNumber && this.state.isPasswordSatisfyLengthRequirement) {
-            this.setState({
-                isPasswordFormatCorrect: true
-            });
         }
     }
-    handlePhoneNumberChange = (event) => {
-        // validate phone number could be a big project
-        // because different county have different phone number patten
-        // here we skip this part
-        this.setState({
-            phoneNumber: event.target.value,
+    // end phoneNumber functions
 
-        });
-    };
-
-    handlePasswordChange = (event) => {
-        if (!this.state.popoverAnchor) {
-            this.setState({
-                popoverAnchor: event.target
-            });
+    // password functions
+    validatePasswordFormat = (password) => {
+        if (password.match(/[a-z][A-Z][0-9]/g) && password.match(/^.{7,31}$/)) {
+            return true;
+        } else {
+            return false;
         }
-        const password = this.strip(event.target.value);
-        this.setState({
-            password: password
-        });
+    }
+    passwordOnChange = (event) => {
+        const password = strip(event.target.value);
+
+        if (this.validatePasswordFormat(password)) {
+            if (this.state.passwordErrMessage) {
+                this.setState({
+                    isPasswordFormatCorrect: true,
+                    password: password,
+                    passwordErrMessage: '',
+                });
+            } else {
+                this.setState({
+                    isPasswordFormatCorrect: true,
+                    password: password
+                });
+            }
+        }
 
         // validate lowercase
         if (password.match(/[a-z]/g)) {
-            this.setState(
-                { isPasswordContainLowercase: true },
-                () => this.validatePassword()
-            );
+            this.setState({
+                isPasswordContainLowercase: true
+            });
         } else {
             this.setState({
                 isPasswordContainLowercase: false
@@ -261,22 +295,19 @@ class RegisterForm extends React.Component {
         }
         // validate capital letter
         if (password.match(/[A-Z]/g)) {
-            this.setState(
-                { isPasswordContainCapital: true },
-                () => this.validatePassword()
-            );
+            this.setState({
+                isPasswordContainCapital: true
+            });
         } else {
-            this.setState(
-                { isPasswordContainCapital: false },
-                () => this.validatePassword()
-            );
+            this.setState({
+                isPasswordContainCapital: false
+            });
         }
         // validate number
         if (password.match(/[0-9]/g)) {
-            this.setState(
-                { isPasswordContainNumber: true },
-                () => this.validatePassword()
-            );
+            this.setState({
+                isPasswordContainNumber: true
+            });
         } else {
             this.setState({
                 isPasswordContainNumber: false
@@ -284,160 +315,257 @@ class RegisterForm extends React.Component {
         }
         //validate length
         if (password.length > 7 && password.length < 31) {
-            this.setState(
-                { isPasswordSatisfyLengthRequirement: true },
-                () => this.validatePassword()
-            );
+            this.setState({
+                isPasswordSatisfyLengthRequirement: true
+            });
         } else {
             this.setState({
                 isPasswordSatisfyLengthRequirement: false
             });
         }
-    };
-
-    handlePasswordInputOnFocus = (event) => {
+    }
+    passwordOnFocus = () => {
         this.setState({
             isPasswordInputOnFocus: true
         });
     }
-
-    handlePasswordInputOnBlur = (event) => {
+    passwordOnBlur = (event) => {
+        const password = strip(event.target.value);
         this.setState({
             isPasswordInputOnFocus: false
         });
-    }
-
-    handlePasswordConfirmChange = (event) => {
-
-        if (event.target.value !== this.state.password) {
+        if (!this.validatePasswordFormat(password)) {
             this.setState({
-                passwordConfirmErrMessage: `password doesn't match`
-            });
-        } else {
-            this.setState({
-                passwordConfirm: event.target.value,
-                passwordConfirmErrMessage: ''
-            });
-        }
-    };
-
-    handleSubmit = () => {
-        if (this.isFormReady()) {
-            this.setState({
-                submitButtonDisable: true
-            });
-            axios.post(settings.serverUrl + '/api/post/user/register', {
-                userName: this.state.userName,
-                email: this.state.email,
-                phoneNumber: this.state.phoneNumber,
-                password: this.state.password,
-                passwordConfirm: this.state.passwordConfirm,
-                invitationCode: this.props.invitationCode
+                passwordErrMessage: 'Password format incorrect'
             })
-                .then((response) => {
-                    const userInfo = response.data.userInfo;
-                    if (userInfo) {
-                        const newUserInfo = {
-                            userId: userInfo.userId,
-                            userName: userInfo.userName,
-                            email: userInfo.email,
-                            phoneNumber: userInfo.phoneNumber || '',
-                            profilePictureURL: userInfo.profilePicture || (userInfo.facebookProfilePictureURL || ''),
-                            trips: userInfo.trips,
-                        };
-                        this.props.dispatch(updateUserInfo(newUserInfo));
-                        const newToken = response.data.token;
-                        if (newToken) {
-                            this.props.dispatch(loginWithToken(response.data.token));
-                        }
-                    } else {// fail creating a user
-                        this.props.dispatch(snackbarMessage('Something went wrong, can not register, please try again'));
-                    }
-                    if (this.props.invitationCode) {
-                        if (response.data.tripInfo) {
-                            this.props.dispatch(updateSelectedTripWithInfo(response.data.tripInfo));
-                            this.props.dispatch(push('/dashboard'));
-                            this.props.dispatch(snackbarMessage('Welcome to your new trip!'));
-                            this.props.dispatch(removeInvitationCode());
-                        } else {
-                            this.props.dispatch(snackbarMessage('can not joint the trip'));
-                        }
-                    } else {
-                        this.handleDialogOpen();
-                    }
+        }
+    }
+    // end password functions
 
+    // password confirm functions
+    passwordConfirmOnChange = (event) => {
+        const passwordConfirm = strip(event.target.value);
+        const passwordConfirmLength = passwordConfirm.length;
+        const passwordSlice = this.state.password.slice(0, passwordConfirmLength);
+
+        if (passwordConfirm) {
+            if (!this.state.isPasswordFormatCorrect) {
+                this.setState({
+                    passwordConfirmErrMessage: 'please finish password first'
                 })
-                .catch((error) => {
-                    this.setState({
-                        submitButtonDisable: false
-                    });
-                    console.error(error);
-                    this.props.dispatch(snackbarMessage('Something went wrong, can not register, please try later'));
-                });
 
-        } else {
-            this.props.dispatch(snackbarMessage('Please fill the form properly according to the hints'));
+            } else {  // password had finished
+                if (passwordConfirm !== passwordSlice) {
+                    this.setState({
+                        passwordConfirmErrMessage: `password doesn't match`
+                    });
+                } else {
+                    this.setState({
+                        passwordConfirm: event.target.value,
+                        passwordConfirmErrMessage: ''
+                    });
+                }
+            }
         }
     }
 
-    handlePressEnter = (e) => {
-        if (e.key === 'Enter') {
+    passwordConfirmOnBlur = (event) => {
+        const passwordConfirm = strip(event.target.value);
+        const password = this.state.password;
+        if (passwordConfirm) {
+            if (passwordConfirm !== password) {
+                this.setState({
+                    passwordConfirmErrMessage: `password doesn't match`
+                });
+            }
+        }
+    }
+
+    passwordConfirmOnPressEnter = (event) => {
+        if (event.key === 'Enter') {
             this.handleSubmit();
         }
     }
-
-    handleDialogClose = () => {
-        this.setState({
-            isDialogOpen: false
-        });
-    }
+    // end password confirm functions
 
     handleDialogOpen = () => {
         this.setState({
             isDialogOpen: true
         });
     }
-
     createNewTrip = () => {
-        this.props.dispatch(push('/trip/new'));
+        this.props.push('/trip/new');
         this.setState({
             isDialogOpen: false
         });
     }
 
     goToMyAccount = () => {
-        this.props.dispatch(push('/myaccount'));
+        this.props.push('/myaccount');
         this.setState({
             isDialogOpen: false
         });
     }
+    // handleSubmit
+    isFormReady = (data) => {
+        let result = true;
+        if (data.userName) {
+            if (data.userName.length > 20 || data.userName < 2) {
+                result = false;
+                this.setState({
+                    userNameErrMessage: 'User Name must between 2-20 characters'
+                });
+            }
+        } else {
+            result = false;
+            this.setState({
+                userNameErrMessage: 'User Name must between 2-20 characters'
+            });
+        }
 
+        if (data.email) {
+            if (!isEmailFormatOK(data.email)) {
+                result = false;
+                this.setState({
+                    emailErrMessage: 'Email format incorrect'
+                });
+            } else { // email format correct but already been registered
+                if (this.state.emailAlreadyExist) {
+                    result = false;
+                    this.setState({
+                        emailErrMessage: 'This Email already registered'
+                    });
+                }
+            }
+        } else {
+            result = false;
+            this.setState({
+                emailErrMessage: 'Email required'
+            });
+        }
+
+        if (data.password) {
+            if (!this.validatePasswordFormat(data.password)) {
+                result = false;
+                this.setState({
+                    passwordErrMessage: 'Password format incorrect'
+                });
+            }
+        } else {
+            result = false;
+            this.setState({
+                passwordErrMessage: 'Password required'
+            });
+        }
+
+        if (data.password && data.passwordConfirm) {
+            if (data.password !== data.passwordConfirm) {
+                result = false;
+                this.setState({
+                    passwordConfirmErrMessage: `password doesn't match`
+                });
+            }
+        } else {
+            result = false;
+            this.setState({
+                passwordConfirmErrMessage: `password confirm required`
+            });
+        }
+
+
+        return result
+
+    }
+    handleSubmit = () => {
+        const data = {
+            userName: this.state.userName,
+            email: this.state.email,
+            phoneNumber: this.state.phoneNumber,
+            password: this.state.password,
+            passwordConfirm: this.state.passwordConfirm,
+            invitationCode: this.props.invitationCode
+        }
+        if (this.isFormReady(data)) {
+            this.setState({
+                submitButtonDisable: true
+            });
+            axios.post(settings.serverUrl + '/api/post/user/register', data)
+                .then((response) => {
+                    if (response.data) {
+                        const userInfo = response.data.userInfo;
+                        if (userInfo) {
+                            const newUserInfo = {
+                                userId: userInfo.userId,
+                                userName: userInfo.userName,
+                                email: userInfo.email,
+                                phoneNumber: userInfo.phoneNumber || '',
+                                profilePictureURL: userInfo.profilePicture || (userInfo.facebookProfilePictureURL || ''),
+                                trips: userInfo.trips,
+                            };
+                            this.props.updateUserInfo(newUserInfo);
+                            const newToken = response.data.token;
+                            if (newToken) {
+                                this.props.loginWithToken(response.data.token);
+                            }
+                        } else {// fail creating a user
+                            this.props.snackbarMessage('Something went wrong, can not register, please try again');
+                        }
+                        if (this.props.invitationCode) {
+                            if (response.data.tripInfo) {
+                                this.props.updateSelectedTripWithInfo(response.data.tripInfo);
+                                this.props.push('/dashboard');
+                                this.props.snackbarMessage('Welcome to your new trip!');
+                                this.props.removeInvitationCode();
+                            } else {
+                                this.props.snackbarMessage('can not joint the trip');
+                            }
+                        } else {
+                            this.handleDialogOpen();
+                        }
+                    }
+                })
+                .catch((error) => {
+                    this.setState({
+                        submitButtonDisable: false
+                    });
+                    console.error(error);
+                    this.props.snackbarMessage('Something went wrong, can not register, please try later');
+                });
+        } else {
+            this.props.snackbarMessage('Please fill the form properly according to the hints');
+        }
+
+    }
+    // end handleSubmit
     render() {
         const { classes } = this.props;
 
         return (
             <div className={classes.container}>
+                <Typography variant="headline" gutterBottom>
+                    Sign UP
+      </Typography>
                 <TextField
                     label="User Name"
-                    onChange={this.handleUserNameChange}
+                    onChange={this.userNameOnChange}
                     error={Boolean(this.state.userNameErrMessage)}
                     helperText={this.state.userNameErrMessage}
-                    onBlur={this.ValidateUserNameFormat}
+                    onBlur={this.userNameOnBlur}
                     className={classes.textField}
                 /><br />
                 <TextField
                     label="Email"
                     helperText={this.state.emailErrMessage}
                     error={Boolean(this.state.emailErrMessage)}
-                    onChange={this.handleEmailInputChange}
-                    onBlur={this.ValidateEmailAvailable}
+                    onChange={this.emailOnchange}
+                    onBlur={this.emailOnBlur}
                     className={classes.textField}
                 /><br />
                 <TextField
                     label="Phone Number"
                     helperText={this.state.phoneNumberErrMessage}
                     error={Boolean(this.state.phoneNumberErrMessage)}
-                    onChange={this.handlePhoneNumberChange}
+                    onChange={this.phoneNumberOnChange}
                     className={classes.textField}
                 /><br />
                 <TextField
@@ -445,9 +573,9 @@ class RegisterForm extends React.Component {
                     type="password"
                     helperText={this.state.passwordErrMessage}
                     error={Boolean(this.state.passwordErrMessage)}
-                    onChange={this.handlePasswordChange}
-                    onFocus={this.handlePasswordInputOnFocus}
-                    onBlur={this.handlePasswordInputOnBlur}
+                    onChange={this.passwordOnChange}
+                    onFocus={this.passwordOnFocus}
+                    onBlur={this.passwordOnBlur}
                     className={classes.textField}
                     id='passwordInputField'
                 /><br />
@@ -468,14 +596,15 @@ class RegisterForm extends React.Component {
                     </ul>
                 </Paper >
                 <TextField
-                    id='passwordCnfInputField'
+                    // id='passwordCnfInputField'
                     label="Confirm Password"
                     type="password"
                     helperText={this.state.passwordConfirmErrMessage}
                     error={Boolean(this.state.passwordConfirmErrMessage)}
-                    onChange={this.handlePasswordConfirmChange}
+                    onChange={this.passwordConfirmOnChange}
                     className={classes.textField}
-                    onKeyPress={this.handlePressEnter}
+                    onKeyPress={this.passwordConfirmOnPressEnter}
+                    onBlur={this.passwordConfirmOnBlur}
                 /> <br />
                 <Button
                     variant="raised"
@@ -523,13 +652,9 @@ class RegisterForm extends React.Component {
         );
     }
 }
-const mapStateToProps = (state) => {
-    return {
-        isLoggedIn: state.isLoggedIn,
-        tripId: state.selectedTrip.tripId,
-        invitationCode: state.invitationCode ? state.invitationCode : null
-    }
-}
 
-RegisterForm = withStyles(styles)(RegisterForm);
-export default connect(mapStateToProps)(RegisterForm);
+SignUPForm.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(SignUPForm);

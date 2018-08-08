@@ -4,9 +4,10 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import PrivateRoute from './utility/PrivateRoute';
 import GTPAppBarContainer from './appBar/GTPAppBarContainer';
-import SignUpForm from './signUp/SignUpForm';
+import SignUpFormContainer from './signUp/SignUpFormContainer';
 import LoginForm from './login/LoginForm';
 import StyleWrapper from './StyleWrapper';
+import GTPSnackbar from './snackBar/GTPSnackbar';
 
 const styles = theme => ({
   root: {
@@ -45,7 +46,7 @@ class App extends Component {
           >
             <Route exact path="/" component={LoginForm} />
             <Route exact path="/login" component={LoginForm} />
-            <Route exact path="/signup" component={SignUpForm} />
+            <Route exact path="/signup" component={SignUpFormContainer} />
             {/* 
               <Route exact path="/trip/join" component={JoinATrip} />
               <Route exact path="/privacy-policy" component={privacyPolicy} />
@@ -55,7 +56,7 @@ class App extends Component {
               <PrivateRoute exact path="/myaccount" component={MyAccount} /> */}
           </main>
           {/* <ChatRoomContainer /> */}
-          {/* <GTPSnackbar /> */}
+          <GTPSnackbar />
         </div>
       </StyleWrapper>
     );
