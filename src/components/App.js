@@ -12,6 +12,7 @@ import GTPDrawerContainer from './sideMenu/GTPDrawerContainer';
 import ChatRoomContainer from './chatRoom/ChatRoomContainer';
 import CreateTripSection from './trip/CreateTripSection';
 import JoinATrip from './trip/JoinATrip';
+import Trips from './trip/Trips';
 import privacyPolicy from './privacyPolicy/privacyPolicy';
 import InviteMemberForm from './member/InviteMemberForm';
 import MyAccount from './profile/MyAccount';
@@ -61,6 +62,7 @@ class App extends Component {
             <PrivateRoute exact path="/members/invite" component={InviteMemberForm} />
             <PrivateRoute exact path="/myaccount" component={MyAccount} />
             <PrivateRoute exact path="/dashboard" component={GTPDashboard} />
+            <PrivateRoute exact path="/trips" component={Trips} />
           </main>
           <ChatRoomContainer />
           <GTPSnackbar />

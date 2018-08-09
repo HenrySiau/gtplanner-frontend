@@ -84,7 +84,7 @@ export const updateSelectedTripWithInfo = (tripInfo) => {
     }
     return {
         type: UPDATE_SELECTED_TRIP,
-        tripId: tripInfo.tripId,
+        tripId: tripInfo.tripId || tripInfo.id,
         title: tripInfo.title,
         description: tripInfo.description,
         owner: tripInfo.owner,

@@ -10,7 +10,7 @@ import { push } from 'react-router-redux';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 
-axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('id_token');
+// axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('id_token');
 
 const styles = theme => ({
     button: {

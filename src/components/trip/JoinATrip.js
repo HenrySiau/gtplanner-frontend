@@ -11,6 +11,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import settings from '../../config';
+import Typography from '@material-ui/core/Typography';
 
 const styles = theme => ({
     button: {
@@ -129,7 +130,7 @@ class JoinATrip extends React.Component {
                             profilePictureURL: userInfo.profilePicture || (userInfo.facebookProfilePictureURL || ''),
                             trips: userInfo.trips,
                         };
-                        
+
                         this.props.updateUserInfo(newUserInfo);
                     }
                     if (response.data.token) {
@@ -161,7 +162,10 @@ class JoinATrip extends React.Component {
         const { classes } = this.props;
         return (
             <div>
-                <h1>Join A Trip</h1>
+                <br />
+                <Typography variant="headline" gutterBottom>
+                    Join A Trip
+      </Typography>
                 <Dialog
                     disableBackdropClick={true}
                     open={this.state.isInvitationCodeValid && this.state.isTokenValid}
