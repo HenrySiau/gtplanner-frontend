@@ -3,6 +3,7 @@ import { toggleDrawer, updateSelectedTrip, toggleDrawerExtend, toggleDrawerFold 
 import { setDashboardViewToMap, setDashboardViewToList, setDashboardViewToSplit, showItinerary, showIdeas, updateFilteredIdeas, updateFocusedIdea } from '../../actions';
 import GTPDrawer from './GTPDrawer';
 import { withRouter } from 'react-router-dom';
+import { push } from 'react-router-redux';
 
 const mapStateToProps = (state) => {
     return {
@@ -52,6 +53,9 @@ const mapDispatchToProps = dispatch => {
         },
         updateFocusedIdea: ideaId => {
             dispatch(updateFocusedIdea(ideaId));
+        },
+        push: (url) => {
+            dispatch(push(url));
         },
     }
 }

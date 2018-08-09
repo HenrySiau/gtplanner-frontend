@@ -12,6 +12,7 @@ import PropTypes from 'prop-types';
 import Divider from '@material-ui/core/Divider';
 import grey from '@material-ui/core/colors/grey';
 import { populateMarkers, clearMarkers } from '../utility/mapFunctions';
+import settings from '../../config';
 
 const drawerWidth = 150;
 const styles = theme => ({
@@ -105,6 +106,10 @@ class GTPDrawer extends React.Component {
     }
 
     showItinerary = () => {
+        this.goToDashboard();
+        if (this.props.dashboardView === 'map') {
+            this.props.setDashboardViewToSplit();
+        };
         let filteredIdeasList = []
         this.props.ideas.forEach(idea => {
             if (idea.inItinerary) {
@@ -125,6 +130,10 @@ class GTPDrawer extends React.Component {
     }
 
     showIdeas = () => {
+        this.goToDashboard();
+        if (this.props.dashboardView === 'map') {
+            this.props.setDashboardViewToSplit();
+        };
         let filteredIdeasList = []
         this.props.ideas.forEach(idea => {
             if (!idea.inItinerary) {
@@ -144,25 +153,44 @@ class GTPDrawer extends React.Component {
         this.props.updateFocusedIdea('');
     }
 
+
+    goToDashboard = () => {
+        if (window.location.href !== settings.serverUrl + '/dashboard') {
+            this.props.push('/dashboard');
+        }
+    }
+    mapButtonOnClick = () => {
+        this.goToDashboard();
+        this.props.setDashboardViewToMap();
+    }
+    listButtonOnClick = () => {
+        this.goToDashboard();
+        this.props.setDashboardViewToList();
+    }
+    splitButtonOnClick = () => {
+        this.goToDashboard();
+        this.props.setDashboardViewToSplit();
+    }
+
     render() {
         const { classes, dashboardView, ideasOrItinerary, } = this.props;
         const sideList = (
             <div className={classes.list}>
                 <List>
                     {this.generateNavigationIcon()}
-                    <ListItem button onClick={this.props.setDashboardViewToMap} className={dashboardView === 'map' ? classes.selected : classes.unSelected}>
+                    <ListItem button onClick={this.mapButtonOnClick} className={dashboardView === 'map' ? classes.selected : classes.unSelected}>
                         <ListItemIcon >
                             <Icon >map</Icon>
                         </ListItemIcon>
                         <ListItemText primary="Map" />
                     </ListItem>
-                    <ListItem button onClick={this.props.setDashboardViewToList} className={dashboardView === 'list' ? classes.selected : classes.unSelected}>
+                    <ListItem button onClick={this.listButtonOnClick} className={dashboardView === 'list' ? classes.selected : classes.unSelected}>
                         <ListItemIcon>
                             <Icon >view_list</Icon>
                         </ListItemIcon>
                         <ListItemText primary="Events" />
                     </ListItem>
-                    <ListItem button onClick={this.props.setDashboardViewToSplit} className={dashboardView === 'split' ? classes.selected : classes.unSelected}>
+                    <ListItem button onClick={this.splitButtonOnClick} className={dashboardView === 'split' ? classes.selected : classes.unSelected}>
                         <ListItemIcon>
                             <Icon >pie_chart</Icon>
                         </ListItemIcon>
@@ -181,7 +209,7 @@ class GTPDrawer extends React.Component {
                         </ListItemIcon>
                         <ListItemText primary="Ideas" />
                     </ListItem>
-                    <ListItem button>
+                    <ListItem button >
                         <ListItemIcon>
                             <Icon >check_box</Icon>
                         </ListItemIcon>
