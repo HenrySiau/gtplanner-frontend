@@ -1,0 +1,32 @@
+.speech-bubble {
+	position: relative;
+	background: #00aabb;
+    border-radius: .4em;
+    margin: 30px;
+    width: 200px;
+}
+
+.speech-bubble p {
+
+}
+
+.speech-bubble:after {
+    content: '';
+	position: absolute;
+	bottom: 0;
+	left: 80%;
+	width: 0;
+	height: 0;
+	border: 53px solid transparent;
+	border-top-color: #00aabb;
+	border-bottom: 0;
+	border-right: 0;
+	margin-left: -26.5px;
+	margin-bottom: -53px;
+}
+
+.pac-container {
+    z-index: 10000 !important;
+}
+
+/* <Grid container direction={'column'} justify={'space-between'} className={classes.root}> */

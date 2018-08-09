@@ -2,7 +2,7 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import '../../css/googleMaps.css';
+import '../../css/dashboard.css';
 import { DateTimePicker } from 'material-ui-pickers';
 import axios from 'axios';
 import settings from '../../config';
@@ -280,6 +280,7 @@ class NewIdea extends React.Component {
         const { classes } = this.props;
         return (
             <div className={classes.root}>
+                
                 <TextField
                     id='ideaTitleInput'
                     label="Title"
@@ -308,6 +309,18 @@ class NewIdea extends React.Component {
                     </Select>
                     <FormHelperText>{this.state.typeHelperText}</FormHelperText>
                 </FormControl><br />
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={this.state.inItinerary}
+                            onChange={(event) => { this.setState({ inItinerary: event.target.checked }) }}
+                            value="inItinerary"
+                            color="primary"
+                        />
+                    }
+                    label="Add to itinerary"
+                    className={classes.input}
+                /><br />
                 <div className={classes.input}>
                     <AvatarEditor
                         ref={this.setImageEditorRef}
@@ -373,18 +386,6 @@ class NewIdea extends React.Component {
                     margin="normal"
                     error={this.state.isIdeaDescriptionErr}
                     helperText={this.state.ideaDescriptionErrText}
-                /><br />
-                <FormControlLabel
-                    control={
-                        <Checkbox
-                            checked={this.state.inItinerary}
-                            onChange={(event) => { this.setState({ inItinerary: event.target.checked }) }}
-                            value="inItinerary"
-                            color="primary"
-                        />
-                    }
-                    label="Add to itinerary"
-                    className={classes.input}
                 /><br />
                 <div>
                     <Button

@@ -19,7 +19,7 @@ import withWidth from '@material-ui/core/withWidth';
 import compose from 'recompose/compose';
 import IdeaDetailCard from './IdeaDetailCard';
 import { makeMarkerIcon, populateMarkers, populateMarker } from '../utility/mapFunctions';
-import '../../css/googleMaps.css';
+import '../../css/dashboard.css';
 
 const styles = theme => ({
     root: {
@@ -64,6 +64,12 @@ const styles = theme => ({
     filters: {
         display: 'flex',
         flexDirection: 'row',
+    },
+    speechBubbleContainer: {
+        width: '100%',
+        display: 'flex',
+        alignItems: 'flex-end',
+        justifyContent: 'flex-end'
     }
 
 });
@@ -104,6 +110,7 @@ class GoogleMaps extends React.Component {
             .then(response => {
                 console.log('get/ideas response: ' + response);
                 let ideas = response.data.ideas;
+
                 let filteredIdeas = [];
                 let ideasMap = new Map();
                 if (ideas) {
@@ -261,13 +268,23 @@ class GoogleMaps extends React.Component {
                 </Paper>
             )
         }
-
         const Ideas = () => {
-            return (
-                <Grid container spacing={8} justify={'flex-start'}>
-                    {ideaCards}
-                </Grid>
-            )
+            if (ideas.size > 0) {
+                console.log(this.state.noIdea);
+                return (
+                    <Grid container spacing={8} justify={'flex-start'}>
+                        {ideaCards}
+                    </Grid>
+                )
+            } else {
+                return (
+                    <div className={classes.speechBubbleContainer}>
+                        <div className="speech-bubble">
+                            <p> Add idea Here</p>
+                        </div>
+                    </div>)
+            }
+
         }
         const IdeaDetail = () => {
             let idea = ideas.get(focusedIdea);
@@ -279,17 +296,16 @@ class GoogleMaps extends React.Component {
                     idea={idea}
                     members={selectedTrip.members}
                 />
-
             )
         }
 
         return (
             <Grid container direction={'column'} justify={'space-between'} className={classes.root}>
                 <Grid style={mapContainerStyle()} id='googleMap' className={getSectionClassName('map')} ></Grid>
-               
                 <div className={getSectionClassName('list')}>
                     {focusedIdea ? <IdeaDetail /> : <Ideas />}
                 </div>
+
                 {focusedIdea ? <BotActionBarIdea /> : <BotActionBarIdeas />}
 
                 {/* <Ideas /> */}
