@@ -90,15 +90,66 @@ class IdeaDetailCard extends React.Component {
     }
 
     addToItinerary = (ideaId) => {
+
+        axios({
+            method: 'POST',
+            url: settings.serverUrl + '/api/post/idea/addToItinerary',
+            json: true,
+            headers: {
+                'x-access-token': localStorage.getItem('id_token'),
+            },
+            data: {
+                ideaId: ideaId
+            }
+        })
+            .then((response) => {
+                if (response.data) {
+                    if (response.data.success) {
+                        let idea = this.props.ideas.get(ideaId);
+                        if(idea){
+                            idea.inItinerary = true;
+                            let newIdeasMap = new Map(this.props.ideas);
+                            newIdeasMap.set(ideaId, idea);
+                            this.props.updateIdeas(newIdeasMap);
+                        }
+                    }
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
         console.log('addToItinerary: ' + ideaId);
-        // const updatedIdea = 
-        // let newIdeasMap = new Map(this.props.ideas);
-
-
     }
 
     removeFromItinerary = (ideaId) => {
         console.log('removeFromItinerary: ' + ideaId);
+        axios({
+            method: 'POST',
+            url: settings.serverUrl + '/api/post/idea/removeFromItinerary',
+            json: true,
+            headers: {
+                'x-access-token': localStorage.getItem('id_token'),
+            },
+            data: {
+                ideaId: ideaId
+            }
+        })
+            .then((response) => {
+                if (response.data) {
+                    if (response.data.success) {
+                        let idea = this.props.ideas.get(ideaId);
+                        if(idea){
+                            idea.inItinerary = false;
+                            let newIdeasMap = new Map(this.props.ideas);
+                            newIdeasMap.set(ideaId, idea);
+                            this.props.updateIdeas(newIdeasMap);
+                        }
+                    }
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }
 
     closeDialog = () => {
