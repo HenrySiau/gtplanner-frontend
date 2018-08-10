@@ -7,17 +7,25 @@ import red from '@material-ui/core/colors/red';
 import Avatar from '@material-ui/core/Avatar';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import PlaceIcon from '@material-ui/icons/Place';
+import CloseIcon from '@material-ui/icons/Close';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Card from '@material-ui/core/Card';
-import InfoIcon from '@material-ui/icons/Info';
+import DeleteIcon from '@material-ui/icons/Delete';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
-import '../../css/ideaCard.css';
 import settings from '../../config';
-import {populateInfoWindow} from '../utility/mapFunctions';
-
+import { populateInfoWindow } from '../utility/mapFunctions';
+import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
+import Tooltip from '@material-ui/core/Tooltip';
+import axios from 'axios';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
     root: {
@@ -65,18 +73,96 @@ const styles = theme => ({
     actions: {
         display: 'flex',
     },
-    ideaCardMoreInfoButton: {
+    closeDetailCardButton: {
         marginLeft: 'auto',
     },
 });
+
+
+
 
 class IdeaDetailCard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            dialogOpen: false
         }
     }
+
+    addToItinerary = (ideaId) => {
+        console.log('addToItinerary: ' + ideaId);
+        // const updatedIdea = 
+        // let newIdeasMap = new Map(this.props.ideas);
+
+
+    }
+
+    removeFromItinerary = (ideaId) => {
+        console.log('removeFromItinerary: ' + ideaId);
+    }
+
+    closeDialog = () => {
+        this.setState({
+            dialogOpen: false
+        })
+
+    }
+
+    openDialog = () => {
+        this.setState({
+            dialogOpen: true
+        })
+    }
+
+    deleteIdea = (ideaId) => {
+        axios({
+            method: 'POST',
+            url: settings.serverUrl + '/api/post/idea/delete',
+            json: true,
+            headers: {
+                'x-access-token': localStorage.getItem('id_token'),
+            },
+            data: {
+                ideaId: ideaId
+            }
+        })
+            .then((response) => {
+                if (response.data) {
+                    if (response.data.success) {
+                        let newIdeasMap = new Map(this.props.ideas);
+                        newIdeasMap.delete(ideaId);
+                        this.props.updateFocusedIdea('');
+                        let updatedFilteredIdeas = [];
+                        const filteredIdeas = this.props.filteredIdeas;
+                        if (filteredIdeas) {
+                            filteredIdeas.forEach(idea => {
+                                if (idea.id !== ideaId) {
+                                    updatedFilteredIdeas.push(idea);
+                                }
+                            });
+                            this.props.updateFilteredIdeas(updatedFilteredIdeas);
+                        }
+
+                        if (window.markers) {
+                            console.log('window.markers true');
+                            let marker = window.markers.get(ideaId);
+                            if (marker) {
+                                marker.setMap(null);
+                                console.log('marker cleared');
+                            }
+                        }
+
+                        this.props.updateIdeas(newIdeasMap);
+                    }
+                }
+
+            })
+            .catch((error) => {
+                // TODO: show error message and guide user to re submit
+                console.error(error);
+            });
+    }
+
     render() {
         const { classes, idea, members } = this.props;
         let startAt = new Date(idea.startAt);
@@ -90,77 +176,142 @@ class IdeaDetailCard extends React.Component {
                 return ''
             }
         }
+        const getProfilePictureURL = userId => {
+            let member = members.get(userId);
+            if (member) {
+                return member.profilePictureURL;
+            } else {
+                return ''
+            }
+        }
         const userName = getUserName(idea.userId);
+        const profilePictureURL = getProfilePictureURL(idea.userId);
+        const AddOrRemove = () => {
+            if (idea.inItinerary) {
+                return (
+                    <Tooltip title={"Remove from Itinerary"}>
+                        <IconButton aria-label="Remove from Itinerary"
+                            onClick={() => { this.removeFromItinerary(idea.id) }}
+                        >
+                            <RemoveCircleIcon />
+                        </IconButton>
+                    </Tooltip>
+                )
+            } else {
+                return (
+                    <Tooltip title={"Add to Itinerary"}>
+                        <IconButton aria-label="Add to Itinerary"
+                            onClick={() => { this.addToItinerary(idea.id) }}
+                        >
+                            <AddCircleIcon />
+                        </IconButton>
+                    </Tooltip>
+                )
+            }
+        }
+
         return (
             <div className={classes.root}>
-            <Card className={classes.card} key={idea.id} >
-                <CardHeader
-                    avatar={
-                        <div className="tooltip">
-                            <Avatar aria-label="User Icon" className={classes.avatar}>R</Avatar>
-                            <span className="tooltiptext">{userName}</span>
-                        </div>
-                    }
-                    action={
-                        <IconButton className="leftTooltip" onClick={() => {
-                            window.map.panTo({ lat: Number(idea.lat), lng: Number(idea.lng) });
-                            // this.handlePlaceIconOnClick({lat:Number(idea.lat), lng: Number(idea.lng)})
-                            let marker = window.markers.get(idea.id);
-                            if (marker) {
-                                if (window.activeMarker !== marker) {
-                                    if (window.activeMarker) {
-                                        window.activeMarker.setIcon(window.window.googleMapDefaultIcon);
+                <Card className={classes.card} key={idea.id} >
+                    <CardHeader
+                        avatar={
+                            <div className="tooltip">
+                                <Avatar aria-label="User Icon" className={classes.avatar}
+                                    src={profilePictureURL}
+                                />
+                                <span className="tooltiptext">{userName}</span>
+                            </div>
+                        }
+                        action={
+                            <IconButton className="leftTooltip" onClick={() => {
+                                window.map.panTo({ lat: Number(idea.lat), lng: Number(idea.lng) });
+                                // this.handlePlaceIconOnClick({lat:Number(idea.lat), lng: Number(idea.lng)})
+                                let marker = window.markers.get(idea.id);
+                                if (marker) {
+                                    if (window.activeMarker !== marker) {
+                                        if (window.activeMarker) {
+                                            window.activeMarker.setIcon(window.window.googleMapDefaultIcon);
+                                        }
+                                        window.activeMarker = marker;
+                                        marker.setIcon(window.googleMapHighlightedIcon);
+                                        populateInfoWindow(marker, window.googleMapInfoWindow, window.map);
                                     }
-                                    window.activeMarker = marker;
-                                    marker.setIcon(window.googleMapHighlightedIcon);
-                                    populateInfoWindow(marker, window.googleMapInfoWindow, window.map);
                                 }
-                            }
-                        }} >
-                            <PlaceIcon />
-                            <span className="tooltiptext">{'Show on the map'}</span>
-                        </IconButton>
-                    }
+                            }} >
+                                <PlaceIcon />
+                                <span className="tooltiptext">{'Show on the map'}</span>
+                            </IconButton>
+                        }
 
-                    title={
-                        <Typography variant="body2" className={classes.ideaCardTitle}>
-                            {idea.title}
-                        </Typography>
-                    }
-                    subheader={subHeader}
-                />
-                <CardMedia className={classes.media} image={' '}>
-                    <img src={settings.imageServerUrl + settings.imagePath + idea.coverImage}
-                        alt={idea.title}
-                        className={classes.cardMediaImage}
+                        title={
+                            <Typography variant="body2" className={classes.ideaCardTitle}>
+                                {idea.title}
+                            </Typography>
+                        }
+                        subheader={subHeader}
                     />
-                </CardMedia>
+                    <CardMedia className={classes.media} image={' '}>
+                        <img src={settings.imageServerUrl + settings.imagePath + idea.coverImage}
+                            alt={idea.title}
+                            className={classes.cardMediaImage}
+                        />
+                    </CardMedia>
 
-                <CardContent className={classes.ideaCardContent}>
-                    <Typography variant="body1">
-                        {idea.description}
-                    </Typography>
-                </CardContent>
-                <CardActions className={classes.actions} disableActionSpacing>
-                    <IconButton aria-label="Like this idea" className="tooltip">
-                        <FavoriteIcon />
-                        <span className="tooltiptext">{'Like this idea'}</span>
-                    </IconButton>
-                    <IconButton aria-label="Add to Itinerary" className="tooltip">
-                        <AddCircleIcon />
-                        <span className="tooltiptext">{'Add to Itinerary'}</span>
-                    </IconButton>
-                    <div className={classes.ideaCardMoreInfoButton}>
-                        <IconButton aria-label="More Info" className="leftTooltip" onClick={
-                            () => {
-                                this.props.updateFocusedIdea(idea.id);
-                            }}>
-                            <InfoIcon />
-                            <span className="tooltiptext">{'More Info'}</span>
+                    <CardContent className={classes.ideaCardContent}>
+                        <Typography variant="body1">
+                            {idea.description}
+                        </Typography>
+                    </CardContent>
+                    <CardActions className={classes.actions} disableActionSpacing>
+                        <IconButton aria-label="Like this idea" >
+                            <FavoriteIcon />
                         </IconButton>
-                    </div>
-                </CardActions>
-            </Card>
+
+                        {AddOrRemove()}
+
+                        <Tooltip title={"Delete"}>
+                            <IconButton aria-label="Add to Itinerary"
+                                onClick={this.openDialog}
+                            >
+                                <DeleteIcon />
+                            </IconButton>
+                        </Tooltip>
+                        <div className={classes.closeDetailCardButton}>
+                            <Tooltip title={"Close"}>
+                                <IconButton aria-label="close" onClick={
+                                    () => {
+                                        this.props.updateFocusedIdea('');
+                                    }}>
+                                    <CloseIcon />
+                                </IconButton>
+                            </Tooltip>
+                        </div>
+                    </CardActions>
+                </Card>
+                <Dialog
+                    open={this.state.dialogOpen}
+                    onClose={this.handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle >{"Are you sure to delete?"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            {idea.title}
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.closeDialog} color="primary">
+                            Cancel
+            </Button>
+                        <Button
+                            // onClick={() => { this.deleteIdea(idea.id) }}
+                            onClick={() => { this.deleteIdea(idea.id) }}
+                            color="primary" autoFocus>
+                            Delete
+            </Button>
+                    </DialogActions>
+                </Dialog>
             </div>
         )
     }

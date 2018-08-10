@@ -149,7 +149,7 @@ class IdeaCard extends React.Component {
                         avatar={
                             <div className="tooltip">
                                 <Avatar aria-label="User Icon" className={classes.avatar}
-                                src={profilePictureURL}
+                                    src={profilePictureURL}
                                 />
                                 <span className="tooltiptext">{userName}</span>
                             </div>
@@ -196,11 +196,10 @@ class IdeaCard extends React.Component {
                         </Typography>
                     </CardContent>
                     <CardActions className={classes.actions} disableActionSpacing>
-                        <IconButton aria-label="Likes" className="tooltip">
+                        <IconButton aria-label="Likes" >
                             <FavoriteIcon />
-                            <span className="tooltiptext">{'Like this idea'}</span>
                         </IconButton>
-                        <IconButton aria-label="Add to Itinerary" className="tooltip">
+                        <IconButton aria-label="Comments" className="tooltip">
                             <CommentIcon />
                             <span className="tooltiptext">{'Comments'}</span>
                         </IconButton>

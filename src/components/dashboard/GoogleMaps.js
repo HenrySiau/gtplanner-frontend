@@ -12,12 +12,12 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import IdeaCard from './IdeaCard';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
-import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
+import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import withWidth from '@material-ui/core/withWidth';
 import compose from 'recompose/compose';
-import IdeaDetailCard from './IdeaDetailCard';
+import IdeaDetailCardContainer from './IdeaDetailCardContainer';
 import { makeMarkerIcon, populateMarkers, populateMarker } from '../utility/mapFunctions';
 import '../../css/dashboard.css';
 
@@ -262,7 +262,7 @@ class GoogleMaps extends React.Component {
                                 updateFocusedIdea('');
                             }}
                             className={classes.dialogButton}>
-                            <RemoveCircleIcon />
+                            <CloseIcon />
                         </IconButton>
                     </Tooltip>
                 </Paper>
@@ -292,7 +292,7 @@ class GoogleMaps extends React.Component {
             console.log('idea title: ' + idea.title);
             return (
 
-                <IdeaDetailCard
+                <IdeaDetailCardContainer
                     idea={idea}
                     members={selectedTrip.members}
                 />

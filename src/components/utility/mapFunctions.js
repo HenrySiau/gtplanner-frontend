@@ -24,7 +24,7 @@ export function makeMarker(markerInfo, onClick) {
             this.setIcon(window.googleMapHighlightedIcon);
         }
         // markerInfo.updateFocusedIdea(markerInfo.id);
-        onClick(markerInfo.id);
+        // onClick(markerInfo.id);
     });
     marker.addListener('mouseover', function () {
         this.setIcon(window.googleMapHighlightedIcon);

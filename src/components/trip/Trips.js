@@ -84,6 +84,8 @@ class Trips extends React.Component {
                 if (response.data) {
                     if (response.data.trip) {
                         this.props.updateSelectedTripWithInfo(response.data.trip);
+                        // TODO update ideas and markers and messages
+                        // maybe it's better just refresh the page 
                     }
                 }
             })
