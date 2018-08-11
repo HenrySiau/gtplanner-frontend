@@ -85,7 +85,7 @@ class IdeaCard extends React.Component {
         const { classes, idea, isChatRoomOpen, members } = this.props;
         let startAt = new Date(idea.startAt);
         let endAt = new Date(idea.endAt);
-        let subHeader = `${startAt.getMonth()}/${startAt.getDay()} ${startAt.getHours()}:${startAt.getMinutes()} -- ${endAt.getMonth()}/${endAt.getDay()} ${endAt.getHours()}:${endAt.getMinutes()}`;
+        let subHeader = `${startAt.getMonth()}/${startAt.getDate()} ${startAt.getHours()}:${startAt.getMinutes()} -- ${endAt.getMonth()}/${endAt.getDate()} ${endAt.getHours()}:${endAt.getMinutes()}`;
         const getIdeaCardWidth = breakPoint => {
             switch (breakPoint) {
                 case 'xs':

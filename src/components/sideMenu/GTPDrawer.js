@@ -159,6 +159,11 @@ class GTPDrawer extends React.Component {
             this.props.push('/dashboard');
         }
     }
+    goToItinerary = () => {
+        if (window.location.href !== settings.serverUrl + '/dashboard') {
+            this.props.push('/itinerary');
+        }
+    }
     mapButtonOnClick = () => {
         this.goToDashboard();
         this.props.setDashboardViewToMap();
@@ -208,6 +213,12 @@ class GTPDrawer extends React.Component {
                             <Icon >favorite</Icon>
                         </ListItemIcon>
                         <ListItemText primary="Ideas" />
+                    </ListItem>
+                    <ListItem button onClick={this.goToItinerary}>
+                        <ListItemIcon>
+                            <Icon >event_available</Icon>
+                        </ListItemIcon>
+                        <ListItemText primary="Agenda" />
                     </ListItem>
                     <ListItem button >
                         <ListItemIcon>

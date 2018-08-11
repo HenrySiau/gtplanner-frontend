@@ -17,6 +17,7 @@ import privacyPolicy from './privacyPolicy/privacyPolicy';
 import InviteMemberForm from './member/InviteMemberForm';
 import MyAccount from './profile/MyAccount';
 import GTPDashboard from './dashboard/GTPDashboard';
+import Itinerary from './itinerary/Itinerary';
 
 const styles = theme => ({
   root: {
@@ -63,6 +64,7 @@ class App extends Component {
             <PrivateRoute exact path="/myaccount" component={MyAccount} />
             <PrivateRoute exact path="/dashboard" component={GTPDashboard} />
             <PrivateRoute exact path="/trips" component={Trips} />
+            <PrivateRoute exact path="/itinerary" component={Itinerary} />
           </main>
           <ChatRoomContainer />
           <GTPSnackbar />
