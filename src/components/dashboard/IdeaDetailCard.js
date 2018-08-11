@@ -26,6 +26,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
+import { populateMarkers, clearMarkers } from '../utility/mapFunctions';
 
 const styles = theme => ({
     root: {
@@ -33,27 +34,14 @@ const styles = theme => ({
     },
     card: {
         maxWidth: 800,
-        // width: 400
     },
-    media: {
-        // height: '100px',
-        // width: '100%',
-        // height: 'auto',
-        // paddingTop: '56.25%', // 16:9
-    },
+
     avatar: {
         backgroundColor: red[500],
         width: 36,
         height: 36,
     },
-    ideaCards: {
-        height: 'calc((100vh - 40px)/2 - 70px)',
-        overflow: 'scroll',
-        display: 'flex',
-        flexWrap: 'wrap',
-        // justifyContent: 'center',
-        // justifyContent: 'space-around',
-    },
+
     ideaCardContent: {
         overflow: 'scroll',
         display: 'flex',
@@ -106,11 +94,26 @@ class IdeaDetailCard extends React.Component {
                 if (response.data) {
                     if (response.data.success) {
                         let idea = this.props.ideas.get(ideaId);
-                        if(idea){
+                        if (idea) {
                             idea.inItinerary = true;
                             let newIdeasMap = new Map(this.props.ideas);
                             newIdeasMap.set(ideaId, idea);
                             this.props.updateIdeas(newIdeasMap);
+                            //updateFilteredIdeas
+
+                            let filteredIdeasList = []
+                            newIdeasMap.forEach(idea => {
+                                if (!idea.inItinerary) {
+                                    filteredIdeasList.push(idea)
+                                }
+                            })
+                            this.props.updateFilteredIdeas(filteredIdeasList);
+
+                            // updateMarkers
+                            window.googleMapBounds = new window.google.maps.LatLngBounds();
+                            clearMarkers(window.markers);
+                            populateMarkers(filteredIdeasList, this.props.updateFocusedIdea, window.map);
+                            this.props.updateFocusedIdea('');
                         }
                     }
                 }
@@ -138,11 +141,26 @@ class IdeaDetailCard extends React.Component {
                 if (response.data) {
                     if (response.data.success) {
                         let idea = this.props.ideas.get(ideaId);
-                        if(idea){
+                        if (idea) {
                             idea.inItinerary = false;
                             let newIdeasMap = new Map(this.props.ideas);
                             newIdeasMap.set(ideaId, idea);
                             this.props.updateIdeas(newIdeasMap);
+                                //updateFilteredIdeas
+
+                                let filteredIdeasList = []
+                                newIdeasMap.forEach(idea => {
+                                    if (idea.inItinerary) {
+                                        filteredIdeasList.push(idea)
+                                    }
+                                })
+                                this.props.updateFilteredIdeas(filteredIdeasList);
+    
+                                // updateMarkers
+                                window.googleMapBounds = new window.google.maps.LatLngBounds();
+                                clearMarkers(window.markers);
+                                populateMarkers(filteredIdeasList, this.props.updateFocusedIdea, window.map);
+                                this.props.updateFocusedIdea('');
                         }
                     }
                 }
