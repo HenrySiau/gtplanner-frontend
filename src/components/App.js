@@ -33,6 +33,7 @@ const styles = theme => ({
     width: '100%',
     height: 'calc(100% - 63px)',
     overflow: 'scroll',
+
   },
 });
 

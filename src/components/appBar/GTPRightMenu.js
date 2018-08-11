@@ -12,7 +12,7 @@ import Popover from '@material-ui/core/Popover';
 
 const styles = theme => ({
     rightMenuIcon: {
-        marginRight: theme.spacing.unit,
+        // marginRight: theme.spacing.unit,
         fontSize: 30, 
         color: 'white'
     },

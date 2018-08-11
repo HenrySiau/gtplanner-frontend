@@ -23,6 +23,8 @@ const styles = theme => ({
         marginTop: 65,
     },
     drawerPaper: {
+        position: 'relative',
+    whiteSpace: 'nowrap',
         width: 360,
         boxShadow: '-3px 0px 5px 0px rgba(220,220,220,1)',
 
@@ -33,8 +35,9 @@ const styles = theme => ({
         },
     },
     drawerHidden: {
-        // position: 'absolute',
-        width: 0
+        // width: 0,
+        overflowX: 'hidden',
+        display: 'none',
     },
     tab: {
         // height: '20px'

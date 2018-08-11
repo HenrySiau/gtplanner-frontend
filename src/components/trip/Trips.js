@@ -70,22 +70,22 @@ class Trips extends React.Component {
     }
     switchTrip = (tripId) => {
         console.log(tripId);
+
         axios({
-            method: 'GET',
-            url: settings.serverUrl + '/api/get/fullTripInfo',
-            params: {
-                tripId: tripId
-            },
+            method: 'POST',
+            url: settings.serverUrl + '/api/post/user/updateDefaultTrip',
+            json: true,
             headers: {
                 'x-access-token': localStorage.getItem('id_token'),
+            },
+            data: {
+                tripId: tripId
             }
         })
             .then((response) => {
                 if (response.data) {
-                    if (response.data.trip) {
-                        this.props.updateSelectedTripWithInfo(response.data.trip);
-                        // TODO update ideas and markers and messages
-                        // maybe it's better just refresh the page 
+                    if (response.data.success) {
+                        window.location.href = '/dashboard';
                     }
                 }
             })

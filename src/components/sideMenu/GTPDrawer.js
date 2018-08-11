@@ -37,7 +37,8 @@ const styles = theme => ({
         width: theme.spacing.unit * 9,
     },
     drawerClosed: {
-        width: 0
+        // width: 0
+        display: 'none',
     },
     list: {
         width: drawerWidth,
