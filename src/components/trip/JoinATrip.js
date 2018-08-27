@@ -102,6 +102,7 @@ class JoinATrip extends React.Component {
             }
         } else {
             this.props.push('/');
+            this.props.snackbarMessage('error from else....');
         }
     }
 

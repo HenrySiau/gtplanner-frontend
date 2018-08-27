@@ -240,7 +240,7 @@ class LoginForm extends React.Component {
                     color="primary"
                     className={classes.signUpButton}
                     component={Link}
-                    to="/register"
+                    to="/signup"
                 >
                     No account?  Sign up here
                 </Button><br />

@@ -188,7 +188,7 @@ class GTPAppBar extends React.Component {
 
             return (
                 <Typography variant="title" color="inherit" className={classes.title} onClick={this.handleTitleOnClick}>
-                    {this.props.selectedTrip ? this.props.selectedTrip.title : 'Group Travel Planner'}
+                    {this.props.selectedTrip ? this.props.selectedTrip.title : 'Group Travel Planner ' + settings.version}
                 </Typography>
             )
 
