@@ -56,10 +56,6 @@ class GTPRightMenu extends React.Component {
 
                     <MenuList role="menu">
                         <MenuItem onClick={() => {
-                            this.props.dispatch(push('/dashboard'));
-                            this.setState({ menuAnchor: null });
-                        }}>New Event</MenuItem>
-                        <MenuItem onClick={() => {
                             this.props.dispatch(push('/members/invite'));
                             this.setState({ menuAnchor: null });
                         }}>Invite Members</MenuItem>
@@ -71,10 +67,6 @@ class GTPRightMenu extends React.Component {
                             this.props.dispatch(push('/trips'));
                             this.setState({ menuAnchor: null });
                         }}>My Trips</MenuItem>
-                        <MenuItem onClick={() => {
-                            this.props.dispatch(push('/trip/members'));
-                            this.setState({ menuAnchor: null });
-                        }}>Trip Members</MenuItem>
                     </MenuList>
                 </Popover>
 
