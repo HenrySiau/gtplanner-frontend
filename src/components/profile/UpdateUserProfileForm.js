@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import PropTypes from 'prop-types';
+import { snackbarMessage } from '../../actions';
 
 
 const styles = theme => ({
@@ -46,6 +47,7 @@ class UpdateUserProfileForm extends React.Component {
     };
 
     onSubmit = () => {
+        this.props.snackbarMessage('Profile Modification Feature Under Construction')
 
     }
 
@@ -110,5 +112,13 @@ const mapStateToProps = (state) => {
     }
 }
 
+const mapDispatchToProps = dispatch => {
+    return {
+        snackbarMessage: (msg) => {
+            dispatch(snackbarMessage(msg));
+        },
+    }
+}
+
 UpdateUserProfileForm = withStyles(styles)(UpdateUserProfileForm);
-export default connect(mapStateToProps)(UpdateUserProfileForm);
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateUserProfileForm);

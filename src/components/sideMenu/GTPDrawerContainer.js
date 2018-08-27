@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { toggleDrawer, updateSelectedTrip, toggleDrawerExtend, toggleDrawerFold } from '../../actions';
+import { toggleDrawer, updateSelectedTrip, toggleDrawerExtend, toggleDrawerFold, snackbarMessage } from '../../actions';
 import { setDashboardViewToMap, setDashboardViewToList, setDashboardViewToSplit, showItinerary, showIdeas, updateFilteredIdeas, updateFocusedIdea } from '../../actions';
 import GTPDrawer from './GTPDrawer';
 import { withRouter } from 'react-router-dom';
@@ -56,6 +56,9 @@ const mapDispatchToProps = dispatch => {
         },
         push: (url) => {
             dispatch(push(url));
+        },
+        snackbarMessage: (msg) => {
+            dispatch(snackbarMessage(msg));
         },
     }
 }

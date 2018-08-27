@@ -122,14 +122,8 @@ class GTPAppBar extends React.Component {
         // console.log('clicked message notification button');
     }
 
-    testEvent = () => {
-        console.log('clicked system notification button');
-        // this.props.updateFilteredMarkers([{ lat: 1, lng: 1 }, { lat: 1, lng: 2 }]);
-        // if(window.markers && window.map){
-        //     window.markers.forEach((value, key) => {
-        //         value.setMap(null);
-        //     })
-        // }
+    systemMessageNotificationButtonOnClick = () => {
+        this.props.snackbarMessage('System Message System Under Construction')
     }
 
     handleTitleOnClick = () => {
@@ -157,7 +151,7 @@ class GTPAppBar extends React.Component {
                     <div className={classes.notification}>
                         <IconButton
                             id='systemMessageNotificationButton'
-                            onClick={this.testEvent}
+                            onClick={this.systemMessageNotificationButtonOnClick}
                             color="inherit" >
                             {this.props.systemMessageBadgeContent ? <Badge
                                 badgeContent={this.props.systemMessageBadgeContent}

@@ -62,7 +62,7 @@ class GTPAvatar extends React.Component {
                             this.setState({ avatarAnchor: null });
                         }}>My account</MenuItem>
                         <MenuItem onClick={() => {
-                            this.props.push('/help');
+                            this.props.snackbarMessage('Helping Center Under Construction');
                             this.setState({ avatarAnchor: null });
                         }}>Help</MenuItem>
                         <MenuItem onClick={() => {

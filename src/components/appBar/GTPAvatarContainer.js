@@ -1,6 +1,6 @@
 import GTPAvatar from './GTPAvatar';
 import { connect } from 'react-redux';
-import { logout } from '../../actions';
+import { logout, snackbarMessage } from '../../actions';
 import { push } from 'react-router-redux';
 
 
@@ -17,6 +17,9 @@ const mapDispatchToProps = dispatch => {
         },
         logout: () => {
             dispatch(logout());
+        },
+        snackbarMessage: (msg) => {
+            dispatch(snackbarMessage(msg));
         },
     }
 }

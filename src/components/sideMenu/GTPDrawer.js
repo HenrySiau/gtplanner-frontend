@@ -179,7 +179,7 @@ class GTPDrawer extends React.Component {
     }
 
     render() {
-        const { classes, dashboardView, ideasOrItinerary, } = this.props;
+        const { classes, dashboardView, ideasOrItinerary, snackbarMessage} = this.props;
         const sideList = (
             <div className={classes.list}>
                 <List>
@@ -221,25 +221,33 @@ class GTPDrawer extends React.Component {
                         </ListItemIcon>
                         <ListItemText primary="Agenda" />
                     </ListItem>
-                    <ListItem button >
+                    <ListItem button onClick={()=>{
+                        snackbarMessage('Check List Feature Under Construction')
+                    }}>
                         <ListItemIcon>
                             <Icon >check_box</Icon>
                         </ListItemIcon>
                         <ListItemText primary="Checklist" />
                     </ListItem>
-                    <ListItem button>
+                    <ListItem button onClick={()=>{
+                        snackbarMessage('Photo Sharing Feature Under Construction')
+                    }}>
                         <ListItemIcon>
                             <Icon >camera_alt</Icon>
                         </ListItemIcon>
                         <ListItemText primary="Photos" />
                     </ListItem>
-                    <ListItem button>
+                    <ListItem button onClick={()=>{
+                        snackbarMessage('Budget Control Feature Under Construction')
+                    }}>
                         <ListItemIcon>
                             <Icon >account_balance_wallet</Icon>
                         </ListItemIcon>
                         <ListItemText primary="Budget" />
                     </ListItem>
-                    <ListItem button>
+                    <ListItem button onClick={()=>{
+                        snackbarMessage('Invitation Tracing Feature Under Construction')
+                    }}>
                         <ListItemIcon>
                             <Icon >mail_outline</Icon>
                         </ListItemIcon>

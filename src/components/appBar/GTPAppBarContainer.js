@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { logout, toggleDrawer, loginWithToken, toggleChatRoomOpen, openChatRoom, closeChatRoom } from '../../actions';
+import { logout, toggleDrawer, loginWithToken, toggleChatRoomOpen, openChatRoom, closeChatRoom, snackbarMessage } from '../../actions';
 import { updateUserInfo, updateSelectedTripWithInfo } from '../../actions';
 import { increaseChatMessageBadgeContent, clearChatMessageBadgeContent, increaseSystemMessageBadgeContent, clearSystemMessageBadgeContent } from '../../actions';
 import { updateFilteredMarkers } from '../../actions';
@@ -62,7 +62,10 @@ const mapDispatchToProps = dispatch => {
         },
         updateFilteredMarkers: (places) => {
             dispatch(updateFilteredMarkers(places));
-        }
+        },
+        snackbarMessage: (msg) => {
+            dispatch(snackbarMessage(msg));
+        },
 
     }
 }
