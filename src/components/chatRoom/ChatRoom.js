@@ -205,9 +205,9 @@ class ChatRoom extends React.Component {
                 </AppBar>
                 {this.props.chatRoomTabsValue === 0 && <div>
                     <div className="chatroom">
-                        <ul className="chats" ref="chats">
+                        <div className="chats" ref="chats">
                             {messages}
-                        </ul>
+                        </div>
                         <form className="input" onSubmit={(e) => this.submitMessage(e)}>
                             <input type="text" ref="msg" />
                             <input type="submit" value="Submit" />

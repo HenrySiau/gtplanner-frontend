@@ -279,7 +279,7 @@ class GoogleMaps extends React.Component {
             } else {
                 return (
                     <div className={classes.speechBubbleContainer}>
-                        <div className="speech-bubble">
+                        <div className="dashboard-speech-bubble">
                             <p> Add idea Here</p>
                         </div>
                     </div>)

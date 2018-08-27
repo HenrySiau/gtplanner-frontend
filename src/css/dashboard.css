@@ -1,32 +1,50 @@
-.speech-bubble {
+.dashboard-speech-bubble {
 	position: relative;
-	background: #00aabb;
-    border-radius: .4em;
-    margin: 30px;
-    width: 200px;
+	background: #e77649;
+	border-radius: .4em;
+	margin:   10px 28px 35px 10px;
+	width: 230px;
+	display: flex;
+	justify-content: center;
 }
 
-.speech-bubble p {
-
+.dashboard-speech-bubble p {
+	font-size: 1.5em
 }
 
-.speech-bubble:after {
-    content: '';
+.dashboard-speech-bubble:after {
+	content: '';
 	position: absolute;
 	bottom: 0;
-	left: 80%;
+	left: 90%;
 	width: 0;
 	height: 0;
-	border: 53px solid transparent;
-	border-top-color: #00aabb;
+	border: 32px solid transparent;
+	border-top-color: #e77649;
 	border-bottom: 0;
 	border-right: 0;
-	margin-left: -26.5px;
-	margin-bottom: -53px;
+	margin-left: -16px;
+	margin-bottom: -32px;
 }
 
+/* .dashboard-speech-bubble:after {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	width: 0;
+	height: 0;
+	border: 50px solid transparent;
+	border-top-color: #00aabb;
+	border-bottom: 0;
+	border-left: 0;
+	margin-left: -25px;
+	margin-bottom: -50px;
+
+} */
+
 .pac-container {
-    z-index: 10000 !important;
+	z-index: 10000 !important;
 }
 
 /* <Grid container direction={'column'} justify={'space-between'} className={classes.root}> */

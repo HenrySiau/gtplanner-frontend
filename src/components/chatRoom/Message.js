@@ -3,7 +3,7 @@ import React from 'react';
 // TODO: props validation 
 
 const Message = ({ userName, content, self, profilePictureURL }) => (
-    <li className={`chat ${self ? "right" : "left speech-bubble"}`} >
+    <div className={`chat ${self ? "right" : "left speech-bubble"}`} >
         {!self
             && <div>
                 {/* <img src={chat.img} alt={`${chat.userName}'s profile pic`} /> */}
@@ -11,8 +11,8 @@ const Message = ({ userName, content, self, profilePictureURL }) => (
                 <h6 className='userName'>{userName}</h6>
             </div>
         }
-        <p>{content}</p>
-    </li>
+        <p className='chatContent'>{content}</p>
+    </div>
 );
 Message.propTypes = {
     // chat: PropTypes.object.isRequired,
