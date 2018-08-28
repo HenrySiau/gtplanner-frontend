@@ -24,7 +24,6 @@ const styles = theme => ({
     },
     drawerPaper: {
         position: 'relative',
-    whiteSpace: 'nowrap',
         width: 360,
         boxShadow: '-3px 0px 5px 0px rgba(220,220,220,1)',
 
